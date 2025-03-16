@@ -5,22 +5,27 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-import java.awt.Window.Type;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
-public class SanPhamGUI extends JFrame {
+public class SanPhamGUI extends JFrame implements ActionListener{
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -223,6 +228,8 @@ public class SanPhamGUI extends JFrame {
 		
 		/************* PHẦN CHỨC NĂNG ************/
 		JButton btnThem = new JButton("THÊM");
+		btnThem.addActionListener(this);
+		btnThem.setActionCommand("Thêm");
 		btnThem.setBackground(Color.WHITE);
 		btnThem.setBorderPainted(false);
 		btnThem.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/addIcon.png")));
@@ -314,4 +321,89 @@ public class SanPhamGUI extends JFrame {
 		 Font font = new Font("Verdana", Font.PLAIN, 14);
 		table.setFont(font);
 	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		String command = e.getActionCommand();
+		switch (command) {
+		case "Thêm":
+			openAddProductGUI();
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+	//Demoo thoi nka
+	public void openAddProductGUI() {
+	    // Tạo cửa sổ JDialog để thêm sản phẩm
+	    JDialog addProductDialog = new JDialog(this, "Thêm Sản Phẩm", true);
+	    addProductDialog.setSize(400, 300);  // Kích thước cửa sổ
+	    addProductDialog.setLocationRelativeTo(this);  // Đặt cửa sổ phụ ở giữa màn hình chính
+
+	    JPanel panel = new JPanel();
+	    panel.setLayout(null);
+
+	    JLabel lbMaSP = new JLabel("Mã Sản Phẩm:");
+	    lbMaSP.setBounds(30, 30, 120, 30);
+	    panel.add(lbMaSP);
+
+	    JTextField tfMaSP = new JTextField();
+	    tfMaSP.setBounds(150, 30, 200, 30);
+	    panel.add(tfMaSP);
+
+	    JLabel lbTenSP = new JLabel("Tên Sản Phẩm:");
+	    lbTenSP.setBounds(30, 70, 120, 30);
+	    panel.add(lbTenSP);
+
+	    JTextField tfTenSP = new JTextField();
+	    tfTenSP.setBounds(150, 70, 200, 30);
+	    panel.add(tfTenSP);
+
+	    JLabel lbGia = new JLabel("Giá:");
+	    lbGia.setBounds(30, 110, 120, 30);
+	    panel.add(lbGia);
+
+	    JTextField tfGia = new JTextField();
+	    tfGia.setBounds(150, 110, 200, 30);
+	    panel.add(tfGia);
+
+	    JLabel lbSoLuong = new JLabel("Số Lượng:");
+	    lbSoLuong.setBounds(30, 150, 120, 30);
+	    panel.add(lbSoLuong);
+
+	    JTextField tfSoLuong = new JTextField();
+	    tfSoLuong.setBounds(150, 150, 200, 30);
+	    panel.add(tfSoLuong);
+
+	    // Nút Lưu
+	    JButton btnLuu = new JButton("Lưu");
+	    btnLuu.setBounds(150, 200, 100, 30);
+	    panel.add(btnLuu);
+
+
+	    btnLuu.addActionListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            String maSP = tfMaSP.getText();
+	            String tenSP = tfTenSP.getText();
+	            String gia = tfGia.getText();
+	            String soLuong = tfSoLuong.getText();
+
+	            if (maSP.isEmpty() || tenSP.isEmpty() || gia.isEmpty() || soLuong.isEmpty()) {
+	                JOptionPane.showMessageDialog(addProductDialog, "Vui lòng điền đầy đủ thông tin!");
+	            } else {
+	                DefaultTableModel model = (DefaultTableModel) table.getModel();
+	                model.addRow(new Object[] { maSP, tenSP, "Giày Thể Thao", Integer.parseInt(gia), Integer.parseInt(soLuong) });
+	                addProductDialog.dispose();  // Đóng cửa sổ phụ sau khi thêm
+	            }
+	        }
+	    });
+
+	    addProductDialog.add(panel);
+	    addProductDialog.setVisible(true);
+	}
+
 }
