@@ -25,7 +25,7 @@ public class SanPhamGUI extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private int DEFAULT_WIDTH = 1300, DEFAULT_HEIGHT= 800;
-	private String color = "#FF7043";
+	private String color = "#FF5252";
 	private JTable table;
 
 	/**
@@ -111,87 +111,95 @@ public class SanPhamGUI extends JFrame {
 		btnDangXuat.setForeground(Color.WHITE);
 		btnDangXuat.setFont(new Font("Verdana", Font.BOLD, 14));
 		btnDangXuat.setBorderPainted(false);
-		btnDangXuat.setBackground(new Color(255, 112, 67));
+		btnDangXuat.setBackground(Color.decode(color));
 		btnDangXuat.setBounds(0, 587, 200, 35);
 		pNavItem.add(btnDangXuat);
 		
 		JButton btnTrangChuGUI = new JButton("TRANG CHỦ");
+		btnTrangChuGUI.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/homeIcon.png")));
 		btnTrangChuGUI.setOpaque(true);
 		btnTrangChuGUI.setHorizontalAlignment(SwingConstants.LEFT);
 		btnTrangChuGUI.setForeground(Color.WHITE);
 		btnTrangChuGUI.setFont(new Font("Verdana", Font.BOLD, 14));
 		btnTrangChuGUI.setBorderPainted(false);
-		btnTrangChuGUI.setBackground(new Color(255, 112, 67));
+		btnTrangChuGUI.setBackground(Color.decode(color));
 		btnTrangChuGUI.setBounds(0, 0, 200, 35);
 		pNavItem.add(btnTrangChuGUI);
 		
 		JButton btnSanPhamGUI = new JButton("SẢN PHẨM");
+		btnSanPhamGUI.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/productIcon.png")));
 		btnSanPhamGUI.setOpaque(true);
 		btnSanPhamGUI.setHorizontalAlignment(SwingConstants.LEFT);
 		btnSanPhamGUI.setForeground(Color.WHITE);
 		btnSanPhamGUI.setFont(new Font("Verdana", Font.BOLD, 14));
 		btnSanPhamGUI.setBorderPainted(false);
-		btnSanPhamGUI.setBackground(new Color(255, 112, 67));
+		btnSanPhamGUI.setBackground(Color.decode(color));
 		btnSanPhamGUI.setBounds(0, 38, 200, 35);
 		pNavItem.add(btnSanPhamGUI);
 		
 		JButton btnNhaCungCapGUI = new JButton("NHÀ CUNG CẤP");
+		btnNhaCungCapGUI.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/providerIcon.png")));
 		btnNhaCungCapGUI.setOpaque(true);
 		btnNhaCungCapGUI.setHorizontalAlignment(SwingConstants.LEFT);
 		btnNhaCungCapGUI.setForeground(Color.WHITE);
 		btnNhaCungCapGUI.setFont(new Font("Verdana", Font.BOLD, 14));
 		btnNhaCungCapGUI.setBorderPainted(false);
-		btnNhaCungCapGUI.setBackground(new Color(255, 112, 67));
+		btnNhaCungCapGUI.setBackground(Color.decode(color));
 		btnNhaCungCapGUI.setBounds(0, 72, 200, 35);
 		pNavItem.add(btnNhaCungCapGUI);
 		
 		JButton btnNhanVienGUI = new JButton("NHÂN VIÊN");
+		btnNhanVienGUI.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/employeeIcon.png")));
 		btnNhanVienGUI.setOpaque(true);
 		btnNhanVienGUI.setHorizontalAlignment(SwingConstants.LEFT);
 		btnNhanVienGUI.setForeground(Color.WHITE);
 		btnNhanVienGUI.setFont(new Font("Verdana", Font.BOLD, 14));
 		btnNhanVienGUI.setBorderPainted(false);
-		btnNhanVienGUI.setBackground(new Color(255, 112, 67));
+		btnNhanVienGUI.setBackground(Color.decode(color));
 		btnNhanVienGUI.setBounds(0, 107, 200, 35);
 		pNavItem.add(btnNhanVienGUI);
 		
 		JButton btnKhachHangGUI = new JButton("KHÁCH HÀNG");
+		btnKhachHangGUI.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/clientIcon.png")));
 		btnKhachHangGUI.setOpaque(true);
 		btnKhachHangGUI.setHorizontalAlignment(SwingConstants.LEFT);
 		btnKhachHangGUI.setForeground(Color.WHITE);
 		btnKhachHangGUI.setFont(new Font("Verdana", Font.BOLD, 14));
 		btnKhachHangGUI.setBorderPainted(false);
-		btnKhachHangGUI.setBackground(new Color(255, 112, 67));
+		btnKhachHangGUI.setBackground(Color.decode(color));
 		btnKhachHangGUI.setBounds(0, 141, 200, 35);
 		pNavItem.add(btnKhachHangGUI);
 		
 		JButton btnPhieuNhapGUI = new JButton("PHIẾU NHẬP");
+		btnPhieuNhapGUI.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/phieuNhap.png")));
 		btnPhieuNhapGUI.setOpaque(true);
 		btnPhieuNhapGUI.setHorizontalAlignment(SwingConstants.LEFT);
 		btnPhieuNhapGUI.setForeground(Color.WHITE);
 		btnPhieuNhapGUI.setFont(new Font("Verdana", Font.BOLD, 14));
 		btnPhieuNhapGUI.setBorderPainted(false);
-		btnPhieuNhapGUI.setBackground(new Color(255, 112, 67));
+		btnPhieuNhapGUI.setBackground(Color.decode(color));
 		btnPhieuNhapGUI.setBounds(0, 173, 200, 35);
 		pNavItem.add(btnPhieuNhapGUI);
 		
 		JButton btnPhieuXuat = new JButton("PHIẾU XUẤT");
+		btnPhieuXuat.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/phieuXuat.png")));
 		btnPhieuXuat.setOpaque(true);
 		btnPhieuXuat.setHorizontalAlignment(SwingConstants.LEFT);
 		btnPhieuXuat.setForeground(Color.WHITE);
 		btnPhieuXuat.setFont(new Font("Verdana", Font.BOLD, 14));
 		btnPhieuXuat.setBorderPainted(false);
-		btnPhieuXuat.setBackground(new Color(255, 112, 67));
+		btnPhieuXuat.setBackground(Color.decode(color));
 		btnPhieuXuat.setBounds(0, 207, 200, 35);
 		pNavItem.add(btnPhieuXuat);
 		
 		JButton btnKhuyenMaiGUI = new JButton("KHUYẾN MÃI");
+		btnKhuyenMaiGUI.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/saleIcon.png")));
 		btnKhuyenMaiGUI.setOpaque(true);
 		btnKhuyenMaiGUI.setHorizontalAlignment(SwingConstants.LEFT);
 		btnKhuyenMaiGUI.setForeground(Color.WHITE);
 		btnKhuyenMaiGUI.setFont(new Font("Verdana", Font.BOLD, 14));
 		btnKhuyenMaiGUI.setBorderPainted(false);
-		btnKhuyenMaiGUI.setBackground(new Color(255, 112, 67));
+		btnKhuyenMaiGUI.setBackground(Color.decode(color));
 		btnKhuyenMaiGUI.setBounds(0, 242, 200, 35);
 		pNavItem.add(btnKhuyenMaiGUI);
 		
@@ -247,6 +255,17 @@ public class SanPhamGUI extends JFrame {
 		btnXuatExcel.setBackground(Color.WHITE);
 		btnXuatExcel.setBounds(279, 0, 137, 100);
 		pLeftHeader.add(btnXuatExcel);
+		
+		JButton btnNhapExcel = new JButton("NHẬP EXCEL");
+		btnNhapExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
+		btnNhapExcel.setPreferredSize(new Dimension(120, 140));
+		btnNhapExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/sheetIcon.png")));
+		btnNhapExcel.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnNhapExcel.setFont(new Font("Verdana", Font.BOLD, 14));
+		btnNhapExcel.setBorderPainted(false);
+		btnNhapExcel.setBackground(Color.WHITE);
+		btnNhapExcel.setBounds(414, 0, 137, 100);
+		pHeaderMain.add(btnNhapExcel);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setFont(new Font("Verdana", Font.PLAIN, 14));
