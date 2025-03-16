@@ -81,31 +81,37 @@ public class SanPhamGUI extends JFrame {
 		pNavbar.setBackground(Color.decode(color));
 		
 		JPanel pAccount = new JPanel();
-		pAccount.setBounds(0, 0, 200, 67);
+		pAccount.setBounds(0, 0, 200, 88);
 		pNavbar.add(pAccount);
 		pAccount.setBackground(Color.decode(color));
 		pAccount.setLayout(null);
+		
+        
 		JLabel lbInfo1 = new JLabel("Xin chào");
+		lbInfo1.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/userIcon.png")));
+		lbInfo1.setVerticalTextPosition(SwingConstants.BOTTOM);
+		lbInfo1.setHorizontalTextPosition(SwingConstants.CENTER);
 		lbInfo1.setForeground(Color.WHITE);
-		lbInfo1.setBounds(0, 0, 200, 33);
+		lbInfo1.setBounds(0, 0, 200, 54);
 		lbInfo1.setFont(new Font("Verdana", Font.BOLD, 14));
 		lbInfo1.setHorizontalAlignment(SwingConstants.CENTER);
 		pAccount.add(lbInfo1);
 		
 		JLabel lbInfo2 = new JLabel("Admin !");
+		lbInfo2.setBounds(0, 55, 200, 33);
+		pAccount.add(lbInfo2);
 		lbInfo2.setForeground(Color.WHITE);
-		lbInfo2.setBounds(0, 24, 200, 33);
 		lbInfo2.setFont(new Font("Verdana", Font.BOLD, 14));
 		lbInfo2.setHorizontalAlignment(SwingConstants.CENTER);
-		pAccount.add(lbInfo2);
 		
 		JPanel pNavItem = new JPanel();
-		pNavItem.setBounds(0, 66, 200, 734);
+		pNavItem.setBounds(0, 87, 200, 713);
 		pNavItem.setBackground(Color.decode(color));
 		pNavbar.add(pNavItem);
 		pNavItem.setLayout(null);
 		
 		JButton btnDangXuat = new JButton("ĐĂNG XUẤT");
+		btnDangXuat.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/logoutIcon.png")));
 		btnDangXuat.setOpaque(true);
 		btnDangXuat.setHorizontalAlignment(SwingConstants.LEFT);
 		btnDangXuat.setForeground(Color.WHITE);
