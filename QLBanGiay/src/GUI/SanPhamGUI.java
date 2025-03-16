@@ -16,6 +16,9 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import java.awt.Window.Type;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class SanPhamGUI extends JFrame {
 
@@ -197,39 +200,53 @@ public class SanPhamGUI extends JFrame {
 		
 		JPanel pLeftHeader = new JPanel();
 		pLeftHeader.setBackground(Color.WHITE);
-		pLeftHeader.setBounds(0, 0, 359, 100);
+		pLeftHeader.setBounds(0, 0, 416, 100);
 		pHeaderMain.add(pLeftHeader);
 		pLeftHeader.setLayout(null);
 		
 		JButton btnThem = new JButton("THÊM");
 		btnThem.setBackground(Color.WHITE);
+		btnThem.setBorderPainted(false);
 		btnThem.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/addIcon.png")));
 		btnThem.setFont(new Font("Verdana", Font.BOLD, 14));
-		btnThem.setBounds(0, 0, 111, 100);
+		btnThem.setBounds(0, 0, 93, 100);
 		btnThem.setVerticalTextPosition(SwingConstants.BOTTOM);
-		btnThem.setHorizontalAlignment(SwingConstants.CENTER);
+		btnThem.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnThem.setPreferredSize(new Dimension(120, 140));
 		pLeftHeader.add(btnThem);
 		
 		JButton btnSua = new JButton("SỬA");
+		btnSua.setBorderPainted(false);
 		btnSua.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnSua.setPreferredSize(new Dimension(120, 140));
 		btnSua.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/editIcon.png")));
-		btnSua.setHorizontalAlignment(SwingConstants.CENTER);
+		btnSua.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnSua.setFont(new Font("Verdana", Font.BOLD, 14));
 		btnSua.setBackground(Color.WHITE);
-		btnSua.setBounds(110, 0, 111, 100);
+		btnSua.setBounds(94, 0, 93, 100);
 		pLeftHeader.add(btnSua);
 		
 		JButton btnXoa = new JButton("XÓA");
+		btnXoa.setBorderPainted(false);
 		btnXoa.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnXoa.setPreferredSize(new Dimension(120, 140));
 		btnXoa.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/deleteIcon.png")));
-		btnXoa.setHorizontalAlignment(SwingConstants.CENTER);
+		btnXoa.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnXoa.setFont(new Font("Verdana", Font.BOLD, 14));
 		btnXoa.setBackground(Color.WHITE);
-		btnXoa.setBounds(220, 0, 111, 100);
+		btnXoa.setBounds(187, 0, 93, 100);
 		pLeftHeader.add(btnXoa);
+		
+		JButton btnXuatExcel = new JButton("XUẤT EXCEL");
+		btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
+		btnXuatExcel.setPreferredSize(new Dimension(120, 140));
+		btnXuatExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/excelIcon.png")));
+		btnXuatExcel.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnXuatExcel.setFont(new Font("Verdana", Font.BOLD, 14));
+		btnXuatExcel.setBorderPainted(false);
+		btnXuatExcel.setBackground(Color.WHITE);
+		btnXuatExcel.setBounds(279, 0, 137, 100);
+		pLeftHeader.add(btnXuatExcel);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setFont(new Font("Verdana", Font.PLAIN, 14));
@@ -246,6 +263,11 @@ public class SanPhamGUI extends JFrame {
 		// Dữ liệu mẫu (ví dụ về sản phẩm)
 		String[] columnNames = { "Mã Sản Phẩm", "Tên Sản Phẩm", "Loại", "Giá", "Số Lượng" };
 		Object[][] data = {
+			{ "SP001", "Giày Nike Air Max", "Giày Thể Thao", 2500000, 100 },
+			{ "SP002", "Giày Adidas Ultraboost", "Giày Thể Thao", 3500000, 50 },
+			{ "SP003", "Giày Puma Clyde", "Giày Thể Thao", 2000000, 75 },
+			{ "SP004", "Giày Converse Chuck Taylor", "Giày Casual", 1200000, 200 },
+			{ "SP005", "Giày Vans Old Skool", "Giày Casual", 1500000, 150 },
 			{ "SP001", "Giày Nike Air Max", "Giày Thể Thao", 2500000, 100 },
 			{ "SP002", "Giày Adidas Ultraboost", "Giày Thể Thao", 3500000, 50 },
 			{ "SP003", "Giày Puma Clyde", "Giày Thể Thao", 2000000, 75 },
