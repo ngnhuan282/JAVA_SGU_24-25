@@ -86,7 +86,7 @@ public class SanPhamGUI extends JFrame {
 		pAccount.setBackground(Color.decode(color));
 		pAccount.setLayout(null);
 		
-        
+        /************* PHẦN HIỂN THỊ THÔNG TIN TÀI KHOẢN ************/
 		JLabel lbInfo1 = new JLabel("Xin chào");
 		lbInfo1.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/userIcon.png")));
 		lbInfo1.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -110,6 +110,7 @@ public class SanPhamGUI extends JFrame {
 		pNavbar.add(pNavItem);
 		pNavItem.setLayout(null);
 		
+		/************* NAVBAR ************/
 		JButton btnDangXuat = new JButton("ĐĂNG XUẤT");
 		btnDangXuat.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/logoutIcon.png")));
 		btnDangXuat.setOpaque(true);
@@ -209,6 +210,8 @@ public class SanPhamGUI extends JFrame {
 		btnKhuyenMaiGUI.setBounds(0, 242, 200, 35);
 		pNavItem.add(btnKhuyenMaiGUI);
 		
+		
+		/************* PHẦN HEADER ************/
 		pHeaderMain.setPreferredSize(new Dimension(DEFAULT_WIDTH, 100));
 		pHeaderMain.setLayout(null);
 		
@@ -218,6 +221,7 @@ public class SanPhamGUI extends JFrame {
 		pHeaderMain.add(pLeftHeader);
 		pLeftHeader.setLayout(null);
 		
+		/************* PHẦN CHỨC NĂNG ************/
 		JButton btnThem = new JButton("THÊM");
 		btnThem.setBackground(Color.WHITE);
 		btnThem.setBorderPainted(false);
@@ -273,6 +277,7 @@ public class SanPhamGUI extends JFrame {
 		btnNhapExcel.setBounds(414, 0, 137, 100);
 		pHeaderMain.add(btnNhapExcel);
 		
+		/************* PHẦN HIỂN THỊ ************/
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setFont(new Font("Verdana", Font.PLAIN, 14));
 		pMain.add(scrollPane, BorderLayout.CENTER);
@@ -298,6 +303,7 @@ public class SanPhamGUI extends JFrame {
 			{ "SP003", "Giày Puma Clyde", "Giày Thể Thao", 2000000, 75 },
 			{ "SP004", "Giày Converse Chuck Taylor", "Giày Casual", 1200000, 200 },
 			{ "SP005", "Giày Vans Old Skool", "Giày Casual", 1500000, 150 }
+			
 		};
 
 		// Tạo DefaultTableModel với dữ liệu mẫu
