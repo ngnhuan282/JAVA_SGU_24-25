@@ -65,14 +65,16 @@ public class SanPhamGUI extends JFrame implements ActionListener{
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
-		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setLayout(null);
 		
 		JPanel pHeader = new JPanel();
-		contentPane.add(pHeader, BorderLayout.NORTH);
+		pHeader.setBounds(5, 5, 1500, 1);
+		contentPane.add(pHeader);
 		pHeader.setLayout(null);
 		
 		JPanel pMain = new JPanel();
-		contentPane.add(pMain, BorderLayout.CENTER);
+		pMain.setBounds(205, 6, 1300, 800);
+		contentPane.add(pMain);
 		pMain.setLayout(new BorderLayout(0, 0));
 		
 		JPanel pHeaderMain = new JPanel();
@@ -80,7 +82,8 @@ public class SanPhamGUI extends JFrame implements ActionListener{
 		pMain.add(pHeaderMain, BorderLayout.NORTH);
 		
 		JPanel pNavbar = new JPanel();
-		contentPane.add(pNavbar, BorderLayout.WEST);
+		pNavbar.setBounds(5, 6, 200, 800);
+		contentPane.add(pNavbar);
 		pNavbar.setLayout(null);
 		pNavbar.setPreferredSize(new Dimension(200, 800));
 		pNavbar.setBackground(Color.decode(color));
@@ -222,7 +225,7 @@ public class SanPhamGUI extends JFrame implements ActionListener{
 		
 		JPanel pLeftHeader = new JPanel();
 		pLeftHeader.setBackground(Color.WHITE);
-		pLeftHeader.setBounds(0, 0, 416, 100);
+		pLeftHeader.setBounds(0, 0, 539, 100);
 		pHeaderMain.add(pLeftHeader);
 		pLeftHeader.setLayout(null);
 		
@@ -274,6 +277,8 @@ public class SanPhamGUI extends JFrame implements ActionListener{
 		pLeftHeader.add(btnXuatExcel);
 		
 		JButton btnNhapExcel = new JButton("NHẬP EXCEL");
+		btnNhapExcel.setBounds(405, 0, 137, 100);
+		pLeftHeader.add(btnNhapExcel);
 		btnNhapExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnNhapExcel.setPreferredSize(new Dimension(120, 140));
 		btnNhapExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/sheetIcon.png")));
@@ -281,17 +286,15 @@ public class SanPhamGUI extends JFrame implements ActionListener{
 		btnNhapExcel.setFont(new Font("Verdana", Font.BOLD, 14));
 		btnNhapExcel.setBorderPainted(false);
 		btnNhapExcel.setBackground(Color.WHITE);
-		btnNhapExcel.setBounds(414, 0, 137, 100);
-		pHeaderMain.add(btnNhapExcel);
 		
 		/************* PHẦN HIỂN THỊ ************/
 		
 		table = new JTable();
 		table.setFont(new Font("Verdana", Font.PLAIN, 14));
 		
-		JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.setFont(new Font("Verdana", Font.PLAIN, 14));
-		pMain.add(scrollPane, BorderLayout.CENTER);
+//		JScrollPane scrollPane = new JScrollPane(table);
+//		scrollPane.setFont(new Font("Verdana", Font.PLAIN, 14));
+		pMain.add(scrollPane);
 		fillTableWithSampleData();
 	}
 	
@@ -338,72 +341,116 @@ public class SanPhamGUI extends JFrame implements ActionListener{
 	
 	//Demoo thoi nka
 	public void openAddProductGUI() {
-	    // Tạo cửa sổ JDialog để thêm sản phẩm
-	    JDialog addProductDialog = new JDialog(this, "Thêm Sản Phẩm", true);
-	    addProductDialog.setSize(400, 300);  // Kích thước cửa sổ
-	    addProductDialog.setLocationRelativeTo(this);  // Đặt cửa sổ phụ ở giữa màn hình chính
+	    // Tạo cửa sổ JDialog cho việc thêm sản phẩm
+	    JDialog addProductDialog = new JDialog(this, "Thêm Sản Phẩm", true); // true để cửa sổ phụ là modal
+	    addProductDialog.setBounds(100, 100, 550, 400);  // Kích thước cửa sổ
+	    addProductDialog.setLocationRelativeTo(this);
+	    JPanel panelMain = new JPanel();
+	    panelMain.setBorder(new EmptyBorder(5, 5, 5, 5));
+	    addProductDialog.setContentPane(panelMain);
+	    panelMain.setLayout(null);  // Sử dụng null layout
 
+	    // Tiêu đề của cửa sổ phụ
+	    JLabel lbHeader = new JLabel("THÊM SẢN PHẨM");
+	    lbHeader.setBounds(5, 5, 531, 31);
+	    lbHeader.setForeground(Color.WHITE);
+	    lbHeader.setHorizontalAlignment(SwingConstants.CENTER);
+	    lbHeader.setFont(new Font("Arial", Font.BOLD, 20));
+	    lbHeader.setBackground(Color.decode("#FF5252"));
+	    lbHeader.setOpaque(true);
+	    panelMain.add(lbHeader);
+
+	    // Panel chính chứa các trường nhập liệu
 	    JPanel panel = new JPanel();
-	    panel.setLayout(null);
+	    panel.setBounds(5, 40, 530, 300);
+	    panel.setLayout(null);  // Sử dụng null layout
+	    panelMain.add(panel);
 
-	    JLabel lbMaSP = new JLabel("Mã Sản Phẩm:");
-	    lbMaSP.setBounds(30, 30, 120, 30);
+	    // Cấu hình các thành phần với vị trí và kích thước hợp lý
+	    JLabel lbMaSP = new JLabel("Mã sản phẩm");
+	    lbMaSP.setFont(new Font("Arial", Font.PLAIN, 14));
+	    lbMaSP.setBounds(10, 21, 100, 23);
 	    panel.add(lbMaSP);
 
-	    JTextField tfMaSP = new JTextField();
-	    tfMaSP.setBounds(150, 30, 200, 30);
-	    panel.add(tfMaSP);
+	    JTextField txtMaSP = new JTextField();
+	    txtMaSP.setBounds(120, 21, 185, 32);
+	    panel.add(txtMaSP);
+	    txtMaSP.setColumns(10);
 
-	    JLabel lbTenSP = new JLabel("Tên Sản Phẩm:");
-	    lbTenSP.setBounds(30, 70, 120, 30);
+	    JLabel lbTenSP = new JLabel("Tên sản phẩm");
+	    lbTenSP.setFont(new Font("Arial", Font.PLAIN, 14));
+	    lbTenSP.setBounds(10, 66, 100, 23);
 	    panel.add(lbTenSP);
 
-	    JTextField tfTenSP = new JTextField();
-	    tfTenSP.setBounds(150, 70, 200, 30);
-	    panel.add(tfTenSP);
+	    JTextField txtTenSP = new JTextField();
+	    txtTenSP.setColumns(10);
+	    txtTenSP.setBounds(120, 66, 185, 32);
+	    panel.add(txtTenSP);
 
-	    JLabel lbGia = new JLabel("Giá:");
-	    lbGia.setBounds(30, 110, 120, 30);
-	    panel.add(lbGia);
+	    JLabel lbDonGia = new JLabel("Đơn giá");
+	    lbDonGia.setFont(new Font("Arial", Font.PLAIN, 14));
+	    lbDonGia.setBounds(10, 111, 100, 23);
+	    panel.add(lbDonGia);
 
-	    JTextField tfGia = new JTextField();
-	    tfGia.setBounds(150, 110, 200, 30);
-	    panel.add(tfGia);
+	    JTextField textField = new JTextField();
+	    textField.setColumns(10);
+	    textField.setBounds(120, 111, 185, 32);
+	    panel.add(textField);
 
-	    JLabel lbSoLuong = new JLabel("Số Lượng:");
-	    lbSoLuong.setBounds(30, 150, 120, 30);
+	    JLabel lbDonViTinh = new JLabel("Đơn vị tính");
+	    lbDonViTinh.setFont(new Font("Arial", Font.PLAIN, 14));
+	    lbDonViTinh.setBounds(10, 156, 100, 23);
+	    panel.add(lbDonViTinh);
+
+	    JTextField txtDonViTinh = new JTextField();
+	    txtDonViTinh.setColumns(10);
+	    txtDonViTinh.setBounds(120, 156, 185, 32);
+	    panel.add(txtDonViTinh);
+
+	    JLabel lbMaLoaiSP = new JLabel("Mã loại sản phẩm");
+	    lbMaLoaiSP.setFont(new Font("Arial", Font.PLAIN, 14));
+	    lbMaLoaiSP.setBounds(10, 201, 120, 23);
+	    panel.add(lbMaLoaiSP);
+
+	    JTextField txtMaLoaiSP = new JTextField();
+	    txtMaLoaiSP.setColumns(10);
+	    txtMaLoaiSP.setBounds(120, 201, 185, 32);
+	    panel.add(txtMaLoaiSP);
+
+	    JLabel lbSoLuong = new JLabel("Số lượng");
+	    lbSoLuong.setFont(new Font("Arial", Font.PLAIN, 14));
+	    lbSoLuong.setBounds(320, 21, 100, 23);  // Đảm bảo vị trí các thành phần hợp lý
 	    panel.add(lbSoLuong);
 
-	    JTextField tfSoLuong = new JTextField();
-	    tfSoLuong.setBounds(150, 150, 200, 30);
-	    panel.add(tfSoLuong);
+	    JTextField txtSoLuong = new JTextField();
+	    txtSoLuong.setColumns(10);
+	    txtSoLuong.setBounds(420, 21, 100, 32);  // Vị trí đúng
+	    panel.add(txtSoLuong);
 
-	    // Nút Lưu
-	    JButton btnLuu = new JButton("Lưu");
-	    btnLuu.setBounds(150, 200, 100, 30);
-	    panel.add(btnLuu);
+	    // Nút Thêm sản phẩm
+	    JButton btnThemSP = new JButton("Thêm");
+	    btnThemSP.setBounds(120, 240, 109, 25);
+	    panel.add(btnThemSP);
+	    btnThemSP.setForeground(Color.WHITE);
+	    btnThemSP.setFont(new Font("Arial", Font.BOLD, 14));
+	    btnThemSP.setBackground(Color.decode("#00C853"));
+	    btnThemSP.setOpaque(true);
 
+	    // Nút Đóng cửa sổ
+	    JButton btnDong = new JButton("Đóng");
+	    btnDong.setOpaque(true);
+	    btnDong.setForeground(Color.WHITE);
+	    btnDong.setFont(new Font("Arial", Font.BOLD, 14));
+	    btnDong.setBackground(Color.decode("#E53935"));
+	    btnDong.setBounds(260, 240, 109, 25);
+	    panel.add(btnDong);
 
-	    btnLuu.addActionListener(new ActionListener() {
-	        @Override
-	        public void actionPerformed(ActionEvent e) {
-	            String maSP = tfMaSP.getText();
-	            String tenSP = tfTenSP.getText();
-	            String gia = tfGia.getText();
-	            String soLuong = tfSoLuong.getText();
+	    // Thêm sự kiện cho nút đóng
+	    btnDong.addActionListener(e -> addProductDialog.dispose()); // Đóng cửa sổ phụ khi nhấn nút Đóng
 
-	            if (maSP.isEmpty() || tenSP.isEmpty() || gia.isEmpty() || soLuong.isEmpty()) {
-	                JOptionPane.showMessageDialog(addProductDialog, "Vui lòng điền đầy đủ thông tin!");
-	            } else {
-	                DefaultTableModel model = (DefaultTableModel) table.getModel();
-	                model.addRow(new Object[] { maSP, tenSP, "Giày Thể Thao", Integer.parseInt(gia), Integer.parseInt(soLuong) });
-	                addProductDialog.dispose();  // Đóng cửa sổ phụ sau khi thêm
-	            }
-	        }
-	    });
-
-	    addProductDialog.add(panel);
+	    // Hiển thị cửa sổ JDialog
 	    addProductDialog.setVisible(true);
 	}
+
 
 }

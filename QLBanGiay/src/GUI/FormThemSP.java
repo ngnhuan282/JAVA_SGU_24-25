@@ -49,7 +49,7 @@ public class FormThemSP extends JFrame {
 		setBounds(100, 100, 550, 372);
 		panelMain = new JPanel();
 		panelMain.setBorder(new EmptyBorder(5, 5, 5, 5));
-
+		setLocationRelativeTo(null);
 		setContentPane(panelMain);
 		panelMain.setLayout(null);
 		
