@@ -29,7 +29,7 @@ public class SanPhamGUI extends JFrame implements ActionListener{
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private int DEFAULT_WIDTH = 1300, DEFAULT_HEIGHT= 800;
+	private int DEFAULT_WIDTH = 1200, DEFAULT_HEIGHT= 800;
 	private String color = "#FF5252";
 	private JTable table;
 
@@ -288,12 +288,13 @@ public class SanPhamGUI extends JFrame implements ActionListener{
 		btnNhapExcel.setBackground(Color.WHITE);
 		
 		/************* PHẦN HIỂN THỊ ************/
-		JScrollPane scrollPane = new JScrollPane();
+		table = new JTable();
+		table.setFont(new Font("Verdana", Font.PLAIN, 14));
+		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setFont(new Font("Verdana", Font.PLAIN, 14));
 		pMain.add(scrollPane, BorderLayout.CENTER);
 		
-		table = new JTable();
-		table.setFont(new Font("Verdana", Font.PLAIN, 14));
+	
 
 		
 //		JScrollPane scrollPane = new JScrollPane(table);
