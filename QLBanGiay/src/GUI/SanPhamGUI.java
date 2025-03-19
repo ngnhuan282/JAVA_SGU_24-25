@@ -288,13 +288,19 @@ public class SanPhamGUI extends JFrame implements ActionListener{
 		btnNhapExcel.setBackground(Color.WHITE);
 		
 		/************* PHẦN HIỂN THỊ ************/
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setFont(new Font("Verdana", Font.PLAIN, 14));
+		pMain.add(scrollPane, BorderLayout.CENTER);
 		
 		table = new JTable();
 		table.setFont(new Font("Verdana", Font.PLAIN, 14));
+
 		
 //		JScrollPane scrollPane = new JScrollPane(table);
 //		scrollPane.setFont(new Font("Verdana", Font.PLAIN, 14));
 		pMain.add(scrollPane);
+
+		scrollPane.setViewportView(table);
 		fillTableWithSampleData();
 	}
 	
