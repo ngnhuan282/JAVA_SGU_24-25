@@ -58,6 +58,7 @@ public class FormThemSP extends JFrame {
 		lbHeader.setForeground(Color.WHITE);
 		lbHeader.setHorizontalAlignment(SwingConstants.CENTER);
 		lbHeader.setFont(new Font("Arial", Font.BOLD, 20));
+
 		lbHeader.setBackground(Color.decode("#FF5252"));
 		lbHeader.setOpaque(true);
 		panelMain.add(lbHeader);
