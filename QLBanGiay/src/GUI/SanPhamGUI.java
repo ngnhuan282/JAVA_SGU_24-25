@@ -8,6 +8,9 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -246,6 +249,8 @@ public class SanPhamGUI extends JFrame implements ActionListener{
 		pLeftHeader.add(btnThem);
 		
 		JButton btnSua = new JButton("SỬA");
+		btnSua.setActionCommand("Sửa");
+		btnSua.addActionListener(this);
 		btnSua.setBorderPainted(false);
 		btnSua.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnSua.setPreferredSize(new Dimension(120, 140));
@@ -343,7 +348,9 @@ public class SanPhamGUI extends JFrame implements ActionListener{
 		case "Thêm":
 			openAddProductGUI();
 			break;
-
+		case "Sửa":
+			openFixProductGUI(e);
+			break;
 		default:
 			break;
 		}
@@ -458,6 +465,157 @@ public class SanPhamGUI extends JFrame implements ActionListener{
 		addProductDialog.getContentPane().add(panelMain);
 		addProductDialog.setVisible(true);
 	}
+	public void openFixProductGUI(java.awt.event.ActionEvent evt) {
+		int selectedRow = table.getSelectedRow();
+		 System.out.println("Hàng được chọn: " + selectedRow); 
+		if (selectedRow == -1) { 
+	        JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm để sửa!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+	        return;  // Dừng lại, không mở cửa sổ sửa
+	    }
+		
+	    JDialog fixProductDialog = new JDialog(this, "Sửa Sản Phẩm", true); // true để cửa sổ phụ là modal
+	    fixProductDialog.setBounds(100, 100, 550, 372);  // Kích thước cửa sổ
+	    fixProductDialog.setLocationRelativeTo(this);
+	    fixProductDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		
+	    JPanel panelMain = new JPanel();
+		panelMain.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setLocationRelativeTo(null);
+		panelMain.setLayout(null);
+		
+		JLabel lbHeader = new JLabel("SỬA SẢN  PHẨM");
+		lbHeader.setBounds(5, 5, 531, 31);
+		lbHeader.setForeground(Color.WHITE);
+		lbHeader.setHorizontalAlignment(SwingConstants.CENTER);
+		lbHeader.setFont(new Font("Arial", Font.BOLD, 20));
+
+		lbHeader.setBackground(Color.decode("#FF5252"));
+		lbHeader.setOpaque(true);
+		panelMain.add(lbHeader);
+		
+		JPanel panel = new JPanel();
+		panel.setBounds(5, 29, 559, 300);
+		panel.setLayout(null);
+		
+		JLabel lbMaSP = new JLabel("Mã sản phẩm");
+		lbMaSP.setFont(new Font("Arial", Font.PLAIN, 14));
+		lbMaSP.setBounds(10, 21, 100, 23);
+		panel.add(lbMaSP);
+		
+		JTextField txtMaSP = new JTextField();
+		txtMaSP.setBounds(10, 46, 185, 32);
+		txtMaSP.setColumns(10);
+		panel.add(txtMaSP);
+		
+		JLabel lbTenSP = new JLabel("Tên sản phẩm");
+		lbTenSP.setFont(new Font("Arial", Font.PLAIN, 14));
+		lbTenSP.setBounds(10, 101, 100, 23);
+		panel.add(lbTenSP);
+		
+		JTextField txtTenSP = new JTextField();
+		txtTenSP.setColumns(10);
+		txtTenSP.setBounds(10, 126, 185, 32);
+		panel.add(txtTenSP);
+		
+		JLabel lbDonGia = new JLabel("Đơn giá");
+		lbDonGia.setFont(new Font("Arial", Font.PLAIN, 14));
+		lbDonGia.setBounds(10, 181, 100, 23);
+		panel.add(lbDonGia);
+		
+		JTextField txtDonGia = new JTextField();
+		txtDonGia.setColumns(10);
+		txtDonGia.setBounds(10, 206, 185, 32);
+		panel.add(txtDonGia);
+		
+		JLabel lbDonViTinh = new JLabel("Đơn vị tính");
+		lbDonViTinh.setFont(new Font("Arial", Font.PLAIN, 14));
+		lbDonViTinh.setBounds(277, 21, 100, 23);
+		panel.add(lbDonViTinh);
+		
+		JTextField txtDonViTinh = new JTextField();
+		txtDonViTinh.setColumns(10);
+		txtDonViTinh.setBounds(277, 46, 185, 32);
+		panel.add(txtDonViTinh);
+		
+		JLabel lbMaLoaiSP = new JLabel("Mã loại sản phẩm");
+		lbMaLoaiSP.setFont(new Font("Arial", Font.PLAIN, 14));
+		lbMaLoaiSP.setBounds(277, 101, 122, 23);
+		panel.add(lbMaLoaiSP);
+		
+		JTextField txtMaLoaiSP = new JTextField();
+		txtMaLoaiSP.setColumns(10);
+		txtMaLoaiSP.setBounds(277, 126, 185, 32);
+		panel.add(txtMaLoaiSP);
+		
+		JLabel lbSoLuong = new JLabel("Số lượng");
+		lbSoLuong.setFont(new Font("Arial", Font.PLAIN, 14));
+		lbSoLuong.setBounds(277, 181, 122, 23);
+		panel.add(lbSoLuong);
+		
+		JTextField txtSoLuong = new JTextField();
+		txtSoLuong.setColumns(10);
+		txtSoLuong.setBounds(277, 206, 185, 32);
+		panel.add(txtSoLuong);
+		
+		JButton btnSuaSP = new JButton("Sửa");
+		btnSuaSP.setBounds(134, 265, 109, 25);
+		panel.add(btnSuaSP);
+		btnSuaSP.setForeground(Color.WHITE);
+		btnSuaSP.setFont(new Font("Arial", Font.BOLD, 14));
+		btnSuaSP.setBackground(Color.decode("#00C853"));
+		btnSuaSP.setOpaque(true);
+		
+		JButton btnDong = new JButton("Đóng");
+		btnDong.setOpaque(true);
+		btnDong.setForeground(Color.WHITE);
+		btnDong.setFont(new Font("Arial", Font.BOLD, 14));
+		btnDong.setBackground(Color.decode("#E53935"));
+		btnDong.setBounds(290, 265, 109, 25);
+		panel.add(btnDong);
+		
+		panelMain.add(panel);
+		fixProductDialog.getContentPane().add(panelMain);
+		
+	
+		
+		btnDong.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        fixProductDialog.dispose(); // Đóng cửa sổ sửa sản phẩm
+		    }
+		});
+
+		System.out.println("Dữ liệu hàng được chọn:");
+		for (int i = 0; i < table.getColumnCount(); i++) {
+		    System.out.println("Cột " + i + ": " + table.getValueAt(selectedRow, i));
+		}
+	    
+		// Lấy số cột của bảng
+		int columnCount = table.getColumnCount();
+
+		// Gán dữ liệu vào JTextField (chỉ lấy nếu tồn tại)
+//		if (columnCount > 0) txtMaSP.setText(table.getValueAt(selectedRow, 0).toString());
+//		if (columnCount > 1) txtTenSP.setText(table.getValueAt(selectedRow, 1).toString());
+//		if (columnCount > 3) txtDonGia.setText(table.getValueAt(selectedRow, 3).toString());
+//		if (columnCount > 2) txtMaLoaiSP.setText(table.getValueAt(selectedRow, 2).toString());
+//		if (columnCount > 4) txtSoLuong.setText(table.getValueAt(selectedRow, 4).toString());
+//
+//		if (table.getValueAt(selectedRow, 0) != null) txtMaSP.setText(table.getValueAt(selectedRow, 0).toString());
+//	    if (table.getValueAt(selectedRow, 1) != null) txtTenSP.setText(table.getValueAt(selectedRow, 1).toString());
+//	    if (table.getValueAt(selectedRow, 2) != null) txtDonGia.setText(table.getValueAt(selectedRow, 2).toString());
+//	    if (table.getValueAt(selectedRow, 4) != null) txtMaLoaiSP.setText(table.getValueAt(selectedRow, 4).toString());
+//	    if (table.getValueAt(selectedRow, 5) != null) txtSoLuong.setText(table.getValueAt(selectedRow, 5).toString());
+
+	    txtMaSP.setText(table.getValueAt(selectedRow, 0).toString());
+	    txtTenSP.setText(table.getValueAt(selectedRow, 1).toString());
+	    txtDonGia.setText(table.getValueAt(selectedRow, 3).toString());
+	    txtMaLoaiSP.setText(table.getValueAt(selectedRow, 2).toString());
+	    txtSoLuong.setText(table.getValueAt(selectedRow, 4).toString());
+		
+		fixProductDialog.setVisible(true);
+
+	}
+	
+
 
 
 }
