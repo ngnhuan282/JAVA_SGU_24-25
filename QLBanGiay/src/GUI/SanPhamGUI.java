@@ -592,18 +592,6 @@ public class SanPhamGUI extends JFrame implements ActionListener{
 		// Lấy số cột của bảng
 		int columnCount = table.getColumnCount();
 
-		// Gán dữ liệu vào JTextField (chỉ lấy nếu tồn tại)
-//		if (columnCount > 0) txtMaSP.setText(table.getValueAt(selectedRow, 0).toString());
-//		if (columnCount > 1) txtTenSP.setText(table.getValueAt(selectedRow, 1).toString());
-//		if (columnCount > 3) txtDonGia.setText(table.getValueAt(selectedRow, 3).toString());
-//		if (columnCount > 2) txtMaLoaiSP.setText(table.getValueAt(selectedRow, 2).toString());
-//		if (columnCount > 4) txtSoLuong.setText(table.getValueAt(selectedRow, 4).toString());
-//
-//		if (table.getValueAt(selectedRow, 0) != null) txtMaSP.setText(table.getValueAt(selectedRow, 0).toString());
-//	    if (table.getValueAt(selectedRow, 1) != null) txtTenSP.setText(table.getValueAt(selectedRow, 1).toString());
-//	    if (table.getValueAt(selectedRow, 2) != null) txtDonGia.setText(table.getValueAt(selectedRow, 2).toString());
-//	    if (table.getValueAt(selectedRow, 4) != null) txtMaLoaiSP.setText(table.getValueAt(selectedRow, 4).toString());
-//	    if (table.getValueAt(selectedRow, 5) != null) txtSoLuong.setText(table.getValueAt(selectedRow, 5).toString());
 
 	    txtMaSP.setText(table.getValueAt(selectedRow, 0).toString());
 	    txtTenSP.setText(table.getValueAt(selectedRow, 1).toString());
