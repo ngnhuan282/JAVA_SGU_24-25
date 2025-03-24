@@ -12,18 +12,25 @@ public class SanPhamBUS {
 		
 	}
 	
+	public ArrayList<SanPhamDTO> getDssp() {
+		return dssp;
+	}
+
 	public void listSP()
 	{
 		
 	}
 	
-	public void addSP()
+	public void addSP(SanPhamDTO sp)
 	{
-		
+		dssp.add(sp);
 	}
 	
-	public void deleteSP()
+	public void deleteSP(String idSP)
 	{
-		
+		for(SanPhamDTO sp : dssp)
+		{
+			
+		}
 	}
 }
