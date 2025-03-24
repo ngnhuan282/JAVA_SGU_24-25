@@ -213,4 +213,5 @@ public class QLBanGiayGUI extends JFrame {
 		pMain.add(scrollBar, BorderLayout.EAST);
 		
 	}
+	
 }
