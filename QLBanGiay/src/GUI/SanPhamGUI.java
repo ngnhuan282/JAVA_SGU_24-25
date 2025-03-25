@@ -349,7 +349,6 @@ public class SanPhamGUI extends JFrame implements ActionListener{
 			openAddProductGUI();
 			break;
 		case "Sửa":
-			openFixProductGUI(e);
 			break;
 		default:
 			break;
@@ -361,7 +360,7 @@ public class SanPhamGUI extends JFrame implements ActionListener{
 	    JDialog addProductDialog = new JDialog(this, "Thêm Sản Phẩm", true); // true để cửa sổ phụ là modal
 	    addProductDialog.setBounds(100, 100, 550, 372);  // Kích thước cửa sổ
 	    addProductDialog.setLocationRelativeTo(this);
-	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		
 	    JPanel panelMain = new JPanel();
 		panelMain.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -408,10 +407,10 @@ public class SanPhamGUI extends JFrame implements ActionListener{
 		lbDonGia.setBounds(10, 181, 100, 23);
 		panel.add(lbDonGia);
 		
-		JTextField textField = new JTextField();
-		textField.setColumns(10);
-		textField.setBounds(10, 206, 185, 32);
-		panel.add(textField);
+		JTextField txtDonGia = new JTextField();
+		txtDonGia.setColumns(10);
+		txtDonGia.setBounds(10, 206, 185, 32);
+		panel.addtxtDonGia);
 		
 		JLabel lbDonViTinh = new JLabel("Đơn vị tính");
 		lbDonViTinh.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -463,6 +462,29 @@ public class SanPhamGUI extends JFrame implements ActionListener{
 		
 		addProductDialog.getContentPane().add(panelMain);
 		addProductDialog.setVisible(true);
+		
+		/******* XỬ LÝ SỰ KIỆN **********/
+		btnThemSP.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				try {
+					int maSP = Integer.parseInt(txtMaSP.getText());
+					
+				} catch (Exception e1) {
+					// TODO: handle exception
+				}
+			}
+		}
+		);
+		
+		btnDong.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				addProductDialog.dispose();
+			}
+		});
 	}
 
 }

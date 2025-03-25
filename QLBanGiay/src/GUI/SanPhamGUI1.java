@@ -409,10 +409,10 @@ public class SanPhamGUI1 extends JFrame implements ActionListener{
 		lbDonGia.setBounds(10, 181, 100, 23);
 		panel.add(lbDonGia);
 		
-		JTextField textField = new JTextField();
-		textField.setColumns(10);
-		textField.setBounds(10, 206, 185, 32);
-		panel.add(textField);
+		JTextField txtDonGia = new JTextField();
+		txtDonGia.setColumns(10);
+		txtDonGia.setBounds(10, 206, 185, 32);
+		panel.add(txtDonGia);
 		
 		JLabel lbDonViTinh = new JLabel("Đơn vị tính");
 		lbDonViTinh.setFont(new Font("Arial", Font.PLAIN, 14));
