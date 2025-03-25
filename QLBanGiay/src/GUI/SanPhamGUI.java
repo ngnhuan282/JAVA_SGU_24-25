@@ -1,12 +1,13 @@
 package GUI;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -20,6 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+
 import BUS.SanPhamBUS;
 import DTO.SanPhamDTO;
 
@@ -30,6 +32,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
     private int DEFAULT_WIDTH = 1200, DEFAULT_HEIGHT = 800;
     private String color = "#FF5252";
     private JTable table;
+    private JLabel lbMaSP, lbTenSP, lbDonGia, lbDonViTinh, lbSoLuong, lbMaLoaiSP;
     private DefaultTableModel model;
     private SanPhamBUS spBUS = new SanPhamBUS();
 
@@ -47,12 +50,21 @@ public class SanPhamGUI extends JFrame implements ActionListener {
     }
 
     public SanPhamGUI() {
-        Object[] header = {"Mã Sản Phẩm", "Tên Sản Phẩm", "Loại", "Giá", "Số Lượng"};
+        Object[] header = {"Mã Sản Phẩm", "Tên Sản Phẩm", "Loại", "Giá", "Số Lượng", "Đơn vị tính"};
         model = new DefaultTableModel(header, 0);
         table = new JTable(model);
         initComponents();
+        loadData();
     }
-
+    
+    public void loadData() {
+        model.setRowCount(0);
+        for (SanPhamDTO sp : spBUS.getDssp()) {
+            Object[] row = {sp.getMaSP(), sp.getTenSP(), sp.getMaLoaiSP(), sp.getDonGia(), sp.getSoLuong(), sp.getDonViTinh()};
+            model.addRow(row);
+        }
+    }
+    
     public void initComponents() {
         setTitle("Hệ thống quản lý bán giày");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -249,6 +261,8 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         pLeftHeader.add(btnSua);
 
         JButton btnXoa = new JButton("XÓA");
+        btnXoa.setActionCommand("Xóa");
+        btnXoa.addActionListener(this);
         btnXoa.setBorderPainted(false);
         btnXoa.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnXoa.setPreferredSize(new Dimension(120, 140));
@@ -293,25 +307,29 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         String command = e.getActionCommand();
         switch (command) {
             case "Thêm":
-                openAddProductGUI();
+                openProductDialog(false);
                 break;
             case "Sửa":
+            	openProductDialog(true);
+                break;
+            case "Xóa":
+            	deleteProduct();
                 break;
             default:
                 break;
         }
     }
 
-    public void openAddProductGUI() {
-        JDialog addProductDialog = new JDialog(this, "Thêm Sản Phẩm", true);
-        addProductDialog.setBounds(100, 100, 550, 372);
-        addProductDialog.setLocationRelativeTo(this);
+    public void openProductDialog(boolean isEditMode) {
+        JDialog productDialog = new JDialog(this, isEditMode ? "Sửa Sản Phẩm" : "Thêm Sản Phẩm", true);
+        productDialog.setBounds(100, 100, 550, 372);
+        productDialog.setLocationRelativeTo(this);
 
         JPanel panelMain = new JPanel();
         panelMain.setBorder(new EmptyBorder(5, 5, 5, 5));
         panelMain.setLayout(null);
 
-        JLabel lbHeader = new JLabel("THÊM SẢN PHẨM");
+        JLabel lbHeader = new JLabel(isEditMode ? "SỬA SẢN PHẨM" : "THÊM SẢN PHẨM");
         lbHeader.setBounds(5, 5, 531, 31);
         lbHeader.setForeground(Color.WHITE);
         lbHeader.setHorizontalAlignment(SwingConstants.CENTER);
@@ -324,6 +342,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         panel.setBounds(5, 36, 531, 300);
         panel.setLayout(null);
 
+        // Các trường nhập liệu
         JLabel lbMaSP = new JLabel("Mã sản phẩm");
         lbMaSP.setFont(new Font("Arial", Font.PLAIN, 14));
         lbMaSP.setBounds(10, 21, 100, 23);
@@ -378,13 +397,14 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         txtSoLuong.setBounds(277, 206, 185, 32);
         panel.add(txtSoLuong);
 
-        JButton btnThemSP = new JButton("Thêm");
-        btnThemSP.setBounds(134, 265, 109, 25);
-        btnThemSP.setForeground(Color.WHITE);
-        btnThemSP.setFont(new Font("Arial", Font.BOLD, 14));
-        btnThemSP.setBackground(Color.decode("#00C853"));
-        btnThemSP.setOpaque(true);
-        panel.add(btnThemSP);
+        // Nút hành động
+        JButton btnAction = new JButton(isEditMode ? "Cập nhật" : "Thêm");
+        btnAction.setBounds(134, 265, 109, 25);
+        btnAction.setForeground(Color.WHITE);
+        btnAction.setFont(new Font("Arial", Font.BOLD, 14));
+        btnAction.setBackground(Color.decode("#00C853"));
+        btnAction.setOpaque(true);
+        panel.add(btnAction);
 
         JButton btnDong = new JButton("Đóng");
         btnDong.setOpaque(true);
@@ -395,86 +415,129 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         panel.add(btnDong);
 
         panelMain.add(panel);
-        addProductDialog.getContentPane().add(panelMain);
+        productDialog.getContentPane().add(panelMain);
 
-        btnThemSP.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    String maSPText = txtMaSP.getText().trim();
-                    String tenSP = txtTenSP.getText().trim();
-                    String soLuongText = txtSoLuong.getText().trim();
-                    String donGiaText = txtDonGia.getText().trim();
-                    String donViTinh = txtDonViTinh.getText().trim();
-                    String maLoaiSP = txtMaLoaiSP.getText().trim();
-
-                    if (maSPText.isEmpty() || tenSP.isEmpty() || soLuongText.isEmpty() ||
-                        donGiaText.isEmpty() || donViTinh.isEmpty() || maLoaiSP.isEmpty()) {
-                        JOptionPane.showMessageDialog(addProductDialog,
-                            "Vui lòng điền đầy đủ tất cả các thông tin",
-                            "Lỗi", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-
-                    int maSP = Integer.parseInt(maSPText);
-                    int soLuong = Integer.parseInt(soLuongText);
-                    double donGia = Double.parseDouble(donGiaText);
-//
-//                    if (maSP <= 0) {
-//                        JOptionPane.showMessageDialog(addProductDialog,
-//                            "Mã sản phẩm phải lớn hơn 0!",
-//                            "Lỗi", JOptionPane.ERROR_MESSAGE);
-//                        return;
-//                    }
-//                    if (soLuong < 0) {
-//                        JOptionPane.showMessageDialog(addProductDialog,
-//                            "Số lượng không được âm!",
-//                            "Lỗi", JOptionPane.ERROR_MESSAGE);
-//                        return;
-//                    }
-//                    if (donGia <= 0) {
-//                        JOptionPane.showMessageDialog(addProductDialog,
-//                            "Đơn giá phải lớn hơn 0!",
-//                            "Lỗi", JOptionPane.ERROR_MESSAGE);
-//                        return;
-//                    }
-
-                    SanPhamDTO sp = new SanPhamDTO(maLoaiSP, tenSP, donViTinh, maSP, soLuong, donGia);
-                    spBUS.addSP(sp);
-
-                    Object[] row = {maSP, tenSP, maLoaiSP, donGia, soLuong};
-                    model.addRow(row); // Thêm dòng mới vào model
-
-                    JOptionPane.showMessageDialog(addProductDialog,
-                        "Thêm sản phẩm thành công!",
-                        "Thành công", JOptionPane.INFORMATION_MESSAGE);
-
-                    txtMaSP.setText("");
-                    txtTenSP.setText("");
-                    txtSoLuong.setText("");
-                    txtDonGia.setText("");
-                    txtDonViTinh.setText("");
-                    txtMaLoaiSP.setText("");
-
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(addProductDialog,
-                        "Vui lòng nhập đúng định dạng số cho Mã SP, Số lượng và Đơn giá!",
-                        "Lỗi", JOptionPane.ERROR_MESSAGE);
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(addProductDialog,
-                        "Đã xảy ra lỗi: " + ex.getMessage(),
-                        "Lỗi", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
-
-        btnDong.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                addProductDialog.dispose();
-            }
-        });
-
-        addProductDialog.setVisible(true);
+        /*****ĐỔ DỮ LIỆU VÀO TEXTFIELD NẾU LÀ SỬA******/
+        if(isEditMode == true)
+        {
+        	 int i = table.getSelectedRow();
+             if(i >= 0)
+             {
+             	txtMaSP.setText(table.getValueAt(i, 0).toString());
+             	txtTenSP.setText(table.getValueAt(i, 1).toString());
+             	txtMaLoaiSP.setText(table.getValueAt(i, 2).toString());
+             	txtDonGia.setText(table.getValueAt(i, 3).toString());
+             	txtSoLuong.setText(table.getValueAt(i, 4).toString());
+             	txtDonViTinh.setText(table.getValueAt(i, 5).toString());
+             }
+             else
+             {
+            	 JOptionPane.showMessageDialog(productDialog, "Vui lòng chọn một sản phẩm để sửa !");
+            	 productDialog.dispose();
+            	 return;
+             }
+        }
+       
+        /***XỬ LÝ SỰ KIỆN THÊM / SỬA***/
+        btnAction.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				try {
+					String maSPText = txtMaSP.getText();
+					String tenSP = txtTenSP.getText();
+					String soLuongText = txtSoLuong.getText();
+					String donGiaText = txtDonGia.getText();
+					String maLoaiSP = txtMaLoaiSP.getText();
+					String donViTinh = txtDonViTinh.getText();
+					
+					if(maSPText.isEmpty() || tenSP.isEmpty() || soLuongText.isEmpty()
+							|| donGiaText.isEmpty() || maLoaiSP.isEmpty() || donViTinh.isEmpty())
+					{
+						JOptionPane.showMessageDialog(productDialog, "Vui lòng nhập đầy đủ thông tin !");
+						return;
+					}
+					
+					int soLuong = Integer.parseInt(soLuongText);
+					double donGia = Double.parseDouble(donGiaText);
+					int maSP = Integer.parseInt(maSPText);
+					
+					SanPhamDTO sp = new SanPhamDTO(maLoaiSP, tenSP, donViTinh, maSP, soLuong, donGia);
+					
+					if(isEditMode)
+					{	
+//						Cập nhật vào spBUS
+						spBUS.updateSP(sp);
+						
+						//Set lại model
+						int i = table.getSelectedRow();
+						model.setValueAt(maSP, i, 0);
+						model.setValueAt(tenSP, i, 1);
+						model.setValueAt(maLoaiSP, i, 2);
+						model.setValueAt(donGia, i, 3);
+						model.setValueAt(soLuong, i, 4);
+						model.setValueAt(donViTinh, i, 5);
+						JOptionPane.showMessageDialog(productDialog, "Cập nhật sản phẩm thành công",
+								"Thành công", JOptionPane.INFORMATION_MESSAGE);
+					}
+					else //Nếu là thêm
+					{
+						spBUS.addSP(sp);
+						Object [] row = {maSP, tenSP, maLoaiSP, donGia, soLuong, donViTinh};
+						model.addRow(row);
+						table.setModel(model);
+						JOptionPane.showMessageDialog(productDialog, "Thêm sản phẩm thành công",
+														"Thành công", JOptionPane.INFORMATION_MESSAGE);
+					}
+					loadData();
+					productDialog.dispose();
+				} catch (NumberFormatException ex) {
+					// TODO: handle exception
+					JOptionPane.showMessageDialog(productDialog, "Vui lòng nhập định dạng số cho Số lượng, Đơn giá !",
+													"Lỗi", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+        productDialog.setVisible(true);
+    }
+    
+    
+    public void deleteProduct()
+    {
+    	int i = table.getSelectedRow();
+    	if(i >= 0)
+    	{
+    		String maSP = table.getValueAt(i, 0).toString();
+    		String tenSP = table.getValueAt(i, 1).toString();
+    		System.out.println("Deleting MaSP: " + maSP + ", TenSP: " + tenSP); // Debug
+    		int confirm = JOptionPane.showConfirmDialog(this, 
+    				"Bạn có chắc muốn xóa sản phẩm " +tenSP + " có mã " +maSP + " không?",
+    				"Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+    		
+    		if(confirm == JOptionPane.YES_OPTION)
+    		{
+    			try {
+    				//Xóa sp trong spBUS
+					spBUS.deleteSP(Integer.parseInt(maSP));
+					
+					//Xóa sp khỏi model
+					model.removeRow(i);
+					
+					JOptionPane.showMessageDialog(this, "Xóa sản phẩm " +tenSP + "có mã " +maSP +"thành công",
+							"Thành công", JOptionPane.INFORMATION_MESSAGE);
+					
+				} catch (Exception e) {
+					// TODO: handle exception
+					JOptionPane.showMessageDialog(this, "Lỗi xóa sản phẩm" +e.getMessage(), 
+							"Lỗi", JOptionPane.ERROR_MESSAGE);
+				}
+    		}
+    	}
+    	else
+    	{
+    		JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm để xóa", 
+    										"Lỗi", JOptionPane.ERROR_MESSAGE);
+    	}
     }
 }

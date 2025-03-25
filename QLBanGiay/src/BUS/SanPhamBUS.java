@@ -2,6 +2,7 @@ package BUS;
 
 import java.util.ArrayList;
 
+import DAO.SanPhamDAO;
 import DTO.SanPhamDTO;
 
 public class SanPhamBUS {
@@ -26,11 +27,22 @@ public class SanPhamBUS {
 		dssp.add(sp);
 	}
 	
-	public void deleteSP(String idSP)
+	public void deleteSP(int idSP)
 	{
 		for(SanPhamDTO sp : dssp)
 		{
-			
+			if(sp.getMaSP() == idSP)
+			{
+				dssp.remove(sp);
+			}
+		}
+	}
+	
+	public void updateSP(SanPhamDTO sp)
+	{
+		for(int i=0; i < dssp.size(); i++)
+		{
+			dssp.set(i, sp);
 		}
 	}
 }
