@@ -6,10 +6,12 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Vector;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -35,6 +37,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
     private JLabel lbMaSP, lbTenSP, lbDonGia, lbDonViTinh, lbSoLuong, lbMaLoaiSP;
     private DefaultTableModel model;
     private SanPhamBUS spBUS = new SanPhamBUS();
+    private JTextField txtSearch;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -230,7 +233,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
 
         JPanel pLeftHeader = new JPanel();
         pLeftHeader.setBackground(Color.WHITE);
-        pLeftHeader.setBounds(0, 0, 539, 100);
+        pLeftHeader.setBounds(0, 0, 514, 100);
         pHeaderMain.add(pLeftHeader);
         pLeftHeader.setLayout(null);
 
@@ -241,7 +244,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         btnThem.setBorderPainted(false);
         btnThem.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/addIcon.png")));
         btnThem.setFont(new Font("Verdana", Font.BOLD, 14));
-        btnThem.setBounds(0, 0, 93, 100);
+        btnThem.setBounds(0, 0, 84, 100);
         btnThem.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnThem.setHorizontalTextPosition(SwingConstants.CENTER);
         btnThem.setPreferredSize(new Dimension(120, 140));
@@ -257,7 +260,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         btnSua.setHorizontalTextPosition(SwingConstants.CENTER);
         btnSua.setFont(new Font("Verdana", Font.BOLD, 14));
         btnSua.setBackground(Color.WHITE);
-        btnSua.setBounds(94, 0, 93, 100);
+        btnSua.setBounds(70, 0, 93, 100);
         pLeftHeader.add(btnSua);
 
         JButton btnXoa = new JButton("XÓA");
@@ -270,7 +273,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         btnXoa.setHorizontalTextPosition(SwingConstants.CENTER);
         btnXoa.setFont(new Font("Verdana", Font.BOLD, 14));
         btnXoa.setBackground(Color.WHITE);
-        btnXoa.setBounds(187, 0, 93, 100);
+        btnXoa.setBounds(140, 0, 84, 100);
         pLeftHeader.add(btnXoa);
 
         JButton btnXuatExcel = new JButton("XUẤT EXCEL");
@@ -281,11 +284,11 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         btnXuatExcel.setFont(new Font("Verdana", Font.BOLD, 14));
         btnXuatExcel.setBorderPainted(false);
         btnXuatExcel.setBackground(Color.WHITE);
-        btnXuatExcel.setBounds(279, 0, 137, 100);
+        btnXuatExcel.setBounds(216, 0, 137, 100);
         pLeftHeader.add(btnXuatExcel);
 
         JButton btnNhapExcel = new JButton("NHẬP EXCEL");
-        btnNhapExcel.setBounds(405, 0, 137, 100);
+        btnNhapExcel.setBounds(347, 0, 137, 100);
         pLeftHeader.add(btnNhapExcel);
         btnNhapExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnNhapExcel.setPreferredSize(new Dimension(120, 140));
@@ -294,12 +297,38 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         btnNhapExcel.setFont(new Font("Verdana", Font.BOLD, 14));
         btnNhapExcel.setBorderPainted(false);
         btnNhapExcel.setBackground(Color.WHITE);
+        
+        txtSearch = new JTextField();
+        txtSearch.setBounds(611, 36, 290, 28);
+        pHeaderMain.add(txtSearch);
+        txtSearch.setColumns(10);
+        
+        JComboBox cboxSearch = new JComboBox();
+        cboxSearch.setBounds(524, 37, 77, 25);
+        pHeaderMain.add(cboxSearch);
+        
+        JButton btnSearch = new JButton("");
+        btnSearch.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/searchIcon.png")));
+        btnSearch.setBounds(911, 36, 63, 28);
+        pHeaderMain.add(btnSearch);
 
         // Gắn table vào scrollPane ngay từ đầu
         table.setFont(new Font("Verdana", Font.PLAIN, 14));
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBounds(0, 100, 987, 700);
         pMain.add(scrollPane);
+        
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) { // Nháy đúp chuột
+                    int row = table.getSelectedRow();
+                    if (row >= 0) {
+                        openProductDialog(true); // Mở hộp thoại sửa
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -497,6 +526,15 @@ public class SanPhamGUI extends JFrame implements ActionListener {
 					JOptionPane.showMessageDialog(productDialog, "Vui lòng nhập định dạng số cho Số lượng, Đơn giá !",
 													"Lỗi", JOptionPane.ERROR_MESSAGE);
 				}
+			}
+		});
+        
+        btnDong.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				productDialog.dispose();
 			}
 		});
         productDialog.setVisible(true);
