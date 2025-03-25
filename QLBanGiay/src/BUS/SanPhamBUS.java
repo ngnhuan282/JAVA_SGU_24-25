@@ -9,7 +9,7 @@ public class SanPhamBUS {
 	
 	public SanPhamBUS()
 	{
-		
+		dssp = new ArrayList<>();
 	}
 	
 	public ArrayList<SanPhamDTO> getDssp() {

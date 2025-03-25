@@ -2,7 +2,8 @@ package DTO;
 
 public class SanPhamDTO {
 	private String maLoaiSP, tenSP, DonViTinh;
-	private int maSP, soLuong, donGia, maNCC;
+	private int maSP, soLuong;
+	private double donGia;
 	
 	public SanPhamDTO()
 	{
@@ -11,14 +12,13 @@ public class SanPhamDTO {
 	
 	
 	
-	public SanPhamDTO(String maLoaiSP, String tenSP, String donViTinh, int maSP, int soLuong, int donGia, int maNCC) {
+	public SanPhamDTO(String maLoaiSP, String tenSP, String donViTinh, int maSP, int soLuong, double donGia) {
 		this.maLoaiSP = maLoaiSP;
 		this.tenSP = tenSP;
 		DonViTinh = donViTinh;
 		this.maSP = maSP;
 		this.soLuong = soLuong;
 		this.donGia = donGia;
-		this.maNCC = maNCC;
 	}
 
 	public String getMaLoaiSP() {
@@ -61,21 +61,14 @@ public class SanPhamDTO {
 		this.soLuong = soLuong;
 	}
 
-	public int getDonGia() {
+	public double getDonGia() {
 		return donGia;
 	}
 
-	public void setDonGia(int donGia) {
+	public void setDonGia(double donGia) {
 		this.donGia = donGia;
 	}
 
-	public int getMaNCC() {
-		return maNCC;
-	}
-
-	public void setMaNCC(int maNCC) {
-		this.maNCC = maNCC;
-	}
 	
 	
 	
