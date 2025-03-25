@@ -433,13 +433,17 @@ public class KhachHangGUI extends JFrame implements ActionListener {
 		btnThemKH.setBackground(Color.decode("#00C853"));
 		btnThemKH.setOpaque(true);
 		btnThemKH.addActionListener(e -> {
-			khachHangBUS.addCustomer(txtMaKH.getText(), txtHo.getText(), txtTen.getText(), txtDiaChi.getText(), txtSDT.getText());
-			txtMaKH.setText("");
-			txtHo.setText("");
-			txtTen.setText("");
-			txtDiaChi.setText("");
-			txtSDT.setText("");
-			fillTableWithSampleData();
+			try {
+				khachHangBUS.addCustomer(txtMaKH.getText(), txtHo.getText(), txtTen.getText(), txtDiaChi.getText(), txtSDT.getText());
+				txtMaKH.setText("");
+				txtHo.setText("");
+				txtTen.setText("");
+				txtDiaChi.setText("");
+				txtSDT.setText("");
+				fillTableWithSampleData();
+			} catch (NumberFormatException e2) {
+				 JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng mã khách hàng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+			}
 		});
 		
 		JButton btnDong = new JButton("Đóng");
