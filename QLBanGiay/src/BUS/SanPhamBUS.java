@@ -27,11 +27,11 @@ public class SanPhamBUS {
 		dssp.add(sp);
 	}
 	
-	public void deleteSP(int idSP)
+	public void deleteSP(String maSP)
 	{
 		for(SanPhamDTO sp : dssp)
 		{
-			if(sp.getMaSP() == idSP)
+			if(sp.getMaSP().equals(maSP))
 			{
 				dssp.remove(sp);
 			}

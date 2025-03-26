@@ -474,14 +474,14 @@ public class SanPhamGUI extends JFrame implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				try {
-					String maSPText = txtMaSP.getText();
+					String maSP= txtMaSP.getText();
 					String tenSP = txtTenSP.getText();
 					String soLuongText = txtSoLuong.getText();
 					String donGiaText = txtDonGia.getText();
 					String maLoaiSP = txtMaLoaiSP.getText();
 					String donViTinh = txtDonViTinh.getText();
 					
-					if(maSPText.isEmpty() || tenSP.isEmpty() || soLuongText.isEmpty()
+					if(maSP.isEmpty() || tenSP.isEmpty() || soLuongText.isEmpty()
 							|| donGiaText.isEmpty() || maLoaiSP.isEmpty() || donViTinh.isEmpty())
 					{
 						JOptionPane.showMessageDialog(productDialog, "Vui lòng nhập đầy đủ thông tin !");
@@ -490,9 +490,8 @@ public class SanPhamGUI extends JFrame implements ActionListener {
 					
 					int soLuong = Integer.parseInt(soLuongText);
 					double donGia = Double.parseDouble(donGiaText);
-					int maSP = Integer.parseInt(maSPText);
 					
-					SanPhamDTO sp = new SanPhamDTO(maLoaiSP, tenSP, donViTinh, maSP, soLuong, donGia);
+					SanPhamDTO sp = new SanPhamDTO(maLoaiSP, tenSP, soLuong, donGia, donViTinh, maSP);
 					
 					if(isEditMode)
 					{	
@@ -557,7 +556,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
     		{
     			try {
     				//Xóa sp trong spBUS
-					spBUS.deleteSP(Integer.parseInt(maSP));
+					spBUS.deleteSP(maSP);
 					
 					//Xóa sp khỏi model
 					model.removeRow(i);
