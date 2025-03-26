@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -65,8 +66,9 @@ public class KhachHangGUI extends JFrame implements ActionListener {
 
 	/**
 	 * Create the frame.
+	 * @throws SQLException 
 	 */
-	public KhachHangGUI() {
+	public KhachHangGUI() throws SQLException {
 		khachHangBUS = new KhachHangBUS();
 		initComponents();
 	}
@@ -433,7 +435,15 @@ public class KhachHangGUI extends JFrame implements ActionListener {
 		btnThemKH.setBackground(Color.decode("#00C853"));
 		btnThemKH.setOpaque(true);
 		btnThemKH.addActionListener(e -> {
+			if(txtMaKH.getText().equals("") || txtHo.getText().equals("") || txtTen.getText().equals("") || txtDiaChi.getText().equals("") || txtSDT.getText().equals("")) {
+				JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin khách hàng", "Thông báo", JOptionPane.WARNING_MESSAGE);
+				return;
+			}
 			try {
+				if(khachHangBUS.checkCustomer(txtMaKH.getText())) {
+					JOptionPane.showMessageDialog(this, "Mã khách hàng đã tồn tại!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
 				khachHangBUS.addCustomer(txtMaKH.getText(), txtHo.getText(), txtTen.getText(), txtDiaChi.getText(), txtSDT.getText());
 				txtMaKH.setText("");
 				txtHo.setText("");
@@ -498,38 +508,38 @@ public class KhachHangGUI extends JFrame implements ActionListener {
 		panel.setBounds(5, 29, 559, 300);
 		panel.setLayout(null);
 		
-		JLabel lbMaKH = new JLabel("Mã khách hàng");
+		JLabel lbMaKH = new JLabel("Họ");
 		lbMaKH.setFont(new Font("Arial", Font.PLAIN, 14));
 		lbMaKH.setBounds(10, 21, 100, 23);
 		panel.add(lbMaKH);
 		
-		JTextField txtMaKH = new JTextField();
-		txtMaKH.setBounds(10, 46, 185, 32);
-		txtMaKH.setColumns(10);
-		txtMaKH.setText(table.getValueAt(selectedRow, 0).toString());
-		panel.add(txtMaKH);
-		
-		JLabel lbHo = new JLabel("Họ");
-		lbHo.setFont(new Font("Arial", Font.PLAIN, 14));
-		lbHo.setBounds(10, 101, 100, 23);
-		panel.add(lbHo);
-		
 		JTextField txtHo = new JTextField();
+		txtHo.setBounds(10, 46, 185, 32);
 		txtHo.setColumns(10);
-		txtHo.setBounds(10, 126, 185, 32);
 		txtHo.setText(table.getValueAt(selectedRow, 1).toString());
 		panel.add(txtHo);
 		
 		JLabel lbTen = new JLabel("Tên");
 		lbTen.setFont(new Font("Arial", Font.PLAIN, 14));
-		lbTen.setBounds(10, 181, 100, 23);
+		lbTen.setBounds(10, 101, 100, 23);
 		panel.add(lbTen);
 		
 		JTextField txtTen = new JTextField();
 		txtTen.setColumns(10);
-		txtTen.setBounds(10, 206, 185, 32);
+		txtTen.setBounds(10, 126, 185, 32);
 		txtTen.setText(table.getValueAt(selectedRow, 2).toString());
 		panel.add(txtTen);
+		
+//		JLabel lbTen = new JLabel("Tên");
+//		lbTen.setFont(new Font("Arial", Font.PLAIN, 14));
+//		lbTen.setBounds(10, 181, 100, 23);
+//		panel.add(lbTen);
+//		
+//		JTextField txtTen = new JTextField();
+//		txtTen.setColumns(10);
+//		txtTen.setBounds(10, 206, 185, 32);
+//		txtTen.setText(table.getValueAt(selectedRow, 2).toString());
+//		panel.add(txtTen);
 		
 		JLabel lbSDT = new JLabel("Số điện thoại");
 		lbSDT.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -573,7 +583,11 @@ public class KhachHangGUI extends JFrame implements ActionListener {
 		panelMain.add(panel);
 		
 		btnSuaKH.addActionListener(e -> {
-			khachHangBUS.updateCustomer(txtMaKH.getText(), txtHo.getText(), txtTen.getText(), txtDiaChi.getText(), txtSDT.getText(), selectedRow);
+			if(txtHo.getText().equals("") || txtTen.getText().equals("") || txtDiaChi.getText().equals("") || txtSDT.getText().equals("")) {
+				JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin khách hàng", "Thông báo", JOptionPane.WARNING_MESSAGE);
+				return;
+			}
+			khachHangBUS.updateCustomer(txtHo.getText(), txtTen.getText(), txtDiaChi.getText(), txtSDT.getText(), selectedRow);
 			updateCustomerDialog.dispose();
 			fillTableWithSampleData();
 		});
@@ -615,7 +629,6 @@ public class KhachHangGUI extends JFrame implements ActionListener {
 			initComponents();
 		}
 		else if(str.equals("Xóa")) {
-			System.out.println("xóa");
 			deleteCustomerGUI();
 			revalidate();
 			repaint();

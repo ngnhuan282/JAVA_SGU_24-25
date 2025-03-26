@@ -4,9 +4,26 @@ public class KhachHangDTO {
 	private int MaKH;
 	private String ho, ten, sdt, diaChi;
 	
+	public KhachHangDTO() {
+		
+	}
+	
+	
+	
+	public KhachHangDTO(int maKH, String ho, String ten, String sdt, String diaChi) {
+		MaKH = maKH;
+		this.ho = ho;
+		this.ten = ten;
+		this.sdt = sdt;
+		this.diaChi = diaChi;
+	}
+
+
+
 	public int getMaKH() {
 		return MaKH;
 	}
+	
 	public void setMaKH(int maKH) {
 		MaKH = maKH;
 	}
