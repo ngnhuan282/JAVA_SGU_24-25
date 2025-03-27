@@ -163,6 +163,7 @@ public class KhachHangGUI extends JFrame implements ActionListener {
 		pNavItem.add(btnTrangChuGUI);
 		
 		JButton btnSanPhamGUI = new JButton("SẢN PHẨM");
+		btnSanPhamGUI.addActionListener(this);
 		btnSanPhamGUI.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/productIcon.png")));
 		btnSanPhamGUI.setOpaque(true);
 		btnSanPhamGUI.setHorizontalAlignment(SwingConstants.LEFT);
@@ -336,8 +337,8 @@ public class KhachHangGUI extends JFrame implements ActionListener {
 					x.getMaKH(),
 					x.getHo(),
 					x.getTen(),
-					x.getDiaChi(),
 					x.getSdt(),
+					x.getDiaChi(),
 			};
 			model.addRow(row);
 		}
@@ -440,8 +441,24 @@ public class KhachHangGUI extends JFrame implements ActionListener {
 				return;
 			}
 			try {
-				if(khachHangBUS.checkCustomer(txtMaKH.getText())) {
+				if(khachHangBUS.checkCustomerExist(txtMaKH.getText())) {
 					JOptionPane.showMessageDialog(this, "Mã khách hàng đã tồn tại!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				if(!khachHangBUS.checkRegexId(txtMaKH.getText())) {
+					JOptionPane.showMessageDialog(this, "Mã khách hàng không đúng định dạng!\nVD: KH001", "Thông báo", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				if(!khachHangBUS.checkRegexSdt(txtSDT.getText())) {
+					JOptionPane.showMessageDialog(this, "Số điện thoại sai định dạng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				if(!khachHangBUS.checkRegexHo(txtHo.getText())) {
+					JOptionPane.showMessageDialog(this, "Họ sai định dạng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				if(!khachHangBUS.checkRegexHo(txtTen.getText())) {
+					JOptionPane.showMessageDialog(this, "Tên sai định dạng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
 					return;
 				}
 				khachHangBUS.addCustomer(txtMaKH.getText(), txtHo.getText(), txtTen.getText(), txtDiaChi.getText(), txtSDT.getText());
@@ -585,6 +602,18 @@ public class KhachHangGUI extends JFrame implements ActionListener {
 		btnSuaKH.addActionListener(e -> {
 			if(txtHo.getText().equals("") || txtTen.getText().equals("") || txtDiaChi.getText().equals("") || txtSDT.getText().equals("")) {
 				JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin khách hàng", "Thông báo", JOptionPane.WARNING_MESSAGE);
+				return;
+			}
+			if(!khachHangBUS.checkRegexSdt(txtSDT.getText())) {
+				JOptionPane.showMessageDialog(this, "Số điện thoại sai định dạng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+				return;
+			}
+			if(!khachHangBUS.checkRegexHo(txtHo.getText())) {
+				JOptionPane.showMessageDialog(this, "Họ sai định dạng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+				return;
+			}
+			if(!khachHangBUS.checkRegexHo(txtTen.getText())) {
+				JOptionPane.showMessageDialog(this, "Tên sai định dạng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
 				return;
 			}
 			khachHangBUS.updateCustomer(txtHo.getText(), txtTen.getText(), txtDiaChi.getText(), txtSDT.getText(), selectedRow);

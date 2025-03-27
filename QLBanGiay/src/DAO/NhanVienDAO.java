@@ -46,11 +46,11 @@ public class NhanVienDAO {
 	public void updateNhanVienDAO(NhanVienDTO x) {
 		String sql = "UPDATE nhanvien"
 				+ " SET"
-				+ " WHERE MaNV = '" + x.getMaNV() + "'"
 				+ " Ho = '" + x.getHo() + "'"
 				+ ", Ten = '" + x.getTen() + "'"
 				+ ", SDT = '" + x.getSdt() + "'"
-				+ ", LuongThang = " + x.getLuong() ;
+				+ ", LuongThang = " + x.getLuong() +""
+				+ " WHERE MaNV = '" + x.getMaNV() + "'";
 				
 				
 		connection.executeUpdate(sql);

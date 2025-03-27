@@ -24,18 +24,49 @@ public class KhachHangBUS {
 		this.listKhachHang = listKhachHang;
 	}
 	
-	public boolean checkCustomer(String maKh) { // trả về true nếu makh đã tồn tại
+	public boolean checkCustomerExist(String maKh) { // trả về true nếu makh đã tồn tại
 		for(KhachHangDTO x : listKhachHang) {
-			if(x.getMaKH() == Integer.valueOf(maKh)) {
+			if(x.getMaKH().equals(maKh)) {
 				return true;
 			}
 		}
 		return false;
 	}
 	
+	public boolean checkRegexId(String maKh) {
+		String regex = "KH\\d{3,6}$";
+		if(maKh.matches(regex))
+			return true;
+		return false;
+	}
+	
+	public boolean checkRegexSdt(String sdt) {
+		String regex = "^(01|02|03|04|05|06|07|08|09)\\d{8,9}$";
+		String regex2 = "^\\+\\d{1,3}\\d{4,14}(?:x\\d+)?$";
+		if(sdt.matches(regex) || sdt.matches(regex2))
+			return true;
+		return false;
+	}
+	
+	public boolean checkRegexHo(String ho) {
+		String regex = "^[^\\d]*$";
+		if(ho.matches(regex)) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean checkRegexTen(String ten) {
+		String regex = "^[^\\d]*$";
+		if(ten.matches(regex)) {
+			return true;
+		}
+		return false;
+	}
+	
 	public void addCustomer(String maKh, String ho, String ten, String diaChi, String sdt) {
 		KhachHangDTO khachHang = new KhachHangDTO();
-		khachHang.setMaKH(Integer.valueOf(maKh));
+		khachHang.setMaKH(maKh);
 		khachHang.setHo(ho);
 		khachHang.setTen(ten);
 		khachHang.setDiaChi(diaChi);

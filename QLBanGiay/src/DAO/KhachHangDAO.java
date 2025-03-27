@@ -26,7 +26,7 @@ public class KhachHangDAO {
 		ResultSet rs = connection.executeQuery(sql);
 		
 		while(rs.next()) {
-			int maKH = Integer.valueOf(rs.getString("MaKH"));
+			String maKH = rs.getString("MaKH");
 			String ho = rs.getString("Ho");
 			String ten = rs.getString("Ten");
 			String sdt = rs.getString("SDT");
@@ -55,10 +55,12 @@ public class KhachHangDAO {
 				+ ", SDT = '" + x.getSdt() + "'"
 				+ " WHERE MaKH = '" + x.getMaKH() + "'";
 		connection.executeUpdate(sql);
+		connection.disConnect();
 	}
 	
 	public void deleteKhachHangDAO(KhachHangDTO x) {
 		String sql  = "DELETE FROM khachhang WHERE MaKH ='" + x.getMaKH() + "'";
 		connection.executeUpdate(sql);
+		connection.disConnect();
 	}
 }
