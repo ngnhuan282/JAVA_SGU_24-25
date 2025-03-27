@@ -33,6 +33,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import BUS.NhanVienBUS;
@@ -519,6 +520,17 @@ public class NhanVienGUI extends JFrame implements ActionListener{
 		            JOptionPane.showMessageDialog(null, "Số điện thoại chỉ được chứa số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
 		            return;
 		        }
+		        if (!hoNV.matches("^[a-zA-ZÀ-ỹ ]+$")) {
+		            JOptionPane.showMessageDialog(null, "Họ nhân viên chỉ được chứa chữ cái!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+		            txtHoNV.requestFocus();
+		            return;
+		        }
+
+		        if (!tenNV.matches("^[a-zA-ZÀ-ỹ ]+$")) {
+		            JOptionPane.showMessageDialog(null, "Tên nhân viên chỉ được chứa chữ cái!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+		            txtTenNV.requestFocus();
+		            return;
+		        }
 		        
 		        if(isDuplicateMaNV(maNV)) {
 					JOptionPane.showMessageDialog(null, "Mã nhân viên đã tồn tại!", "Thông báo", JOptionPane.WARNING_MESSAGE);
@@ -537,6 +549,10 @@ public class NhanVienGUI extends JFrame implements ActionListener{
 				txtSDTNV.setText("");
 				txtLuongThang.setText("");
 				fillTableWithSampleData();
+				
+				TableRowSorter<TableModel> sorter = new TableRowSorter<>(table.getModel());
+				table.setRowSorter(sorter);
+				sorter.setSortKeys(Collections.singletonList(new RowSorter.SortKey(0, SortOrder.ASCENDING)));
 		       
 		        JOptionPane.showMessageDialog(null, "Thêm nhân viên thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
 		        addStaffDialog.dispose();
@@ -576,7 +592,7 @@ public class NhanVienGUI extends JFrame implements ActionListener{
 	        return;  // Dừng lại, không mở cửa sổ sửa
 	    }
 		
-		JDialog fixStaffDialog = new JDialog(this, "Thêm Nhân Viên", true); // true để cửa sổ phụ là modal
+		JDialog fixStaffDialog = new JDialog(this, "Sửa Nhân Viên", true); // true để cửa sổ phụ là modal
 	    fixStaffDialog.setBounds(100, 100, 550, 372);  // Kích thước cửa sổ
 	    fixStaffDialog.setLocationRelativeTo(this);
 	    fixStaffDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -586,7 +602,7 @@ public class NhanVienGUI extends JFrame implements ActionListener{
 		setLocationRelativeTo(null);
 		panelMain.setLayout(null);
 		
-		JLabel lbHeader = new JLabel("THÊM NHÂN VIÊN");
+		JLabel lbHeader = new JLabel("SỬA NHÂN VIÊN");
 		lbHeader.setBounds(5, 5, 531, 31);
 		lbHeader.setForeground(Color.WHITE);
 		lbHeader.setHorizontalAlignment(SwingConstants.CENTER);
@@ -696,7 +712,6 @@ public class NhanVienGUI extends JFrame implements ActionListener{
 	    txtSDTNV.setText(table.getValueAt(selectedRow, 3).toString());
 	    txtLuongThang.setText(table.getValueAt(selectedRow, 4).toString());
 
-	    String txtmaNVcu = txtMaNV.getText();
 	    String txtsdtcu = txtSDTNV.getText();
 		
 	    
@@ -712,12 +727,6 @@ public class NhanVienGUI extends JFrame implements ActionListener{
 		            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ dữ liệu!", "Thông báo", JOptionPane.WARNING_MESSAGE);
 		            return;
 		        }
-	            if(!maNV.equals(txtmaNVcu)) {
-	            	if (isDuplicateMaNV(maNV)) {
-			            JOptionPane.showMessageDialog(null, "Mã nhân viên đã tồn tại! Vui lòng nhập mã khác.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-			            return;
-			        }
-	            }
 	            if(!sdtNV.equals(txtsdtcu)) {
 	            	 if (isDuplicateSDT(sdtNV)) {
 	 		            JOptionPane.showMessageDialog(null, "Số điện thoại đã tồn tại! Vui lòng nhập số khác.", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -729,6 +738,17 @@ public class NhanVienGUI extends JFrame implements ActionListener{
 		            txtSDTNV.requestFocus();
 		            return;
 		        }
+	            if (!hoNV.matches("^[a-zA-ZÀ-ỹ ]+$")) {
+	                JOptionPane.showMessageDialog(null, "Họ nhân viên chỉ được chứa chữ cái!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+	                txtHoNV.requestFocus();
+	                return;
+	            }
+
+	            if (!tenNV.matches("^[a-zA-ZÀ-ỹ ]+$")) {
+	                JOptionPane.showMessageDialog(null, "Tên nhân viên chỉ được chứa chữ cái!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+	                txtTenNV.requestFocus();
+	                return;
+	            }
 	            // Kiểm tra dữ liệu hợp lệ
 	            if (maNV.isEmpty() || hoNV.isEmpty() || tenNV.isEmpty() || sdtNV.isEmpty() || luongNV.isEmpty()) {
 	                JOptionPane.showMessageDialog(fixStaffDialog, "Vui lòng điền đầy đủ thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -740,25 +760,15 @@ public class NhanVienGUI extends JFrame implements ActionListener{
 			    	luong = Double.parseDouble(txtLuongThang.getText());
 			  
 	                // Cập nhật dữ liệu vào bảng
-	        	    nhanVienBUS.fixStaff(txtMaNV.getText(),txtHoNV.getText(), txtTenNV.getText(), txtSDTNV.getText(), luong, selectedRow);
+	        	    nhanVienBUS.fixStaff(txtHoNV.getText(), txtTenNV.getText(), txtSDTNV.getText(), luong, selectedRow);
 	        	    
 	        		JOptionPane.showMessageDialog(null, "Sửa nhân viên thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
 	        		fillTableWithSampleData();
-
+	        		
 
 	                fixStaffDialog.dispose();
 	            
 	        }
-	        private boolean isDuplicateMaNV(String maNV) {
-		        for (int i = 0; i < table.getRowCount(); i++) {  // table là JTable chứa danh sách nhân viên
-		            String existingMaNV = table.getValueAt(i, 0).toString();
-		            if (maNV.equals(existingMaNV)) {
-		            	txtMaNV.requestFocus();
-		                return true;
-		            }
-		        }
-		        return false;
-		    }
 		    private boolean isDuplicateSDT(String sdtNV) {
 		        for (int i = 0; i < table.getRowCount(); i++) {  // table là JTable chứa danh sách nhân viên
 		            String existingSDTNV = table.getValueAt(i, 3).toString();// Lấy giá trị từ cột Mã NV (cột 0)
@@ -795,7 +805,7 @@ public class NhanVienGUI extends JFrame implements ActionListener{
 	        DefaultTableModel model = (DefaultTableModel) table.getModel();
 	        model.removeRow(selectedRow);
 
-	        // Cập nhật bảng sau khi xóa
+	        nhanVienBUS.deleteStaff(selectedRow);
 	        updateTableSort();
 	        JOptionPane.showMessageDialog(null, "Xóa nhân viên thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
 	    }

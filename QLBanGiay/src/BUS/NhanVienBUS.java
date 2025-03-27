@@ -44,14 +44,18 @@ public class NhanVienBUS {
 		nhanVienDAO.addNhanVienDAO(nhanVien);
 	}
 	
-	public void fixStaff(String maNV, String ho, String ten, String sdt,double luong,int index) {
+	public void fixStaff(String ho, String ten, String sdt,double luong,int index) {
 		NhanVienDTO nv = listNhanVien.get(index);
-		nv.setMaNV(maNV);
 		nv.setHo(ho);
 		nv.setTen(ten);
 		nv.setSdt(sdt);
 		nv.setLuong(luong);
 		nhanVienDAO.updateNhanVienDAO(nv);
+	}
+	public void deleteStaff(int index) {
+		NhanVienDTO nv = listNhanVien.get(index);
+		listNhanVien.remove(index);
+		nhanVienDAO.deleteNhanVienDAO(nv);
 	}
 
 	

@@ -49,10 +49,8 @@ public class NhanVienDAO {
 				+ " Ho = '" + x.getHo() + "'"
 				+ ", Ten = '" + x.getTen() + "'"
 				+ ", SDT = '" + x.getSdt() + "'"
-				+ ", LuongThang = " + x.getLuong() +""
-				+ " WHERE MaNV = '" + x.getMaNV() + "'";
-				
-				
+				+ " WHERE LuongThang = '" + x.getLuong() + "'";
+					
 		connection.executeUpdate(sql);
 	}
 	
