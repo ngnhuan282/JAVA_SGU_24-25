@@ -57,7 +57,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         model = new DefaultTableModel(header, 0);
         table = new JTable(model);
         initComponents();
-        loadData();
+      
     }
     
     public void loadData() {
