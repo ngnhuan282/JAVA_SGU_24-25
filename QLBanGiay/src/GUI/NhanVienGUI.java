@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,6 +35,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
+import BUS.NhanVienBUS;
+import DTO.NhanVienDTO;
+
 public class NhanVienGUI extends JFrame implements ActionListener{
 
 	private static final long serialVersionUID = 1L;
@@ -41,6 +45,7 @@ public class NhanVienGUI extends JFrame implements ActionListener{
 	private int DEFAULT_WIDTH = 1200, DEFAULT_HEIGHT= 800;
 	private String color = "#FF5252";
 	private JTable table;
+	private NhanVienBUS nhanVienBUS;
 
 	/**
 	 * Launch the application.
@@ -58,8 +63,9 @@ public class NhanVienGUI extends JFrame implements ActionListener{
 		});
 	}
 	
-	public NhanVienGUI()
+	public NhanVienGUI() throws SQLException
 	{
+		nhanVienBUS = new NhanVienBUS();
 		initComponents();
 	}
 	/**
@@ -321,25 +327,25 @@ public class NhanVienGUI extends JFrame implements ActionListener{
 	}
 	
 	//Hàm này để hiển thị table, demo xem trước
+	private DefaultTableModel model;
 	private void fillTableWithSampleData() {
 		// Dữ liệu mẫu (ví dụ về sản phẩm)
 		String[] columnNames = { "Mã Nhân Viên", "Họ NV", "Tên NV", "Số Điện Thoại", "Lương Tháng" };
-		Object[][] data = {
-			    { "NV001", "Nguyễn Tiến", "Minh", "0933133496", 10000000 },
-			    { "NV002", "Trần Văn", "Bảo", "0987654321", 12000000 },
-			    { "NV003", "Lê Hoàng", "Anh", "0912345678", 11000000 },
-			    { "NV004", "Phạm Hữu", "Đạt", "0978563412", 9000000 },
-			    { "NV005", "Hoàng Thị", "Lan", "0965124783", 9500000 },
-			    { "NV006", "Đặng Xuân", "Nam", "0943125874", 10500000 },
-			    { "NV007", "Ngô Thị", "Hương", "0925478963", 9800000 },
-			    { "NV008", "Bùi Văn", "Tùng", "0914875632", 10200000 },
-			    { "NV009", "Đỗ Minh", "Quân", "0903126587", 11500000 },
-			    { "NV010", "Vũ Thị", "Nhung", "0932147856", 9700000 }
-			};
-
+		
 		// Tạo DefaultTableModel với dữ liệu mẫu
-		DefaultTableModel model = new DefaultTableModel(data, columnNames);
-
+		DefaultTableModel model = new DefaultTableModel(columnNames,0);
+		
+		for(NhanVienDTO x : nhanVienBUS.getListNhanVien()){
+			Object[] row = {
+					x.getMaNV() , 
+					x.getHo(),
+					x.getTen(),
+					x.getSdt(),
+					x.getLuong()
+			};
+			model.addRow(row);
+		}
+		
 		// Gán model vào JTable
 		table.setModel(model);
 		 Font font = new Font("Verdana", Font.PLAIN, 14);
@@ -487,56 +493,54 @@ public class NhanVienGUI extends JFrame implements ActionListener{
 		        addStaffDialog.dispose(); // Đóng cửa sổ sửa sản phẩm
 		    }
 		});
-	    //txtMaNV
-		//txtHoNV
-		//txtTenNV
-		//txtSDTNV
-		//txtLuongThang
 		
 		btnThem.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		        String maNV = txtMaNV.getText().trim();
+		        double luong = 0;
+		    	try {
+		    	    luong = Double.parseDouble(txtLuongThang.getText());
+		    	} catch (NumberFormatException e1) {
+		    	    JOptionPane.showMessageDialog(null, "Lương phải là số hợp lệ!", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+		    	    return;
+		    	}
+
+				String maNV = txtMaNV.getText().trim();
 		        String hoNV = txtHoNV.getText().trim();
 		        String tenNV = txtTenNV.getText().trim();
 		        String sdtNV = txtSDTNV.getText().trim();
 		        String luongThang = txtLuongThang.getText().trim();
-
+			        
 		        if (maNV.isEmpty() || hoNV.isEmpty() || tenNV.isEmpty() || sdtNV.isEmpty() || luongThang.isEmpty()) {
 		            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ dữ liệu!", "Thông báo", JOptionPane.WARNING_MESSAGE);
 		            return;
 		        }
-
+		        
 		        if (!sdtNV.matches("\\d+")) {  // regex: chỉ chấp nhận số (0-9)
 		            JOptionPane.showMessageDialog(null, "Số điện thoại chỉ được chứa số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
 		            return;
 		        }
-		        try {
-		            double luong = Double.parseDouble(luongThang);
-		        } catch (NumberFormatException ex) {
-		            JOptionPane.showMessageDialog(null, "Lương phải là một số hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-		            return;
-		        }
-		        if (isDuplicateMaNV(maNV)) {
-		            JOptionPane.showMessageDialog(null, "Mã nhân viên đã tồn tại! Vui lòng nhập mã khác.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-		            return;
-		        }
+		        
+		        if(isDuplicateMaNV(maNV)) {
+					JOptionPane.showMessageDialog(null, "Mã nhân viên đã tồn tại!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
 		        if (isDuplicateSDT(sdtNV)) {
 		            JOptionPane.showMessageDialog(null, "Số điện thoại đã tồn tại! Vui lòng nhập số khác.", "Lỗi", JOptionPane.ERROR_MESSAGE);
 		            return;
 		        }
+		       
 		        
-		        DefaultTableModel model = (DefaultTableModel) table.getModel();
-		        model.addRow(new Object[]{maNV, hoNV, tenNV, sdtNV, luongThang});
-		        
-		        // Nếu vượt qua kiểm tra, thực hiện thêm nhân viên (cần bổ sung logic thêm vào bảng hoặc database)
+		    	nhanVienBUS.addStaff(txtMaNV.getText(), txtHoNV.getText(), txtTenNV.getText(), txtSDTNV.getText(), luong);
+		    	txtMaNV.setText("");
+				txtHoNV.setText("");
+				txtTenNV.setText("");
+				txtSDTNV.setText("");
+				txtLuongThang.setText("");
+				fillTableWithSampleData();
+		       
 		        JOptionPane.showMessageDialog(null, "Thêm nhân viên thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
 		        addStaffDialog.dispose();
-		        
-		     // **CẬP NHẬT LẠI TABLE ĐỂ SORT THEO MÃ NHÂN VIÊN**  
-		        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
-		        table.setRowSorter(sorter);
-		        sorter.setSortKeys(Collections.singletonList(new RowSorter.SortKey(0, SortOrder.ASCENDING)));
-		        sorter.sort();
+
 		    }
 		    //check maNhanVien co trung ko
 		    private boolean isDuplicateMaNV(String maNV) {
@@ -560,6 +564,8 @@ public class NhanVienGUI extends JFrame implements ActionListener{
 		        return false;
 		    }
 		});
+
+
 		
 		addStaffDialog.setVisible(true);
 	}
@@ -683,12 +689,13 @@ public class NhanVienGUI extends JFrame implements ActionListener{
 		    }
 		});
 	    
-		// Lấy số cột của bảng
+		//Lay du lieu co san tu hang da chon
 	    txtMaNV.setText(table.getValueAt(selectedRow, 0).toString());
 	    txtHoNV.setText(table.getValueAt(selectedRow, 1).toString());
 	    txtTenNV.setText(table.getValueAt(selectedRow, 2).toString());
 	    txtSDTNV.setText(table.getValueAt(selectedRow, 3).toString());
 	    txtLuongThang.setText(table.getValueAt(selectedRow, 4).toString());
+
 	    String txtmaNVcu = txtMaNV.getText();
 	    String txtsdtcu = txtSDTNV.getText();
 		
@@ -696,8 +703,6 @@ public class NhanVienGUI extends JFrame implements ActionListener{
 	    btnSua.addActionListener(new ActionListener() {
 	        @Override
 	        public void actionPerformed(ActionEvent e) {
-	        	
-	            // Lấy dữ liệu đã chỉnh sửa từ các ô nhập liệu
 	            String maNV = txtMaNV.getText().trim();
 	            String hoNV = txtHoNV.getText().trim();
 	            String tenNV = txtTenNV.getText().trim();
@@ -719,7 +724,6 @@ public class NhanVienGUI extends JFrame implements ActionListener{
 	 		            return;
 	 		        }
 	            }
-
 	            if (!sdtNV.matches("\\d+")) {  // regex: chỉ chấp nhận số (0-9)
 		            JOptionPane.showMessageDialog(null, "Số điện thoại chỉ được chứa số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
 		            txtSDTNV.requestFocus();
@@ -730,42 +734,20 @@ public class NhanVienGUI extends JFrame implements ActionListener{
 	                JOptionPane.showMessageDialog(fixStaffDialog, "Vui lòng điền đầy đủ thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
 	                return;
 	            }
-	            try {
-		            double luong = Double.parseDouble(luongNV);
-		        } catch (NumberFormatException ex) {
-		            JOptionPane.showMessageDialog(null, "Lương phải là một số hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-		            return;
-		        }
 	            
 	            // Kiểm tra giá trị số
-	            try {
+	            	double luong = 0;
+			    	luong = Double.parseDouble(txtLuongThang.getText());
+			  
 	                // Cập nhật dữ liệu vào bảng
-	                table.setValueAt(maNV, selectedRow, 0);
-	                table.setValueAt(hoNV, selectedRow, 1);
-	                table.setValueAt(tenNV, selectedRow, 2);
-	                table.setValueAt(sdtNV, selectedRow, 3);
-	                table.setValueAt(luongNV, selectedRow, 4);
+	        	    nhanVienBUS.fixStaff(txtMaNV.getText(),txtHoNV.getText(), txtTenNV.getText(), txtSDTNV.getText(), luong, selectedRow);
+	        	    
+	        		JOptionPane.showMessageDialog(null, "Sửa nhân viên thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+	        		fillTableWithSampleData();
 
-	                // Làm mới bảng để hiển thị thay đổi
-	                table.repaint();
-	                table.revalidate();
 
-	                // Hiển thị thông báo
-	                JOptionPane.showMessageDialog(fixStaffDialog, "Cập nhật thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-	             // Sau khi cập nhật thành công, thực hiện sắp xếp lại bảng
-	                DefaultTableModel model = (DefaultTableModel) table.getModel();
-	                TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
-	                table.setRowSorter(sorter);
-
-	                // Sắp xếp theo cột "Mã nhân viên" (cột 0) tăng dần
-	                sorter.setSortKeys(List.of(new RowSorter.SortKey(0, SortOrder.ASCENDING)));
-	                sorter.sort();
-
-	                // Đóng cửa sổ sửa sản phẩm
 	                fixStaffDialog.dispose();
-	            } catch (NumberFormatException ex) {
-	                JOptionPane.showMessageDialog(fixStaffDialog, "Đơn giá và số lượng phải là số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-	            }
+	            
 	        }
 	        private boolean isDuplicateMaNV(String maNV) {
 		        for (int i = 0; i < table.getRowCount(); i++) {  // table là JTable chứa danh sách nhân viên
