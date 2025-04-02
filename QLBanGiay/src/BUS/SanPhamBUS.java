@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import DTO.SanPhamDTO;
 
 public class SanPhamBUS {
-	private ArrayList<SanPhamDTO> dssp;
+	private static ArrayList<SanPhamDTO> dssp;
 	
 	public SanPhamBUS()
 	{
-		dssp = new ArrayList<>();
+		
 	}
 	
 	public ArrayList<SanPhamDTO> getDssp() {
