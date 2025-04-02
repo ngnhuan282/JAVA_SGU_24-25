@@ -2,6 +2,7 @@ package BUS;
 
 import java.util.ArrayList;
 
+import DAO.SanPhamDAO;
 import DTO.SanPhamDTO;
 
 public class SanPhamBUS {
@@ -36,23 +37,41 @@ public class SanPhamBUS {
 	}
 	
 	public void addSP(SanPhamDTO sp)
-	{
+	{	
+		if(sp.getMaSP().isEmpty() || sp.getTenSP().isEmpty() || sp.getMaLoaiSP().isEmpty()
+				|| sp.getDonViTinh().isEmpty())
+		{
+			System.out.println("Vui lòng nhập đầy đủ thông tin");
+			return;
+		}
+		if(sp.getSoLuong() < 0)
+		{
+			System.out.println("Vui lòng nhập số lượng lớn hơn 0");
+			return;
+		}
+		if(sp.getDonGia() < 0)
+		{
+			System.out.println("Vui lòng nhập đơn giá lớn hôn 0");
+			return;
+		}
 		dssp.add(sp);
 	}
 	
 	public void deleteSP(String maSP)
 	{
-		for(SanPhamDTO sp : dssp)
+		for(int i=0; i < dssp.size(); i++)
 		{
-			if(sp.getMaSP().equals(maSP))
+			if(dssp.get(i).getMaSP().equals(maSP))
 			{
-				dssp.remove(sp);
+				SanPhamDAO dao = new SanPhamDAO();
+				dao.delete(maSP);
+				dssp.remove(i);
 			}
 		}
 	}
 	
 	public void updateSP(SanPhamDTO sp)
-	{
+	{	
 		for(int i=0; i < dssp.size(); i++)
 		{
 			dssp.set(i, sp);

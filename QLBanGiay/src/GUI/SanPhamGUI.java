@@ -38,7 +38,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
     private JTable table;
     private JLabel lbMaSP, lbTenSP, lbDonGia, lbDonViTinh, lbSoLuong, lbMaLoaiSP;
     private DefaultTableModel model;
-    private SanPhamBUS spBUS = new SanPhamBUS();
+//    private SanPhamBUS spBUS = new SanPhamBUS();
     private JTextField txtSearch;
 
     public static void main(String[] args) {
@@ -59,16 +59,16 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         model = new DefaultTableModel(header, 0);
         table = new JTable(model);
         initComponents();
-        loadData();
+//        loadData();
     }
     
-    public void loadData() {
-        model.setRowCount(0);
-        for (SanPhamDTO sp : spBUS.getDssp()) {
-            Object[] row = {sp.getMaSP(), sp.getTenSP(), sp.getMaLoaiSP(), sp.getDonGia(), sp.getSoLuong(), sp.getDonViTinh()};
-            model.addRow(row);
-        }
-    }
+//    public void loadData() {
+//        model.setRowCount(0);
+//        for (SanPhamDTO sp : spBUS.getDssp()) {
+//            Object[] row = {sp.getMaSP(), sp.getTenSP(), sp.getMaLoaiSP(), sp.getDonGia(), sp.getSoLuong(), sp.getDonViTinh()};
+//            model.addRow(row);
+//        }
+//    }
     
     public void initComponents() {
         setTitle("Hệ thống quản lý bán giày");
@@ -570,7 +570,8 @@ public class SanPhamGUI extends JFrame implements ActionListener {
 					
 					if(isEditMode)
 					{	
-//						Cập nhật vào spBUS
+						SanPhamBUS spBUS = new SanPhamBUS();
+						//Cập nhật vào spBUS
 						spBUS.updateSP(sp);
 						
 						//Set lại model
@@ -585,7 +586,8 @@ public class SanPhamGUI extends JFrame implements ActionListener {
 								"Thành công", JOptionPane.INFORMATION_MESSAGE);
 					}
 					else //Nếu là thêm
-					{
+					{	
+						SanPhamBUS spBUS = new SanPhamBUS();
 						spBUS.addSP(sp);
 						Object [] row = {maSP, tenSP, maLoaiSP, donGia, soLuong, donViTinh};
 						model.addRow(row);
@@ -593,7 +595,6 @@ public class SanPhamGUI extends JFrame implements ActionListener {
 						JOptionPane.showMessageDialog(productDialog, "Thêm sản phẩm thành công",
 														"Thành công", JOptionPane.INFORMATION_MESSAGE);
 					}
-					loadData();
 					productDialog.dispose();
 				} catch (NumberFormatException ex) {
 					// TODO: handle exception
