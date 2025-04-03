@@ -31,6 +31,7 @@ import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -179,6 +180,22 @@ public class NhanVienGUI extends JFrame implements ActionListener{
 		btnNhaCungCapGUI.setBackground(Color.decode(color));
 		btnNhaCungCapGUI.setBounds(0, 72, 200, 35);
 		pNavItem.add(btnNhaCungCapGUI);
+		
+		btnNhaCungCapGUI.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        // Đóng giao diện hiện tại (nếu cần)
+		        JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(btnNhaCungCapGUI);
+		        if (currentFrame != null) {
+		            currentFrame.dispose();
+		        }
+
+		        // Mở giao diện mới
+		        NhaCungCapGUI nhaCungCapGUI = new NhaCungCapGUI();
+		        nhaCungCapGUI.setVisible(true);
+		    }
+		});
+
 		
 		JButton btnNhanVienGUI = new JButton("NHÂN VIÊN");
 		btnNhanVienGUI.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/employeeIcon.png")));
@@ -819,9 +836,11 @@ public class NhanVienGUI extends JFrame implements ActionListener{
 	    sorter.setSortKeys(List.of(new RowSorter.SortKey(0, SortOrder.ASCENDING)));
 	    sorter.sort();
 	}
+	
 
 
 	
 
 
 }
+
