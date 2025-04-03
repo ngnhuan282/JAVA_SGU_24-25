@@ -33,7 +33,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
-    private int DEFAULT_WIDTH = 1200, DEFAULT_HEIGHT = 800;
+    private int DEFAULT_WIDTH = 1450, DEFAULT_HEIGHT = 800;
     private String color = "#FF5252";
     private JTable table;
     private JLabel lbMaSP, lbTenSP, lbDonGia, lbDonViTinh, lbSoLuong, lbMaLoaiSP;
@@ -86,24 +86,24 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         pHeader.setLayout(null);
 
         JPanel pMain = new JPanel();
-        pMain.setBounds(205, 6, 1300, 800);
+        pMain.setBounds(233, 6, 1272, 800);
         contentPane.add(pMain);
         pMain.setLayout(null);
 
         JPanel pHeaderMain = new JPanel();
-        pHeaderMain.setBounds(0, 0, 1300, 100);
+        pHeaderMain.setBounds(12, 0, 1288, 100);
         pHeaderMain.setBackground(Color.WHITE);
         pMain.add(pHeaderMain);
 
         JPanel pNavbar = new JPanel();
-        pNavbar.setBounds(5, 6, 200, 800);
+        pNavbar.setBounds(5, 6, 230, 800);
         contentPane.add(pNavbar);
         pNavbar.setLayout(null);
         pNavbar.setPreferredSize(new Dimension(200, 800));
         pNavbar.setBackground(Color.decode(color));
 
         JPanel pAccount = new JPanel();
-        pAccount.setBounds(0, 0, 200, 88);
+        pAccount.setBounds(0, 0, 230, 88);
         pNavbar.add(pAccount);
         pAccount.setBackground(Color.decode(color));
         pAccount.setLayout(null);
@@ -113,20 +113,20 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         lbInfo1.setVerticalTextPosition(SwingConstants.BOTTOM);
         lbInfo1.setHorizontalTextPosition(SwingConstants.CENTER);
         lbInfo1.setForeground(Color.WHITE);
-        lbInfo1.setBounds(0, 0, 200, 54);
+        lbInfo1.setBounds(16, 0, 200, 54);
         lbInfo1.setFont(new Font("Verdana", Font.BOLD, 14));
         lbInfo1.setHorizontalAlignment(SwingConstants.CENTER);
         pAccount.add(lbInfo1);
 
         JLabel lbInfo2 = new JLabel("Admin !");
-        lbInfo2.setBounds(0, 55, 200, 33);
+        lbInfo2.setBounds(13, 49, 200, 33);
         pAccount.add(lbInfo2);
         lbInfo2.setForeground(Color.WHITE);
         lbInfo2.setFont(new Font("Verdana", Font.BOLD, 14));
         lbInfo2.setHorizontalAlignment(SwingConstants.CENTER);
 
         JPanel pNavItem = new JPanel();
-        pNavItem.setBounds(0, 87, 200, 713);
+        pNavItem.setBounds(0, 86, 230, 672);
         pNavItem.setBackground(Color.decode(color));
         pNavbar.add(pNavItem);
         pNavItem.setLayout(null);
@@ -139,10 +139,14 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         btnDangXuat.setFont(new Font("Verdana", Font.BOLD, 14));
         btnDangXuat.setBorderPainted(false);
         btnDangXuat.setBackground(Color.decode(color));
-        btnDangXuat.setBounds(0, 587, 200, 35);
+        btnDangXuat.setBounds(20, 600, 200, 35);
         pNavItem.add(btnDangXuat);
 
         JButton btnTrangChuGUI = new JButton("TRANG CHỦ");
+        btnTrangChuGUI.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        	}
+        });
         btnTrangChuGUI.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/homeIcon.png")));
         btnTrangChuGUI.setOpaque(true);
         btnTrangChuGUI.setHorizontalAlignment(SwingConstants.LEFT);
@@ -150,7 +154,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         btnTrangChuGUI.setFont(new Font("Verdana", Font.BOLD, 14));
         btnTrangChuGUI.setBorderPainted(false);
         btnTrangChuGUI.setBackground(Color.decode(color));
-        btnTrangChuGUI.setBounds(0, 0, 200, 35);
+        btnTrangChuGUI.setBounds(20, 13, 200, 35);
         pNavItem.add(btnTrangChuGUI);
 
         JButton btnSanPhamGUI = new JButton("SẢN PHẨM");
@@ -161,7 +165,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         btnSanPhamGUI.setFont(new Font("Verdana", Font.BOLD, 14));
         btnSanPhamGUI.setBorderPainted(false);
         btnSanPhamGUI.setBackground(Color.decode(color));
-        btnSanPhamGUI.setBounds(0, 38, 200, 35);
+        btnSanPhamGUI.setBounds(20, 49, 200, 35);
         pNavItem.add(btnSanPhamGUI);
 
         JButton btnNhaCungCapGUI = new JButton("NHÀ CUNG CẤP");
@@ -172,7 +176,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         btnNhaCungCapGUI.setFont(new Font("Verdana", Font.BOLD, 14));
         btnNhaCungCapGUI.setBorderPainted(false);
         btnNhaCungCapGUI.setBackground(Color.decode(color));
-        btnNhaCungCapGUI.setBounds(0, 72, 200, 35);
+        btnNhaCungCapGUI.setBounds(20, 85, 200, 35);
         pNavItem.add(btnNhaCungCapGUI);
 
         JButton btnNhanVienGUI = new JButton("NHÂN VIÊN");
@@ -183,7 +187,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         btnNhanVienGUI.setFont(new Font("Verdana", Font.BOLD, 14));
         btnNhanVienGUI.setBorderPainted(false);
         btnNhanVienGUI.setBackground(Color.decode(color));
-        btnNhanVienGUI.setBounds(0, 107, 200, 35);
+        btnNhanVienGUI.setBounds(20, 121, 200, 35);
         pNavItem.add(btnNhanVienGUI);
 
         JButton btnKhachHangGUI = new JButton("KHÁCH HÀNG");
@@ -194,7 +198,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         btnKhachHangGUI.setFont(new Font("Verdana", Font.BOLD, 14));
         btnKhachHangGUI.setBorderPainted(false);
         btnKhachHangGUI.setBackground(Color.decode(color));
-        btnKhachHangGUI.setBounds(0, 141, 200, 35);
+        btnKhachHangGUI.setBounds(20, 157, 200, 35);
         pNavItem.add(btnKhachHangGUI);
 
         JButton btnPhieuNhapGUI = new JButton("PHIẾU NHẬP");
@@ -205,7 +209,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         btnPhieuNhapGUI.setFont(new Font("Verdana", Font.BOLD, 14));
         btnPhieuNhapGUI.setBorderPainted(false);
         btnPhieuNhapGUI.setBackground(Color.decode(color));
-        btnPhieuNhapGUI.setBounds(0, 173, 200, 35);
+        btnPhieuNhapGUI.setBounds(20, 193, 200, 35);
         pNavItem.add(btnPhieuNhapGUI);
 
         JButton btnPhieuXuat = new JButton("PHIẾU XUẤT");
@@ -216,7 +220,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         btnPhieuXuat.setFont(new Font("Verdana", Font.BOLD, 14));
         btnPhieuXuat.setBorderPainted(false);
         btnPhieuXuat.setBackground(Color.decode(color));
-        btnPhieuXuat.setBounds(0, 207, 200, 35);
+        btnPhieuXuat.setBounds(20, 229, 200, 35);
         pNavItem.add(btnPhieuXuat);
 
         JButton btnKhuyenMaiGUI = new JButton("KHUYẾN MÃI");
@@ -227,7 +231,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         btnKhuyenMaiGUI.setFont(new Font("Verdana", Font.BOLD, 14));
         btnKhuyenMaiGUI.setBorderPainted(false);
         btnKhuyenMaiGUI.setBackground(Color.decode(color));
-        btnKhuyenMaiGUI.setBounds(0, 242, 200, 35);
+        btnKhuyenMaiGUI.setBounds(20, 265, 200, 35);
         pNavItem.add(btnKhuyenMaiGUI);
 
         pHeaderMain.setPreferredSize(new Dimension(DEFAULT_WIDTH, 100));
@@ -235,7 +239,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
 
         JPanel pLeftHeader = new JPanel();
         pLeftHeader.setBackground(Color.WHITE);
-        pLeftHeader.setBounds(0, 0, 514, 100);
+        pLeftHeader.setBounds(2, 0, 512, 100);
         pHeaderMain.add(pLeftHeader);
         pLeftHeader.setLayout(null);
 
@@ -317,7 +321,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         // Gắn table vào scrollPane ngay từ đầu
         table.setFont(new Font("Verdana", Font.PLAIN, 14));
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(0, 100, 987, 656);
+        scrollPane.setBounds(15, 99, 918, 602);
         pMain.add(scrollPane);
         
         table.addMouseListener(new MouseAdapter() {
