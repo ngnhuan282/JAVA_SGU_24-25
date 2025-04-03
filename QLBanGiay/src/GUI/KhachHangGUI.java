@@ -317,7 +317,7 @@ public class KhachHangGUI extends JFrame implements ActionListener {
 		table.setFont(new Font("Verdana", Font.PLAIN, 14));
 		JScrollPane scrollPane = new JScrollPane(table);
 		pHeaderMain.add(scrollPane);
-		scrollPane.setBounds(0, 92, 987, 672);
+		scrollPane.setBounds(0, 94, 987, 670);
 		scrollPane.setFont(new Font("Verdana", Font.PLAIN, 14));
 
 		scrollPane.setViewportView(table);
@@ -352,7 +352,7 @@ public class KhachHangGUI extends JFrame implements ActionListener {
 	}
 	
 	public void openAddCustomerGUI() {
-		JDialog addCutomerDialog = new JDialog(this, "Thêm Sản Phẩm", false); // true để cửa sổ phụ là modal
+		JDialog addCutomerDialog = new JDialog(this, "Thêm khách hàng", false); // true để cửa sổ phụ là modal
 		addCutomerDialog.setBounds(100, 100, 550, 372);  // Kích thước cửa sổ
 		addCutomerDialog.setLocationRelativeTo(this);
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
