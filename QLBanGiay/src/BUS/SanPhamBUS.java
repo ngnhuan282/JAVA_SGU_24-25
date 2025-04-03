@@ -13,6 +13,14 @@ public class SanPhamBUS {
 		
 	}
 	
+	public void docDSSP()
+	{
+		if(dssp == null)
+			dssp = new ArrayList<SanPhamDTO>();
+		SanPhamDAO spDAO = new SanPhamDAO();
+		dssp = spDAO.docDSSP();
+	}
+	
 	public ArrayList<SanPhamDTO> getDssp() {
 		return dssp;
 	}
@@ -31,13 +39,12 @@ public class SanPhamBUS {
 		return null;
 	}
 	
-	public void listSP()
-	{
-		
-	}
 	
 	public void addSP(SanPhamDTO sp)
 	{	
+		if(dssp == null)
+			dssp = new ArrayList<SanPhamDTO>();
+		
 		if(sp.getMaSP().isEmpty() || sp.getTenSP().isEmpty() || sp.getMaLoaiSP().isEmpty()
 				|| sp.getDonViTinh().isEmpty())
 		{
@@ -54,6 +61,8 @@ public class SanPhamBUS {
 			System.out.println("Vui lòng nhập đơn giá lớn hôn 0");
 			return;
 		}
+		SanPhamDAO spDAO = new SanPhamDAO();
+		spDAO.add(sp);
 		dssp.add(sp);
 	}
 	
@@ -66,6 +75,7 @@ public class SanPhamBUS {
 				SanPhamDAO dao = new SanPhamDAO();
 				dao.delete(maSP);
 				dssp.remove(i);
+				return;
 			}
 		}
 	}

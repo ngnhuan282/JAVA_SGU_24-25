@@ -555,13 +555,10 @@ public class SanPhamGUI extends JFrame implements ActionListener {
 					String donGiaText = txtDonGia.getText();
 					String maLoaiSP = txtMaLoaiSP.getText();
 					String donViTinh = txtDonViTinh.getText();
-					
-					if(maSP.isEmpty() || tenSP.isEmpty() || soLuongText.isEmpty()
-							|| donGiaText.isEmpty() || maLoaiSP.isEmpty() || donViTinh.isEmpty())
-					{
-						JOptionPane.showMessageDialog(productDialog, "Vui lòng nhập đầy đủ thông tin !");
-						return;
-					}
+					String kieuDang = txtKieuDang.getText();
+					String chatLieu = txtChatLieu.getText();
+					String kichThuoc = cboxKichThuoc.getSelectedItem().toString();
+					String mauSac = bgMauSac.getSelection().toString();
 					
 					int soLuong = Integer.parseInt(soLuongText);
 					double donGia = Double.parseDouble(donGiaText);
@@ -631,6 +628,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
     		if(confirm == JOptionPane.YES_OPTION)
     		{
     			try {
+    				SanPhamBUS spBUS = new SanPhamBUS();
     				//Xóa sp trong spBUS
 					spBUS.deleteSP(maSP);
 					

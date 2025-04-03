@@ -14,7 +14,7 @@ public class SanPhamDAO {
 		
 	}
 	
-	public ArrayList<SanPhamDTO> list()
+	public ArrayList<SanPhamDTO> docDSSP()
 	{	
 		ArrayList<SanPhamDTO> dssp = new ArrayList<>();
 		try {
@@ -46,12 +46,12 @@ public class SanPhamDAO {
 	{
 		MySQLConnect mysql = new MySQLConnect();
 		String sql = "INSERT INTO SanPham VALUES(";
-		sql += "'" +sp.getMaSP() + "'";
-		sql += "'" +sp.getTenSP() + "'";
-		sql += "'" +sp.getSoLuong() + "'";
-		sql += "'" +sp.getDonGia() + "'";
-		sql += "'" +sp.getDonViTinh() + "'";
-		sql += "'" +sp.getMaLoaiSP() + ")";
+		sql += "'" +sp.getMaSP() + "', ";
+		sql += "'" +sp.getTenSP() + "', ";
+		sql += "'" +sp.getSoLuong() + "', ";
+		sql += "'" +sp.getDonGia() + "', ";
+		sql += "'" +sp.getDonViTinh() + "', ";
+		sql += "'" +sp.getMaLoaiSP() + "')";
 		
 		mysql.executeUpdate(sql);
 		mysql.disConnect();
