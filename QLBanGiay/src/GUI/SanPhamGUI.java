@@ -28,6 +28,12 @@ import javax.swing.table.DefaultTableModel;
 
 import BUS.SanPhamBUS;
 import DTO.SanPhamDTO;
+import java.awt.CardLayout;
+import javax.swing.Box;
+import javax.swing.UIManager;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.LineBorder;
+import java.awt.SystemColor;
 
 public class SanPhamGUI extends JFrame implements ActionListener {
 
@@ -35,7 +41,6 @@ public class SanPhamGUI extends JFrame implements ActionListener {
     private JPanel contentPane;
     private int DEFAULT_WIDTH = 1450, DEFAULT_HEIGHT = 800;
     private String color = "#FF5252";
-    private JTable table;
     private JLabel lbMaSP, lbTenSP, lbDonGia, lbDonViTinh, lbSoLuong, lbMaLoaiSP;
     private DefaultTableModel model;
 //    private SanPhamBUS spBUS = new SanPhamBUS();
@@ -57,7 +62,6 @@ public class SanPhamGUI extends JFrame implements ActionListener {
     public SanPhamGUI() {
         Object[] header = {"Mã Sản Phẩm", "Tên Sản Phẩm", "Loại", "Giá", "Số Lượng", "Đơn vị tính"};
         model = new DefaultTableModel(header, 0);
-        table = new JTable(model);
         initComponents();
 //        loadData();
     }
@@ -86,14 +90,14 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         pHeader.setLayout(null);
 
         JPanel pMain = new JPanel();
+        pMain.setBackground(SystemColor.control);
         pMain.setBounds(233, 6, 1272, 800);
         contentPane.add(pMain);
-        pMain.setLayout(null);
+        pMain.setLayout(new CardLayout(0, 0));
 
         JPanel pHeaderMain = new JPanel();
-        pHeaderMain.setBounds(12, 0, 1288, 100);
         pHeaderMain.setBackground(Color.WHITE);
-        pMain.add(pHeaderMain);
+        pMain.add(pHeaderMain, "name_717443329139900");
 
         JPanel pNavbar = new JPanel();
         pNavbar.setBounds(5, 6, 230, 800);
@@ -243,98 +247,87 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         pHeaderMain.add(pLeftHeader);
         pLeftHeader.setLayout(null);
 
-        JButton btnThem = new JButton("THÊM");
+        JButton btnThem = new JButton("Thêm");
+        btnThem.setBorder(new LineBorder(new Color(0, 0, 0)));
         btnThem.setActionCommand("Thêm");
         btnThem.addActionListener(this);
-        btnThem.setBackground(Color.WHITE);
+        btnThem.setBackground(SystemColor.text);
         btnThem.setBorderPainted(false);
-        btnThem.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/addIcon.png")));
-        btnThem.setFont(new Font("Verdana", Font.BOLD, 14));
+        btnThem.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/add48.png")));
+        btnThem.setFont(new Font("Arial", Font.PLAIN, 15));
         btnThem.setBounds(0, 0, 84, 100);
         btnThem.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnThem.setHorizontalTextPosition(SwingConstants.CENTER);
         btnThem.setPreferredSize(new Dimension(120, 140));
         pLeftHeader.add(btnThem);
 
-        JButton btnSua = new JButton("SỬA");
+        JButton btnSua = new JButton("Sửa");
+        btnSua.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
         btnSua.setActionCommand("Sửa");
         btnSua.addActionListener(this);
         btnSua.setBorderPainted(false);
         btnSua.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnSua.setPreferredSize(new Dimension(120, 140));
-        btnSua.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/editIcon.png")));
+        btnSua.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/edit48.png")));
         btnSua.setHorizontalTextPosition(SwingConstants.CENTER);
-        btnSua.setFont(new Font("Verdana", Font.BOLD, 14));
+        btnSua.setFont(new Font("Arial", Font.PLAIN, 15));
         btnSua.setBackground(Color.WHITE);
         btnSua.setBounds(70, 0, 93, 100);
         pLeftHeader.add(btnSua);
 
-        JButton btnXoa = new JButton("XÓA");
+        JButton btnXoa = new JButton("Xóa");
         btnXoa.setActionCommand("Xóa");
         btnXoa.addActionListener(this);
         btnXoa.setBorderPainted(false);
         btnXoa.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnXoa.setPreferredSize(new Dimension(120, 140));
-        btnXoa.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/deleteIcon.png")));
+        btnXoa.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/remove48.png")));
         btnXoa.setHorizontalTextPosition(SwingConstants.CENTER);
-        btnXoa.setFont(new Font("Verdana", Font.BOLD, 14));
+        btnXoa.setFont(new Font("Arial", Font.PLAIN, 15));
         btnXoa.setBackground(Color.WHITE);
         btnXoa.setBounds(140, 0, 84, 100);
         pLeftHeader.add(btnXoa);
 
-        JButton btnXuatExcel = new JButton("XUẤT EXCEL");
+        JButton btnXuatExcel = new JButton("Xuất Excel");
         btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnXuatExcel.setPreferredSize(new Dimension(120, 140));
-        btnXuatExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/excelIcon.png")));
+        btnXuatExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/excel48.png")));
         btnXuatExcel.setHorizontalTextPosition(SwingConstants.CENTER);
-        btnXuatExcel.setFont(new Font("Verdana", Font.BOLD, 14));
+        btnXuatExcel.setFont(new Font("Arial", Font.PLAIN, 15));
         btnXuatExcel.setBorderPainted(false);
         btnXuatExcel.setBackground(Color.WHITE);
-        btnXuatExcel.setBounds(216, 0, 137, 100);
+        btnXuatExcel.setBounds(220, 0, 108, 100);
         pLeftHeader.add(btnXuatExcel);
 
-        JButton btnNhapExcel = new JButton("NHẬP EXCEL");
-        btnNhapExcel.setBounds(347, 0, 137, 100);
+        JButton btnNhapExcel = new JButton("Nhập Excel");
+        btnNhapExcel.setBounds(327, 0, 114, 100);
         pLeftHeader.add(btnNhapExcel);
         btnNhapExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnNhapExcel.setPreferredSize(new Dimension(120, 140));
-        btnNhapExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/sheetIcon.png")));
+        btnNhapExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/bill48.png")));
         btnNhapExcel.setHorizontalTextPosition(SwingConstants.CENTER);
-        btnNhapExcel.setFont(new Font("Verdana", Font.BOLD, 14));
+        btnNhapExcel.setFont(new Font("Arial", Font.PLAIN, 15));
         btnNhapExcel.setBorderPainted(false);
         btnNhapExcel.setBackground(Color.WHITE);
         
         txtSearch = new JTextField();
-        txtSearch.setBounds(611, 36, 290, 28);
+        txtSearch.setBounds(611, 29, 290, 41);
         pHeaderMain.add(txtSearch);
         txtSearch.setColumns(10);
         
         JComboBox cboxSearch = new JComboBox();
-        cboxSearch.setBounds(524, 37, 77, 25);
+        cboxSearch.setBounds(524, 33, 77, 37);
         pHeaderMain.add(cboxSearch);
         
         JButton btnSearch = new JButton("");
-        btnSearch.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/searchIcon.png")));
-        btnSearch.setBounds(911, 36, 63, 28);
+        btnSearch.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/seach48.png")));
+        btnSearch.setBounds(911, 29, 66, 41);
         pHeaderMain.add(btnSearch);
-
-        // Gắn table vào scrollPane ngay từ đầu
-        table.setFont(new Font("Verdana", Font.PLAIN, 14));
-        JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(15, 99, 918, 602);
-        pMain.add(scrollPane);
         
-        table.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) { // Nháy đúp chuột
-                    int row = table.getSelectedRow();
-                    if (row >= 0) {
-                        openProductDialog(true); // Mở hộp thoại sửa
-                    }
-                }
-            }
-        });
+        JPanel panel = new JPanel();
+        panel.setBackground(SystemColor.text);
+        panel.setBounds(2, 101, 1023, 655);
+        pHeaderMain.add(panel);
     }
 
     @Override
