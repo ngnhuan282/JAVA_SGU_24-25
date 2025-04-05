@@ -94,6 +94,16 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         model.addRow(new Object[]{"SP001", "Nike Air Force 1", "Nike", 2500000, 10, "Đôi"});
         model.addRow(new Object[]{"SP002", "Adidas Ultraboost", "Adidas", 2800000, 5, "Đôi"});
         model.addRow(new Object[]{"SP003", "Converse Chuck Taylor", "Converse", 1500000, 8, "Đôi"});
+        model.addRow(new Object[]{"SP003", "Converse Chuck Taylor", "Converse", 1500000, 8, "Đôi"});
+        model.addRow(new Object[]{"SP001", "Nike Air Force 1", "Nike", 2500000, 10, "Đôi"});
+        model.addRow(new Object[]{"SP002", "Adidas Ultraboost", "Adidas", 2800000, 5, "Đôi"});
+        model.addRow(new Object[]{"SP003", "Converse Chuck Taylor", "Converse", 1500000, 8, "Đôi"});
+        model.addRow(new Object[]{"SP001", "Nike Air Force 1", "Nike", 2500000, 10, "Đôi"});
+        model.addRow(new Object[]{"SP002", "Adidas Ultraboost", "Adidas", 2800000, 5, "Đôi"});
+        model.addRow(new Object[]{"SP003", "Converse Chuck Taylor", "Converse", 1500000, 8, "Đôi"});
+        model.addRow(new Object[]{"SP001", "Nike Air Force 1", "Nike", 2500000, 10, "Đôi"});
+        model.addRow(new Object[]{"SP002", "Adidas Ultraboost", "Adidas", 2800000, 5, "Đôi"});
+        model.addRow(new Object[]{"SP003", "Converse Chuck Taylor", "Converse", 1500000, 8, "Đôi"});
     }
 //    public void loadData() {
 //        model.setRowCount(0);
@@ -122,11 +132,12 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         pMain.setBackground(SystemColor.control);
         pMain.setBounds(233, 6, 1272, 800);
         contentPane.add(pMain);
-        pMain.setLayout(new CardLayout(0, 0));
+        pMain.setLayout(null);
 
         JPanel pHeaderMain = new JPanel();
+        pHeaderMain.setBounds(0, 0, 1272, 748);
         pHeaderMain.setBackground(Color.WHITE);
-        pMain.add(pHeaderMain, "name_717443329139900");
+        pMain.add(pHeaderMain);
 
         JPanel pNavbar = new JPanel();
         pNavbar.setBounds(5, 6, 230, 800);
@@ -375,8 +386,9 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         table.setBorder(UIManager.getBorder("Table.scrollPaneBorder"));
         table.setFillsViewportHeight(true);
         table.setFont(new Font("Arial", Font.PLAIN, 14));
+        table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(10, 21, 1184, 431);
+        scrollPane.setBounds(305, 270, 745, 363);
         pContent.add(scrollPane);
     }
 
