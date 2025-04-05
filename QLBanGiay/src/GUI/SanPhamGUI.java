@@ -34,6 +34,7 @@ import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import java.awt.SystemColor;
+import javax.swing.BoxLayout;
 
 public class SanPhamGUI extends JFrame implements ActionListener {
 
@@ -45,6 +46,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
     private DefaultTableModel model;
 //    private SanPhamBUS spBUS = new SanPhamBUS();
     private JTextField txtSearch;
+    private JTable table;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -63,9 +65,36 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         Object[] header = {"Mã Sản Phẩm", "Tên Sản Phẩm", "Loại", "Giá", "Số Lượng", "Đơn vị tính"};
         model = new DefaultTableModel(header, 0);
         initComponents();
-//        loadData();
+        loadDataDemo(); 
     }
     
+    private void loadDataDemo() {
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.addRow(new Object[]{"SP001", "Nike Air Force 1", "Nike", 2500000, 10, "Đôi"});
+        model.addRow(new Object[]{"SP002", "Adidas Ultraboost", "Adidas", 2800000, 5, "Đôi"});
+        model.addRow(new Object[]{"SP003", "Converse Chuck Taylor", "Converse", 1500000, 8, "Đôi"});
+        model.addRow(new Object[]{"SP001", "Nike Air Force 1", "Nike", 2500000, 10, "Đôi"});
+        model.addRow(new Object[]{"SP002", "Adidas Ultraboost", "Adidas", 2800000, 5, "Đôi"});
+        model.addRow(new Object[]{"SP003", "Converse Chuck Taylor", "Converse", 1500000, 8, "Đôi"});
+        model.addRow(new Object[]{"SP001", "Nike Air Force 1", "Nike", 2500000, 10, "Đôi"});
+        model.addRow(new Object[]{"SP002", "Adidas Ultraboost", "Adidas", 2800000, 5, "Đôi"});
+        model.addRow(new Object[]{"SP003", "Converse Chuck Taylor", "Converse", 1500000, 8, "Đôi"});
+        model.addRow(new Object[]{"SP001", "Nike Air Force 1", "Nike", 2500000, 10, "Đôi"});
+        model.addRow(new Object[]{"SP002", "Adidas Ultraboost", "Adidas", 2800000, 5, "Đôi"});
+        model.addRow(new Object[]{"SP003", "Converse Chuck Taylor", "Converse", 1500000, 8, "Đôi"});
+        model.addRow(new Object[]{"SP001", "Nike Air Force 1", "Nike", 2500000, 10, "Đôi"});
+        model.addRow(new Object[]{"SP002", "Adidas Ultraboost", "Adidas", 2800000, 5, "Đôi"});
+        model.addRow(new Object[]{"SP003", "Converse Chuck Taylor", "Converse", 1500000, 8, "Đôi"});
+        model.addRow(new Object[]{"SP001", "Nike Air Force 1", "Nike", 2500000, 10, "Đôi"});
+        model.addRow(new Object[]{"SP002", "Adidas Ultraboost", "Adidas", 2800000, 5, "Đôi"});
+        model.addRow(new Object[]{"SP003", "Converse Chuck Taylor", "Converse", 1500000, 8, "Đôi"});
+        model.addRow(new Object[]{"SP001", "Nike Air Force 1", "Nike", 2500000, 10, "Đôi"});
+        model.addRow(new Object[]{"SP002", "Adidas Ultraboost", "Adidas", 2800000, 5, "Đôi"});
+        model.addRow(new Object[]{"SP003", "Converse Chuck Taylor", "Converse", 1500000, 8, "Đôi"});
+        model.addRow(new Object[]{"SP001", "Nike Air Force 1", "Nike", 2500000, 10, "Đôi"});
+        model.addRow(new Object[]{"SP002", "Adidas Ultraboost", "Adidas", 2800000, 5, "Đôi"});
+        model.addRow(new Object[]{"SP003", "Converse Chuck Taylor", "Converse", 1500000, 8, "Đôi"});
+    }
 //    public void loadData() {
 //        model.setRowCount(0);
 //        for (SanPhamDTO sp : spBUS.getDssp()) {
@@ -310,24 +339,45 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         btnNhapExcel.setBorderPainted(false);
         btnNhapExcel.setBackground(Color.WHITE);
         
+        Box horizontalBox = Box.createHorizontalBox();
+        horizontalBox.setBorder(UIManager.getBorder("Button.border"));
+        horizontalBox.setBounds(0, 0, 512, 100);
+        pLeftHeader.add(horizontalBox);
+        
         txtSearch = new JTextField();
-        txtSearch.setBounds(611, 29, 290, 41);
+        txtSearch.setBounds(771, 31, 290, 41);
         pHeaderMain.add(txtSearch);
         txtSearch.setColumns(10);
         
         JComboBox cboxSearch = new JComboBox();
-        cboxSearch.setBounds(524, 33, 77, 37);
+        cboxSearch.setBounds(656, 33, 77, 37);
         pHeaderMain.add(cboxSearch);
         
         JButton btnSearch = new JButton("");
         btnSearch.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/seach48.png")));
-        btnSearch.setBounds(911, 29, 66, 41);
+        btnSearch.setBounds(1078, 29, 66, 41);
         pHeaderMain.add(btnSearch);
         
-        JPanel panel = new JPanel();
-        panel.setBackground(SystemColor.text);
-        panel.setBounds(2, 101, 1023, 655);
-        pHeaderMain.add(panel);
+        JPanel pContent = new JPanel();
+        pContent.setBackground(SystemColor.text);
+        pContent.setBounds(2, 101, 1204, 655);
+        pHeaderMain.add(pContent);
+        pContent.setLayout(null);
+        
+        table = new JTable(new DefaultTableModel(
+        	new Object[][] {
+        	},
+        	new String[] {
+        		"M\u00E3 S\u1EA3n Ph\u1EA9m", "T\u00EAn S\u1EA3n Ph\u1EA9m", "Lo\u1EA1i", "Gi\u00E1", "S\u1ED1 L\u01B0\u1EE3ng", "\u0110\u01A1n v\u1ECB t\u00EDnh"
+        	}
+        ));
+        table.setBackground(SystemColor.text);
+        table.setBorder(UIManager.getBorder("Table.scrollPaneBorder"));
+        table.setFillsViewportHeight(true);
+        table.setFont(new Font("Arial", Font.PLAIN, 14));
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setBounds(10, 21, 1184, 431);
+        pContent.add(scrollPane);
     }
 
     @Override
@@ -517,7 +567,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         btnDong.setBounds(291, 479, 109, 25);
         panel.add(btnDong);
 
-
+        
         /*****ĐỔ DỮ LIỆU VÀO TEXTFIELD NẾU LÀ SỬA******/
         if(isEditMode == true)
         {
