@@ -13,6 +13,14 @@ public class LoaiBUS {
 		
 	}
 	
+	public static ArrayList<LoaiDTO> getDsloai() {
+		return dsloai;
+	}
+
+	public static void setDsloai(ArrayList<LoaiDTO> dsloai) {
+		LoaiBUS.dsloai = dsloai;
+	}
+
 	public void docDSLoai()
 	{
 		if(dsloai == null)
@@ -42,6 +50,20 @@ public class LoaiBUS {
 				LoaiDAO loaiDAO = new LoaiDAO();
 				loaiDAO.update(loai);
 				dsloai.set(i, loai);
+				return;
+			}
+		}
+	}
+	
+	public void delete(String maLoaiSP)
+	{
+		for(int i=0; i < dsloai.size(); i++)
+		{
+			if(dsloai.get(i).getMaLoaiSP().equals(maLoaiSP))
+			{
+				LoaiDAO loaiDAO = new LoaiDAO();
+				loaiDAO.delete(maLoaiSP);
+				dsloai.remove(i);
 				return;
 			}
 		}

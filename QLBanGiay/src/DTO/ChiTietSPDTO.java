@@ -9,6 +9,15 @@ public class ChiTietSPDTO {
 	{
 		
 	}
+	
+	public ChiTietSPDTO(String maSP, String mauSac,  int kichThuoc, String chatLieu, String kieuDang) {
+		super();
+		this.maSP = maSP;
+		this.mauSac = mauSac;
+		this.chatLieu = chatLieu;
+		this.kieuDang = kieuDang;
+		this.kichThuoc = kichThuoc;
+	}
 
 	public String getMaSP() {
 		return maSP;

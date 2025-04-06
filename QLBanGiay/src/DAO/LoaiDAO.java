@@ -60,4 +60,16 @@ public class LoaiDAO {
 			e.printStackTrace();
 		}
 	}
+	
+	public void delete(String maLoaiSP)
+	{
+		try {
+			String sql = "DELETE FROM PhanLoai WHERE MaLoaiSP= "; 
+			sql +="'"+ maLoaiSP +"'";
+			mysql.executeUpdate(sql);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
 }
