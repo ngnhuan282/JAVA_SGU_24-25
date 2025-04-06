@@ -30,6 +30,8 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
 import BUS.SanPhamBUS;
+import javax.swing.border.TitledBorder;
+import javax.swing.border.EtchedBorder;
 
 public class SanPhamGUI extends JFrame implements ActionListener {
 
@@ -279,78 +281,74 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         pHeaderMain.setLayout(null);
 
         JPanel pLeftHeader = new JPanel();
+        pLeftHeader.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Ch\u1EE9c n\u0103ng", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         pLeftHeader.setBackground(Color.WHITE);
         pLeftHeader.setBounds(2, 0, 512, 100);
         pHeaderMain.add(pLeftHeader);
         pLeftHeader.setLayout(null);
-
-        JButton btnThem = new JButton("Thêm");
-        btnThem.setBorder(new LineBorder(new Color(0, 0, 0)));
-        btnThem.setActionCommand("Thêm");
-        btnThem.addActionListener(this);
-        btnThem.setBackground(Color.WHITE);
-        btnThem.setBorderPainted(false);
-        btnThem.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/add48.png")));
-        btnThem.setFont(new Font("Arial", Font.PLAIN, 15));
-        btnThem.setBounds(0, 0, 84, 100);
-        btnThem.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnThem.setHorizontalTextPosition(SwingConstants.CENTER);
-        btnThem.setPreferredSize(new Dimension(120, 140));
-        pLeftHeader.add(btnThem);
-
-        JButton btnSua = new JButton("Sửa");
-        btnSua.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-        btnSua.setActionCommand("Sửa");
-        btnSua.addActionListener(this);
-        btnSua.setBorderPainted(false);
-        btnSua.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnSua.setPreferredSize(new Dimension(120, 140));
-        btnSua.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/edit48.png")));
-        btnSua.setHorizontalTextPosition(SwingConstants.CENTER);
-        btnSua.setFont(new Font("Arial", Font.PLAIN, 15));
-        btnSua.setBackground(Color.WHITE);
-        btnSua.setBounds(70, 0, 93, 100);
-        pLeftHeader.add(btnSua);
-
-        JButton btnXoa = new JButton("Xóa");
-        btnXoa.setActionCommand("Xóa");
-        btnXoa.addActionListener(this);
-        btnXoa.setBorderPainted(false);
-        btnXoa.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnXoa.setPreferredSize(new Dimension(120, 140));
-        btnXoa.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/remove48.png")));
-        btnXoa.setHorizontalTextPosition(SwingConstants.CENTER);
-        btnXoa.setFont(new Font("Arial", Font.PLAIN, 15));
-        btnXoa.setBackground(Color.WHITE);
-        btnXoa.setBounds(140, 0, 84, 100);
-        pLeftHeader.add(btnXoa);
-
-        JButton btnXuatExcel = new JButton("Xuất Excel");
-        btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnXuatExcel.setPreferredSize(new Dimension(120, 140));
-        btnXuatExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/excel48.png")));
-        btnXuatExcel.setHorizontalTextPosition(SwingConstants.CENTER);
-        btnXuatExcel.setFont(new Font("Arial", Font.PLAIN, 15));
-        btnXuatExcel.setBorderPainted(false);
-        btnXuatExcel.setBackground(Color.WHITE);
-        btnXuatExcel.setBounds(220, 0, 108, 100);
-        pLeftHeader.add(btnXuatExcel);
-
-        JButton btnNhapExcel = new JButton("Nhập Excel");
-        btnNhapExcel.setBounds(327, 0, 114, 100);
-        pLeftHeader.add(btnNhapExcel);
-        btnNhapExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnNhapExcel.setPreferredSize(new Dimension(120, 140));
-        btnNhapExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/bill48.png")));
-        btnNhapExcel.setHorizontalTextPosition(SwingConstants.CENTER);
-        btnNhapExcel.setFont(new Font("Arial", Font.PLAIN, 15));
-        btnNhapExcel.setBorderPainted(false);
-        btnNhapExcel.setBackground(Color.WHITE);
         
         Box horizontalBox = Box.createHorizontalBox();
         horizontalBox.setBorder(UIManager.getBorder("Button.border"));
-        horizontalBox.setBounds(0, 0, 512, 100);
+        horizontalBox.setBounds(0, 0, 512, 111);
         pLeftHeader.add(horizontalBox);
+        
+                JButton btnThem = new JButton("Thêm");
+                horizontalBox.add(btnThem);
+                btnThem.setBorder(new LineBorder(new Color(0, 0, 0)));
+                btnThem.setActionCommand("Thêm");
+                btnThem.addActionListener(this);
+                btnThem.setBackground(Color.WHITE);
+                btnThem.setBorderPainted(false);
+                btnThem.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/add48.png")));
+                btnThem.setFont(new Font("Arial", Font.PLAIN, 15));
+                btnThem.setVerticalTextPosition(SwingConstants.BOTTOM);
+                btnThem.setHorizontalTextPosition(SwingConstants.CENTER);
+                btnThem.setPreferredSize(new Dimension(120, 140));
+                
+                        JButton btnSua = new JButton("Sửa");
+                        horizontalBox.add(btnSua);
+                        btnSua.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+                        btnSua.setActionCommand("Sửa");
+                        btnSua.addActionListener(this);
+                        btnSua.setBorderPainted(false);
+                        btnSua.setVerticalTextPosition(SwingConstants.BOTTOM);
+                        btnSua.setPreferredSize(new Dimension(120, 140));
+                        btnSua.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/edit48.png")));
+                        btnSua.setHorizontalTextPosition(SwingConstants.CENTER);
+                        btnSua.setFont(new Font("Arial", Font.PLAIN, 15));
+                        btnSua.setBackground(Color.WHITE);
+                        
+                                JButton btnXoa = new JButton("Xóa");
+                                horizontalBox.add(btnXoa);
+                                btnXoa.setActionCommand("Xóa");
+                                btnXoa.addActionListener(this);
+                                btnXoa.setBorderPainted(false);
+                                btnXoa.setVerticalTextPosition(SwingConstants.BOTTOM);
+                                btnXoa.setPreferredSize(new Dimension(120, 140));
+                                btnXoa.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/remove48.png")));
+                                btnXoa.setHorizontalTextPosition(SwingConstants.CENTER);
+                                btnXoa.setFont(new Font("Arial", Font.PLAIN, 15));
+                                btnXoa.setBackground(Color.WHITE);
+                                
+                                        JButton btnXuatExcel = new JButton("Xuất Excel");
+                                        horizontalBox.add(btnXuatExcel);
+                                        btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
+                                        btnXuatExcel.setPreferredSize(new Dimension(120, 140));
+                                        btnXuatExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/excel48.png")));
+                                        btnXuatExcel.setHorizontalTextPosition(SwingConstants.CENTER);
+                                        btnXuatExcel.setFont(new Font("Arial", Font.PLAIN, 15));
+                                        btnXuatExcel.setBorderPainted(false);
+                                        btnXuatExcel.setBackground(Color.WHITE);
+                                        
+                                                JButton btnNhapExcel = new JButton("Nhập Excel");
+                                                horizontalBox.add(btnNhapExcel);
+                                                btnNhapExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
+                                                btnNhapExcel.setPreferredSize(new Dimension(120, 140));
+                                                btnNhapExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/bill48.png")));
+                                                btnNhapExcel.setHorizontalTextPosition(SwingConstants.CENTER);
+                                                btnNhapExcel.setFont(new Font("Arial", Font.PLAIN, 15));
+                                                btnNhapExcel.setBorderPainted(false);
+                                                btnNhapExcel.setBackground(Color.WHITE);
         
         txtSearch = new JTextField();
         txtSearch.setBounds(771, 31, 290, 27);
