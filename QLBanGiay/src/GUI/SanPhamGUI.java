@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -41,14 +42,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
     private JTextField txtSearch;
     private JTable table;
     private JTextField textField;
-    private JTextField textField_1;
-    private JTextField textField_2;
-    private JTextField textField_3;
-    private JTextField textField_4;
-    private JTextField textField_5;
-    private JTextField textField_6;
-    private JTextField textField_7;
-    private JTextField textField_8;
+    private JTextField txtLoaiSP, txtMaSP, txtTenSP, txtDonGia, txtSoLuong, txtDonViTinh, txtChatLieu, txtKieuDang;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -359,21 +353,25 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         pLeftHeader.add(horizontalBox);
         
         txtSearch = new JTextField();
-        txtSearch.setBounds(771, 31, 290, 41);
+        txtSearch.setBounds(771, 31, 290, 27);
         pHeaderMain.add(txtSearch);
         txtSearch.setColumns(10);
         
         JComboBox cboxSearch = new JComboBox();
-        cboxSearch.setBounds(656, 33, 77, 37);
+        cboxSearch.setFont(new Font("Arial", Font.PLAIN, 14));
+        cboxSearch.setBounds(682, 30, 79, 28);
+        cboxSearch.setBackground(Color.WHITE); // nền trắng
+        cboxSearch.setForeground(Color.BLACK); // chữ đen cho dễ đọc
+        cboxSearch.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY)); // viền xám nhạt
         pHeaderMain.add(cboxSearch);
         
         JButton btnSearch = new JButton("");
-        btnSearch.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/seach48.png")));
-        btnSearch.setBounds(1078, 29, 66, 41);
+        btnSearch.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/search30.png")));
+        btnSearch.setBounds(1071, 22, 66, 39);
         pHeaderMain.add(btnSearch);
         
         JPanel pContent = new JPanel();
-        pContent.setBackground(SystemColor.text);
+        pContent.setBackground(Color.white);
         pContent.setBounds(0, 103, 1248, 654); // Đặt bên dưới pHeaderMain
         pContent.setLayout(null);
         pMain.add(pContent); 
@@ -408,50 +406,45 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         pContent.add(pInput);
         pInput.setLayout(null);
         
-        textField_1 = new JTextField();
-        textField_1.setFont(new Font("Arial", Font.PLAIN, 13));
-        textField_1.setColumns(10);
-        textField_1.setBounds(233, 357, 112, 19);
-        pInput.add(textField_1);
+        txtKieuDang = new JTextField();
+        txtKieuDang.setFont(new Font("Arial", Font.PLAIN, 13));
+        txtKieuDang.setColumns(10);
+        txtKieuDang.setBounds(233, 357, 168, 19);
+        pInput.add(txtKieuDang);
         
         JLabel lbMaSP = new JLabel("Mã sản phẩm");
         lbMaSP.setFont(new Font("Arial", Font.PLAIN, 14));
         lbMaSP.setBounds(10, 65, 112, 17);
         pInput.add(lbMaSP);
         
-        textField_2 = new JTextField();
-        textField_2.setFont(new Font("Arial", Font.PLAIN, 13));
-        textField_2.setColumns(10);
-        textField_2.setBounds(10, 91, 112, 19);
-        pInput.add(textField_2);
+        txtMaSP = new JTextField();
+        txtMaSP.setFont(new Font("Arial", Font.PLAIN, 13));
+        txtMaSP.setColumns(10);
+        txtMaSP.setBounds(10, 91, 168, 19);
+        pInput.add(txtMaSP);
         
         JLabel lbLoaiSP = new JLabel("Loại sản phẩm");
         lbLoaiSP.setFont(new Font("Arial", Font.PLAIN, 14));
         lbLoaiSP.setBounds(233, 65, 112, 17);
         pInput.add(lbLoaiSP);
         
-        textField_3 = new JTextField();
-        textField_3.setFont(new Font("Arial", Font.PLAIN, 13));
-        textField_3.setColumns(10);
-        textField_3.setBounds(233, 91, 112, 19);
-        pInput.add(textField_3);
-        
         JLabel lbTenSP = new JLabel("Tên sản phẩm");
         lbTenSP.setFont(new Font("Arial", Font.PLAIN, 14));
         lbTenSP.setBounds(10, 133, 112, 17);
         pInput.add(lbTenSP);
         
-        textField_4 = new JTextField();
-        textField_4.setFont(new Font("Arial", Font.PLAIN, 13));
-        textField_4.setColumns(10);
-        textField_4.setBounds(10, 159, 112, 19);
-        pInput.add(textField_4);
+        txtTenSP = new JTextField();
+        txtTenSP.setFont(new Font("Arial", Font.PLAIN, 13));
+        txtTenSP.setColumns(10);
+        txtTenSP.setBounds(10, 159, 168, 19);
+        pInput.add(txtTenSP);
         
         JLabel lbMauSac = new JLabel("Màu sắc");
         lbMauSac.setFont(new Font("Arial", Font.PLAIN, 14));
         lbMauSac.setBounds(233, 133, 112, 17);
         pInput.add(lbMauSac);
         
+      
         JRadioButton rbDen = new JRadioButton("Đen");
         rbDen.setFont(new Font("Arial", Font.PLAIN, 13));
         rbDen.setBackground(Color.WHITE);
@@ -470,16 +463,19 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         rbXam.setBounds(388, 158, 62, 21);
         pInput.add(rbXam);
         
+        ButtonGroup bgMauSac = new ButtonGroup();
+        bgMauSac.add(rbDen);  bgMauSac.add(rbTrang);  bgMauSac.add(rbXam);
+        
         JLabel lbDonGia = new JLabel("Đơn giá");
         lbDonGia.setFont(new Font("Arial", Font.PLAIN, 14));
         lbDonGia.setBounds(10, 198, 112, 17);
         pInput.add(lbDonGia);
         
-        textField_5 = new JTextField();
-        textField_5.setFont(new Font("Arial", Font.PLAIN, 13));
-        textField_5.setColumns(10);
-        textField_5.setBounds(10, 224, 112, 19);
-        pInput.add(textField_5);
+        txtDonGia = new JTextField();
+        txtDonGia.setFont(new Font("Arial", Font.PLAIN, 13));
+        txtDonGia.setColumns(10);
+        txtDonGia.setBounds(10, 224, 168, 19);
+        pInput.add(txtDonGia);
         
         JLabel lbKichThuoc = new JLabel("Kích thước");
         lbKichThuoc.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -499,33 +495,39 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         lbSoLuong.setBounds(10, 265, 112, 17);
         pInput.add(lbSoLuong);
         
-        textField_6 = new JTextField();
-        textField_6.setFont(new Font("Arial", Font.PLAIN, 13));
-        textField_6.setColumns(10);
-        textField_6.setBounds(10, 291, 112, 19);
-        pInput.add(textField_6);
+        txtSoLuong = new JTextField();
+        txtSoLuong.setFont(new Font("Arial", Font.PLAIN, 13));
+        txtSoLuong.setColumns(10);
+        txtSoLuong.setBounds(10, 291, 168, 19);
+        pInput.add(txtSoLuong);
         
         JLabel lbChatLieu = new JLabel("Chất liệu");
         lbChatLieu.setFont(new Font("Arial", Font.PLAIN, 14));
         lbChatLieu.setBounds(233, 265, 112, 17);
         pInput.add(lbChatLieu);
         
-        textField_7 = new JTextField();
-        textField_7.setFont(new Font("Arial", Font.PLAIN, 13));
-        textField_7.setColumns(10);
-        textField_7.setBounds(233, 291, 112, 19);
-        pInput.add(textField_7);
+        txtChatLieu = new JTextField();
+        txtChatLieu.setFont(new Font("Arial", Font.PLAIN, 13));
+        txtChatLieu.setColumns(10);
+        txtChatLieu.setBounds(233, 291, 168, 19);
+        pInput.add(txtChatLieu);
+        
+        txtLoaiSP = new JTextField();
+        txtLoaiSP.setFont(new Font("Arial", Font.PLAIN, 13));
+        txtLoaiSP.setColumns(10);
+        txtLoaiSP.setBounds(233, 92, 168, 19);
+        pInput.add(txtLoaiSP);
         
         JLabel lbDonViTinh = new JLabel("Đơn vị tính");
         lbDonViTinh.setFont(new Font("Arial", Font.PLAIN, 14));
         lbDonViTinh.setBounds(10, 331, 112, 17);
         pInput.add(lbDonViTinh);
         
-        textField_8 = new JTextField();
-        textField_8.setFont(new Font("Arial", Font.PLAIN, 13));
-        textField_8.setColumns(10);
-        textField_8.setBounds(10, 357, 112, 19);
-        pInput.add(textField_8);
+        txtDonViTinh = new JTextField();
+        txtDonViTinh.setFont(new Font("Arial", Font.PLAIN, 13));
+        txtDonViTinh.setColumns(10);
+        txtDonViTinh.setBounds(10, 357, 168, 19);
+        pInput.add(txtDonViTinh);
         
         JLabel lbKieuDang = new JLabel("Kiểu dáng");
         lbKieuDang.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -538,6 +540,8 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         lbHeaderSP.setBackground(Color.decode("#00C853"));
         lbHeaderSP.setBounds(0, 10, 502, 45);
         pInput.add(lbHeaderSP);
+        
+      
         
         String[] listKichThuoc = {"38", "39", "40", "41", "42", "43"};
         for (String size : listKichThuoc) 
