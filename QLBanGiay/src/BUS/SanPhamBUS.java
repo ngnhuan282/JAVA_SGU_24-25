@@ -39,6 +39,15 @@ public class SanPhamBUS {
 		return null;
 	}
 	
+	public boolean checkMaSP(String maSP)
+	{
+		for(SanPhamDTO sp : dssp)
+		{
+			if(sp.getMaSP().equals(maSP))
+				return true;
+		}
+		return false;
+	}
 	
 	public void addSP(SanPhamDTO sp)
 	{	
@@ -84,7 +93,13 @@ public class SanPhamBUS {
 	{	
 		for(int i=0; i < dssp.size(); i++)
 		{
-			dssp.set(i, sp);
+			if(dssp.get(i).getMaSP().equals(sp.getMaSP()))
+			{
+				SanPhamDAO dao = new SanPhamDAO();
+				dao.update(sp);
+				dssp.set(i, sp);
+				return;
+			}
 		}
 	}
 }

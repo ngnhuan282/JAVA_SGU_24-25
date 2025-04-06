@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import DTO.LoaiDTO;
 
 public class LoaiDAO {
+	MySQLConnect mysql = new MySQLConnect();
 	
 	public LoaiDAO()
 	{
@@ -17,7 +18,6 @@ public class LoaiDAO {
 	{	
 		ArrayList<LoaiDTO> dsloai = new ArrayList<LoaiDTO>();
 		try {
-			MySQLConnect mysql = new MySQLConnect();
 			String sql = "SELECT * FROM PhanLoai";
 			ResultSet rs = mysql.executeQuery(sql);
 			while(rs.next())
@@ -37,10 +37,23 @@ public class LoaiDAO {
 	public void add(LoaiDTO loai)
 	{
 		try {
-			MySQLConnect mysql = new MySQLConnect();
 			String sql = "INSERT INTO PhanLoai VALUES(";
 			sql += "'" + loai.getMaLoaiSP() + "', ";
 			sql += "'" + loai.getTenLoaiSP() + "')";
+			mysql.executeUpdate(sql);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+	
+	public void update(LoaiDTO loai)
+	{
+		try {
+			String sql = "UPDATE PhanLoai SET TenLoaiSP= ";
+			sql += "'" + loai.getTenLoaiSP() + "'";
+			sql += "WHERE MaLoaiSP= ";
+			sql += "'" + loai.getMaLoaiSP() + "'";
 			mysql.executeUpdate(sql);
 		} catch (Exception e) {
 			// TODO: handle exception

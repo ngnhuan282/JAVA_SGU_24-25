@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import DTO.SanPhamDTO;
 
 public class SanPhamDAO {
+	MySQLConnect mysql = new MySQLConnect();
 	
 	public SanPhamDAO()
 	{
@@ -44,7 +45,6 @@ public class SanPhamDAO {
 	
 	public void add(SanPhamDTO sp)
 	{
-		MySQLConnect mysql = new MySQLConnect();
 		String sql = "INSERT INTO SanPham VALUES(";
 		sql += "'" +sp.getMaSP() + "', ";
 		sql += "'" +sp.getTenSP() + "', ";
@@ -59,7 +59,6 @@ public class SanPhamDAO {
 	
 	public void update(SanPhamDTO sp)
 	{
-		MySQLConnect mysql = new MySQLConnect();
 		String sql = "UPDATE SanPham SET ";
 		sql += "MaSP='" + sp.getMaSP() + "', ";
 		sql += "TenSP='" + sp.getTenSP() + "', ";
@@ -74,7 +73,6 @@ public class SanPhamDAO {
 	
 	public void delete(String MaSP)
 	{
-		MySQLConnect mysql = new MySQLConnect();
 		String sql = "DELETE FROM SanPham WHERE MaSP ='" +MaSP + "'";
 		mysql.executeUpdate(sql);
 		mysql.disConnect();
