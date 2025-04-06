@@ -14,24 +14,27 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import BUS.SanPhamBUS;
-import javax.swing.border.TitledBorder;
-import javax.swing.border.EtchedBorder;
 
 public class SanPhamGUI extends JFrame implements ActionListener {
 
@@ -44,7 +47,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
     private JTextField txtSearch;
     private JTable table;
     private JTextField textField;
-    private JTextField txtLoaiSP, txtMaSP, txtTenSP, txtDonGia, txtSoLuong, txtDonViTinh, txtChatLieu, txtKieuDang;
+    private JTextField txtMaSP, txtTenSP, txtDonGia, txtSoLuong, txtDonViTinh, txtChatLieu, txtKieuDang;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -480,14 +483,18 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         lbKichThuoc.setBounds(233, 201, 112, 17);
         pInput.add(lbKichThuoc);
         
-        JComboBox cbKichThuoc = new JComboBox();
-        cbKichThuoc.setFont(new Font("Arial", Font.PLAIN, 13));
-        cbKichThuoc.setBounds(233, 223, 57, 21);
-        cbKichThuoc.setBackground(Color.WHITE); // nền trắng
-        cbKichThuoc.setForeground(Color.BLACK); // chữ đen cho dễ đọc
-        cbKichThuoc.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY)); // viền xám nhạt
-        pInput.add(cbKichThuoc);
+        JComboBox cbLoaiSP = new JComboBox();
+        cbLoaiSP.setFont(new Font("Arial", Font.PLAIN, 13));
+        cbLoaiSP.setBounds(233, 91, 133, 21);
+        cbLoaiSP.setBackground(Color.WHITE); // nền trắng
+        cbLoaiSP.setForeground(Color.BLACK); // chữ đen cho dễ đọc
+        cbLoaiSP.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY)); // viền xám nhạt
+        pInput.add(cbLoaiSP);
         
+        String[] listLoaiSP = {"Giày boots", "Giày sneakers", "Giày sandals"};
+        for (String loai : listLoaiSP) 
+            cbLoaiSP.addItem(loai);
+
         JLabel lbSoLuong = new JLabel("Số lượng");
         lbSoLuong.setFont(new Font("Arial", Font.PLAIN, 14));
         lbSoLuong.setBounds(10, 265, 112, 17);
@@ -509,12 +516,6 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         txtChatLieu.setColumns(10);
         txtChatLieu.setBounds(233, 291, 168, 19);
         pInput.add(txtChatLieu);
-        
-        txtLoaiSP = new JTextField();
-        txtLoaiSP.setFont(new Font("Arial", Font.PLAIN, 13));
-        txtLoaiSP.setColumns(10);
-        txtLoaiSP.setBounds(233, 92, 168, 19);
-        pInput.add(txtLoaiSP);
         
         JLabel lbDonViTinh = new JLabel("Đơn vị tính");
         lbDonViTinh.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -539,12 +540,57 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         lbHeaderSP.setBounds(0, 10, 502, 45);
         pInput.add(lbHeaderSP);
         
-      
+        JSpinner spinKichThuoc = new JSpinner();
+        spinKichThuoc.setModel(new SpinnerNumberModel(38, 38, 43, 1));
+        spinKichThuoc.setFont(new Font("Arial", Font.PLAIN, 13));
+        spinKichThuoc.setBounds(233, 224, 62, 20);
+        pInput.add(spinKichThuoc);
         
-        String[] listKichThuoc = {"38", "39", "40", "41", "42", "43"};
-        for (String size : listKichThuoc) 
-            cbKichThuoc.addItem(size);
-    
+        JButton btnThemLoaiSP = new JButton("Thêm");
+        btnThemLoaiSP.setBackground(Color.decode("#81C784"));
+        btnThemLoaiSP.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/add20.png")));
+        btnThemLoaiSP.setFont(new Font("Arial", Font.PLAIN, 13));
+        btnThemLoaiSP.setBounds(336, 65, 95, 18);
+        pInput.add(btnThemLoaiSP);
+        
+      
+        btnThemLoaiSP.addActionListener(e -> {
+            JDialog dialog = new JDialog(this, "Quản lý loại sản phẩm", true);
+            dialog.setSize(400, 300);
+            dialog.setLocationRelativeTo(this);
+            dialog.setLayout(null);
+
+            // Danh sách loại
+            DefaultTableModel modelLoai = new DefaultTableModel(new String[]{"Mã loại", "Tên loại"}, 0);
+            JTable tblLoai = new JTable(modelLoai);
+            JScrollPane scrollLoai = new JScrollPane(tblLoai);
+            scrollLoai.setBounds(10, 10, 380, 150);
+            dialog.add(scrollLoai);
+
+            // Load dữ liệu từ PHANLOAI (giả lập)
+            modelLoai.addRow(new Object[]{"L001", "Giày boots"});
+            modelLoai.addRow(new Object[]{"L002", "Giày sneakers"});
+
+            // Trường nhập loại mới
+            JTextField txtTenLoai = new JTextField();
+            txtTenLoai.setBounds(10, 170, 200, 25);
+            dialog.add(txtTenLoai);
+
+            JButton btnThemMoi = new JButton("Thêm loại");
+            btnThemMoi.setBounds(220, 170, 100, 25);
+            btnThemMoi.addActionListener(ev -> {
+                String tenLoai = txtTenLoai.getText().trim();
+                if (!tenLoai.isEmpty()) {
+                    // Thêm vào PHANLOAI qua PhanLoaiBUS (giả lập)
+                    modelLoai.addRow(new Object[]{"L" + (modelLoai.getRowCount() + 1), tenLoai});
+                    cbLoaiSP.addItem(tenLoai); // Cập nhật JComboBox
+                    txtTenLoai.setText("");
+                }
+            });
+            dialog.add(btnThemMoi);
+
+            dialog.setVisible(true);
+        });
         
     }
 

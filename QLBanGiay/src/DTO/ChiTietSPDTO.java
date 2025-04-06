@@ -1,31 +1,20 @@
 package DTO;
 
 public class ChiTietSPDTO {
-	private int maSP;
-	private String mauSac, kichCo, chatLieu, kieuDang, moTa;
-	private String maHangSX;
+	private String maSP;
+	private String mauSac, chatLieu, kieuDang;
+	private int kichThuoc;
 	
 	public ChiTietSPDTO()
 	{
 		
 	}
 
-	public ChiTietSPDTO(int maSP, String mauSac, String kichCo, String chatLieu, String kieuDang, String moTa,
-			String maHangSX) {
-		this.maSP = maSP;
-		this.mauSac = mauSac;
-		this.kichCo = kichCo;
-		this.chatLieu = chatLieu;
-		this.kieuDang = kieuDang;
-		this.moTa = moTa;
-		this.maHangSX = maHangSX;
-	}
-
-	public int getMaSP() {
+	public String getMaSP() {
 		return maSP;
 	}
 
-	public void setMaSP(int maSP) {
+	public void setMaSP(String maSP) {
 		this.maSP = maSP;
 	}
 
@@ -35,14 +24,6 @@ public class ChiTietSPDTO {
 
 	public void setMauSac(String mauSac) {
 		this.mauSac = mauSac;
-	}
-
-	public String getKichCo() {
-		return kichCo;
-	}
-
-	public void setKichCo(String kichCo) {
-		this.kichCo = kichCo;
 	}
 
 	public String getChatLieu() {
@@ -61,21 +42,15 @@ public class ChiTietSPDTO {
 		this.kieuDang = kieuDang;
 	}
 
-	public String getMoTa() {
-		return moTa;
+	public int getKichThuoc() {
+		return kichThuoc;
 	}
 
-	public void setMoTa(String moTa) {
-		this.moTa = moTa;
+	public void setKichThuoc(int kichThuoc) {
+		this.kichThuoc = kichThuoc;
 	}
-
-	public String getMaHangSX() {
-		return maHangSX;
-	}
-
-	public void setMaHangSX(String maHangSX) {
-		this.maHangSX = maHangSX;
-	}
+	
+	
 	
 	
 }

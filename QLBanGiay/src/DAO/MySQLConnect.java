@@ -20,6 +20,7 @@ public class MySQLConnect {
 			conn = DriverManager.getConnection(url, user, password);
 		} catch (ClassNotFoundException | SQLException ex) {
 			// TODO: handle exception
+			ex.printStackTrace();
 		}
 	}
 	
@@ -30,6 +31,7 @@ public class MySQLConnect {
 			conn.close();
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 	}
 	
@@ -42,6 +44,7 @@ public class MySQLConnect {
 			rs = st.executeQuery(sql);
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return rs;
 	}
@@ -55,6 +58,7 @@ public class MySQLConnect {
 			disConnect();
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 	}
 	
