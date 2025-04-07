@@ -1,7 +1,7 @@
 package DTO;
 
 public class LoaiDTO {
-	private String maLoaiSP;
+	private int maLoaiSP;
 	private String tenLoaiSP;
 	
 	public LoaiDTO()
@@ -9,16 +9,16 @@ public class LoaiDTO {
 		
 	}
 	
-	public LoaiDTO(String maLoaiSP, String tenLoaiSP) {
+	public LoaiDTO(int maLoaiSP, String tenLoaiSP) {
 		this.maLoaiSP = maLoaiSP;
 		this.tenLoaiSP = tenLoaiSP;
 	}
 
-	public String getMaLoaiSP() {
+	public int getMaLoaiSP() {
 		return maLoaiSP;
 	}
 
-	public void setMaLoaiSP(String maLoaiSP) {
+	public void setMaLoaiSP(int maLoaiSP) {
 		this.maLoaiSP = maLoaiSP;
 	}
 

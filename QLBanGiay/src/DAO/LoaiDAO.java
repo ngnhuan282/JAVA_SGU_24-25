@@ -22,7 +22,7 @@ public class LoaiDAO {
 			ResultSet rs = mysql.executeQuery(sql);
 			while(rs.next())
 			{
-				String maLoai = rs.getString(0);
+				int maLoai = rs.getInt(0);
 				String tenLoai = rs.getString(1);
 				LoaiDTO loai = new LoaiDTO(maLoai, tenLoai);
 				dsloai.add(loai);
@@ -61,7 +61,7 @@ public class LoaiDAO {
 		}
 	}
 	
-	public void delete(String maLoaiSP)
+	public void delete(int maLoaiSP)
 	{
 		try {
 			String sql = "DELETE FROM PhanLoai WHERE MaLoaiSP= "; 

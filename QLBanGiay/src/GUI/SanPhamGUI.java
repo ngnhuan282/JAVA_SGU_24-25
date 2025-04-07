@@ -44,7 +44,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
     private String color = "#FF5252";
     private DefaultTableModel model;
     private JTextField txtSearch;
-    private JTable table;
+    private JTable tblDSSP;
     private JTextField txtMaSP, txtTenSP, txtDonGia, txtSoLuong, txtDonViTinh, txtChatLieu, txtKieuDang;
     private JComboBox<String> cbLoaiSP;
     private JRadioButton rbDen, rbTrang, rbXam;
@@ -71,7 +71,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
     }
     
     private void loadDataDemo() {
-        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        DefaultTableModel model = (DefaultTableModel) tblDSSP.getModel();
         model.addRow(new Object[]{"SP001", "Nike Air Force 1", "Nike", 2500000, 10, "Đôi"});
         model.addRow(new Object[]{"SP002", "Adidas Ultraboost", "Adidas", 2800000, 5, "Đôi"});
         model.addRow(new Object[]{"SP003", "Converse Chuck Taylor", "Converse", 1500000, 8, "Đôi"});
@@ -298,6 +298,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         
                 JButton btnThem = new JButton("Thêm");
                 horizontalBox.add(btnThem);
+                btnThem.setFocusPainted(false);
                 btnThem.setBorder(new LineBorder(new Color(0, 0, 0)));
                 btnThem.setActionCommand("Thêm");
                 btnThem.addActionListener(this);
@@ -311,6 +312,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
                 
                         JButton btnSua = new JButton("Sửa");
                         horizontalBox.add(btnSua);
+                        btnSua.setFocusPainted(false);
                         btnSua.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
                         btnSua.setActionCommand("Sửa");
                         btnSua.addActionListener(this);
@@ -324,6 +326,7 @@ public class SanPhamGUI extends JFrame implements ActionListener {
                         
                                 JButton btnXoa = new JButton("Xóa");
                                 horizontalBox.add(btnXoa);
+                                btnXoa.setFocusPainted(false);
                                 btnXoa.setActionCommand("Xóa");
                                 btnXoa.addActionListener(this);
                                 btnXoa.setBorderPainted(false);
@@ -380,19 +383,19 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         
         
         /*************TABLE HIỂN THỊ***************/
-        table = new JTable(new DefaultTableModel(
+        tblDSSP = new JTable(new DefaultTableModel(
         	new Object[][] {
         	},
         	new String[] {
         		"M\u00E3 S\u1EA3n Ph\u1EA9m", "T\u00EAn S\u1EA3n Ph\u1EA9m", "Lo\u1EA1i", "Gi\u00E1", "S\u1ED1 L\u01B0\u1EE3ng", "\u0110\u01A1n v\u1ECB t\u00EDnh"
         	}
         ));
-        table.setBackground(Color.WHITE);
-        table.setBorder(UIManager.getBorder("Table.scrollPaneBorder"));
-        table.setFillsViewportHeight(true);
-        table.setFont(new Font("Arial", Font.PLAIN, 13));
-        table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 13));
-        JScrollPane scrollPane = new JScrollPane(table);
+        tblDSSP.setBackground(Color.WHITE);
+        tblDSSP.setBorder(UIManager.getBorder("Table.scrollPaneBorder"));
+        tblDSSP.setFillsViewportHeight(true);
+        tblDSSP.setFont(new Font("Arial", Font.PLAIN, 13));
+        tblDSSP.getTableHeader().setFont(new Font("Arial", Font.BOLD, 13));
+        JScrollPane scrollPane = new JScrollPane(tblDSSP);
         scrollPane.setBounds(591, 40, 613, 402);
         scrollPane.getVerticalScrollBar().setUI(new ModernScrollBarUI());
         scrollPane.getHorizontalScrollBar().setUI(new ModernScrollBarUI());
@@ -547,51 +550,22 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         spinKichThuoc.setBounds(233, 224, 62, 20);
         pInput.add(spinKichThuoc);
         
-        JButton btnThemLoaiSP = new JButton("Thêm");
-        btnThemLoaiSP.setBackground(Color.decode("#81C784"));
-        btnThemLoaiSP.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/add20.png")));
-        btnThemLoaiSP.setFont(new Font("Arial", Font.PLAIN, 13));
-        btnThemLoaiSP.setBounds(336, 65, 95, 18);
-        pInput.add(btnThemLoaiSP);
-        
-      
-        btnThemLoaiSP.addActionListener(e -> {
-            JDialog dialog = new JDialog(this, "Quản lý loại sản phẩm", true);
-            dialog.setSize(400, 300);
-            dialog.setLocationRelativeTo(this);
-            dialog.setLayout(null);
-
-            // Danh sách loại
-            DefaultTableModel modelLoai = new DefaultTableModel(new String[]{"Mã loại", "Tên loại"}, 0);
-            JTable tblLoai = new JTable(modelLoai);
-            JScrollPane scrollLoai = new JScrollPane(tblLoai);
-            scrollLoai.setBounds(10, 10, 380, 150);
-            dialog.add(scrollLoai);
-
-            // Load dữ liệu từ PHANLOAI (giả lập)
-            modelLoai.addRow(new Object[]{"L001", "Giày boots"});
-            modelLoai.addRow(new Object[]{"L002", "Giày sneakers"});
-
-            // Trường nhập loại mới
-            JTextField txtTenLoai = new JTextField();
-            txtTenLoai.setBounds(10, 170, 200, 25);
-            dialog.add(txtTenLoai);
-
-            JButton btnThemMoi = new JButton("Thêm loại");
-            btnThemMoi.setBounds(220, 170, 100, 25);
-            btnThemMoi.addActionListener(ev -> {
-                String tenLoai = txtTenLoai.getText().trim();
-                if (!tenLoai.isEmpty()) {
-                    // Thêm vào PHANLOAI qua PhanLoaiBUS (giả lập)
-                    modelLoai.addRow(new Object[]{"L" + (modelLoai.getRowCount() + 1), tenLoai});
-                    cbLoaiSP.addItem(tenLoai); // Cập nhật JComboBox
-                    txtTenLoai.setText("");
-                }
-            });
-            dialog.add(btnThemMoi);
-
-            dialog.setVisible(true);
-        });
+        JButton btnLoaiSP = new JButton("");
+        btnLoaiSP.setBorder(null);
+        btnLoaiSP.setBackground(null);
+        btnLoaiSP.setFocusPainted(false);
+        btnLoaiSP.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/more30.png")));
+        btnLoaiSP.setFont(new Font("Arial", Font.PLAIN, 13));
+        btnLoaiSP.setBounds(331, 64, 47, 18);
+        btnLoaiSP.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				openLoaiSPDialog();
+			}
+		});
+        pInput.add(btnLoaiSP);
         
     }
 
@@ -608,12 +582,33 @@ public class SanPhamGUI extends JFrame implements ActionListener {
             case "Xóa":
             	deleteProduct();
                 break;
+//            case "ThemLoai":
+//            	addCategory();
+//            	break;
+//            case "SuaLoai":
+//            	updateCategory();
+//            	break;
+//            case "XoaLoai":
+//            	deleteCategory();
+//            	break;
             default:
                 break;
         }
     }
     
-    public void addProduct()
+    
+    
+    
+    public void updateCategory()
+    {
+    	
+    }
+    
+    public void deleteCategory()
+    {
+    	
+    }
+	public void addProduct()
     {
     	
     }
@@ -642,11 +637,11 @@ public class SanPhamGUI extends JFrame implements ActionListener {
     
     public void deleteProduct()
     {
-    	int i = table.getSelectedRow();
+    	int i = tblDSSP.getSelectedRow();
     	if(i >= 0)
     	{
-    		String maSP = table.getValueAt(i, 0).toString();
-    		String tenSP = table.getValueAt(i, 1).toString();
+    		String maSP = tblDSSP.getValueAt(i, 0).toString();
+    		String tenSP = tblDSSP.getValueAt(i, 1).toString();
     		System.out.println("Deleting MaSP: " + maSP + ", TenSP: " + tenSP); // Debug
     		int confirm = JOptionPane.showConfirmDialog(this, 
     				"Bạn có chắc muốn xóa sản phẩm " +tenSP + " có mã " +maSP + " không?",
@@ -678,4 +673,99 @@ public class SanPhamGUI extends JFrame implements ActionListener {
     										"Lỗi", JOptionPane.ERROR_MESSAGE);
     	}
     }
+    
+    
+    private void openLoaiSPDialog() {
+        JDialog dialog = new JDialog(this, "Quản lý loại sản phẩm", true);
+        dialog.setSize(500, 400);
+        dialog.setLocationRelativeTo(null);
+        dialog.getContentPane().setLayout(null);
+        
+        // Tiêu đề
+        JLabel lbTitle = new JLabel("QUẢN LÝ LOẠI SẢN PHẨM", SwingConstants.CENTER);
+        lbTitle.setFont(new Font("Arial", Font.BOLD, 16));
+        lbTitle.setBounds(0, 10, 500, 30);
+        dialog.getContentPane().add(lbTitle);
+
+        // Bảng hiển thị danh sách loại sản phẩm
+        DefaultTableModel modelLoai = new DefaultTableModel(new String[]{"Mã loại", "Tên loại"}, 0);
+        JTable tblLoai = new JTable(modelLoai);
+        tblLoai.setFont(new Font("Arial", Font.PLAIN, 13));
+        tblLoai.getTableHeader().setFont(new Font("Arial", Font.BOLD, 13));
+        JScrollPane scrollLoai = new JScrollPane(tblLoai);
+        scrollLoai.setBounds(10, 50, 480, 200);
+        dialog.getContentPane().add(scrollLoai);
+
+        // Form nhập liệu
+        JLabel lbMaLoai = new JLabel("Mã loại:");
+        lbMaLoai.setFont(new Font("Arial", Font.PLAIN, 14));
+        lbMaLoai.setBounds(10, 260, 80, 25);
+        dialog.getContentPane().add(lbMaLoai);
+
+        JTextField txtMaLoai = new JTextField();
+        txtMaLoai.setFont(new Font("Arial", Font.PLAIN, 13));
+        txtMaLoai.setBounds(90, 260, 100, 25);
+        txtMaLoai.setEditable(false);
+        dialog.getContentPane().add(txtMaLoai);
+
+        JLabel lbTenLoai = new JLabel("Tên loại:");
+        lbTenLoai.setFont(new Font("Arial", Font.PLAIN, 14));
+        lbTenLoai.setBounds(210, 260, 71, 25);
+        dialog.getContentPane().add(lbTenLoai);
+
+        JTextField txtTenLoai = new JTextField();
+        txtTenLoai.setFont(new Font("Arial", Font.PLAIN, 13));
+        txtTenLoai.setBounds(280, 260, 200, 25);
+        dialog.getContentPane().add(txtTenLoai);
+
+        // Nút thêm/sửa/xóa
+        JButton btnThemLoai = new JButton("Thêm", new ImageIcon(LoaiSanPhamGUI.class.getResource("/image/add20.png")));
+        btnThemLoai.setForeground(Color.WHITE);
+        btnThemLoai.setFont(new Font("Arial", Font.PLAIN, 13));
+        btnThemLoai.setActionCommand("ThemLoai");
+        btnThemLoai.addActionListener(this);
+        btnThemLoai.setBounds(56, 300, 120, 30);
+        btnThemLoai.setBackground(Color.decode("#4CAF50"));
+        dialog.getContentPane().add(btnThemLoai);
+        
+        ImageIcon addIcon = new ImageIcon(getClass().getResource("/image/add20.png"));
+        JButton btnSuaLoai = new JButton("Cập nhật", new ImageIcon(LoaiSanPhamGUI.class.getResource("/image/edit20.png")));
+        btnSuaLoai.setFont(new Font("Arial", Font.PLAIN, 13));
+        btnSuaLoai.setActionCommand("SuaLoai");
+        btnSuaLoai.addActionListener(this);
+        btnSuaLoai.setBounds(199, 300, 120, 30);
+        btnSuaLoai.setForeground(Color.WHITE);
+        btnSuaLoai.setBackground(Color.decode("#7986CB"));
+        dialog.getContentPane().add(btnSuaLoai);
+        
+        ImageIcon removeIcon = new ImageIcon(getClass().getResource("/image/remove20.png"));
+        JButton btnXoaLoai = new JButton("Xóa", removeIcon);
+        btnXoaLoai.setFont(new Font("Arial", Font.PLAIN, 13));
+        btnXoaLoai.setActionCommand("XoaLoai");
+        btnXoaLoai.addActionListener(this);
+        btnXoaLoai.setBounds(338, 300, 120, 30);
+        btnXoaLoai.setForeground(Color.WHITE);
+        btnXoaLoai.setBackground(Color.decode("#FF7043"));
+        dialog.getContentPane().add(btnXoaLoai);
+
+        dialog.setVisible(true);
+        
+        /**********XỬ LÝ SỰ KIỆN CHO THÊM/SỬA/XÓA***********/
+        btnThemLoai.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String tenLoai = txtTenLoai.getText();
+				if(tenLoai.isEmpty())
+				{
+					
+				}
+			}
+		});
+    }
+    
+    
+    
+    
 }

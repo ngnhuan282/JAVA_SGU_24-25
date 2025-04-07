@@ -33,7 +33,7 @@ public class LoaiBUS {
 	{
 		for(LoaiDTO x : dsloai)
 		{
-			if(x.equals(loai.getMaLoaiSP()))
+			if(x.getMaLoaiSP() == loai.getMaLoaiSP())
 				return;
 			LoaiDAO loaiDAO = new LoaiDAO();
 			loaiDAO.add(loai);
@@ -45,7 +45,7 @@ public class LoaiBUS {
 	{
 		for(int i=0; i < dsloai.size(); i++)
 		{
-			if(dsloai.get(i).equals(loai.getMaLoaiSP()))
+			if(dsloai.get(i).getMaLoaiSP() == loai.getMaLoaiSP())
 			{
 				LoaiDAO loaiDAO = new LoaiDAO();
 				loaiDAO.update(loai);
@@ -55,11 +55,11 @@ public class LoaiBUS {
 		}
 	}
 	
-	public void delete(String maLoaiSP)
+	public void delete(int maLoaiSP)
 	{
 		for(int i=0; i < dsloai.size(); i++)
 		{
-			if(dsloai.get(i).getMaLoaiSP().equals(maLoaiSP))
+			if(dsloai.get(i).getMaLoaiSP() == maLoaiSP)
 			{
 				LoaiDAO loaiDAO = new LoaiDAO();
 				loaiDAO.delete(maLoaiSP);
