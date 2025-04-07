@@ -43,11 +43,12 @@ public class SanPhamGUI extends JFrame implements ActionListener {
     private int DEFAULT_WIDTH = 1450, DEFAULT_HEIGHT = 800;
     private String color = "#FF5252";
     private DefaultTableModel model;
-//    private SanPhamBUS spBUS = new SanPhamBUS();
     private JTextField txtSearch;
     private JTable table;
-    private JTextField textField;
     private JTextField txtMaSP, txtTenSP, txtDonGia, txtSoLuong, txtDonViTinh, txtChatLieu, txtKieuDang;
+    private JComboBox<String> cbLoaiSP;
+    private JRadioButton rbDen, rbTrang, rbXam;
+    private JSpinner spinKichThuoc;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -599,10 +600,10 @@ public class SanPhamGUI extends JFrame implements ActionListener {
         String command = e.getActionCommand();
         switch (command) {
             case "Thêm":
-//                openProductDialog(false);
+            	addProduct();
                 break;
             case "Sửa":
-//            	openProductDialog(true);
+            	updateProduct();
                 break;
             case "Xóa":
             	deleteProduct();
@@ -611,7 +612,33 @@ public class SanPhamGUI extends JFrame implements ActionListener {
                 break;
         }
     }
-
+    
+    public void addProduct()
+    {
+    	
+    }
+    
+    public void updateProduct()
+    {
+    	
+    }
+    
+    
+    public void resetForm()
+    {
+    	txtMaSP.setText("");
+    	txtTenSP.setText("");
+    	txtDonGia.setText("");
+    	txtSoLuong.setText("");
+    	txtDonViTinh.setText("");
+    	txtChatLieu.setText("");
+    	txtKieuDang.setText("");
+    	rbDen.setSelected(false);
+    	rbTrang.setSelected(false);
+    	rbXam.setSelected(false);
+    	spinKichThuoc.setValue(38);
+    	cbLoaiSP.setSelectedIndex(0);
+    }
     
     public void deleteProduct()
     {
