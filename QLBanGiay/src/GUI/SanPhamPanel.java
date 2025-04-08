@@ -192,7 +192,7 @@ public class SanPhamPanel extends JPanel {
         lbHeaderSP.setFont(new Font("Arial", Font.BOLD, 15));
         lbHeaderSP.setBackground(Color.decode("#00C853"));
         lbHeaderSP.setOpaque(true); // Đảm bảo màu nền hiển thị
-        lbHeaderSP.setBounds(0, 10, 502, 45);
+        lbHeaderSP.setBounds(0, 0, 502, 45);
         pInput.add(lbHeaderSP);
 
         spinKichThuoc = new JSpinner(new SpinnerNumberModel(38, 38, 43, 1));
@@ -307,7 +307,7 @@ public class SanPhamPanel extends JPanel {
         JFrame frame = new JFrame("Test SanPhamPanel");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1248, 654);
-        frame.add(new SanPhamPanel());
+        frame.getContentPane().add(new SanPhamPanel());
         frame.setVisible(true);
     }
 }
