@@ -313,14 +313,14 @@ public class MainGUI extends JFrame implements ActionListener {
         pMain.add(pContent);
 
         // Add panels to CardLayout
-        pContent.add(new TrangChuPanel(), "TrangChu");
-        pContent.add(new SanPhamPanel(), "SanPham");
-        pContent.add(new NhaCungCapPanel(), "NhaCungCap");
-        pContent.add(new NhanVienPanel(), "NhanVien");
-        pContent.add(new KhachHangPanel(), "KhachHang");
-        pContent.add(new PhieuNhapPanel(), "PhieuNhap");
-        pContent.add(new PhieuXuatPanel(), "PhieuXuat");
-        pContent.add(new KhuyenMaiPanel(), "KhuyenMai");
+        pContent.add(new TrangChuGUI(), "TrangChu");
+        pContent.add(new SanPhamGUI(), "SanPham");
+        pContent.add(new NhaCungCapGUI(), "NhaCungCap");
+        pContent.add(new NhanVienGUI(), "NhanVien");
+        pContent.add(new KhachHangGUI(), "KhachHang");
+        pContent.add(new PhieuNhapGUI(), "PhieuNhap");
+        pContent.add(new PhieuXuatGUI(), "PhieuXuat");
+        pContent.add(new KhuyenMaiGUI(), "KhuyenMai");
 
         // Default panel
         cardLayout.show(pContent, "TrangChu");
@@ -368,52 +368,52 @@ public class MainGUI extends JFrame implements ActionListener {
                 break;
         }
     }
-
-    // Placeholder panels
-    class TrangChuPanel extends JPanel {
-        public TrangChuPanel() {
+    
+ // Placeholder panels
+    class TrangChuGUI extends JPanel {
+        public TrangChuGUI() {
             setBackground(Color.WHITE);
             add(new JLabel("Đây là Trang Chủ", SwingConstants.CENTER));
         }
     }
 
-    class NhaCungCapPanel extends JPanel {
-        public NhaCungCapPanel() {
+    class NhaCungCapGUI extends JPanel {
+        public NhaCungCapGUI() {
             setBackground(Color.WHITE);
             add(new JLabel("Đây là Nhà Cung Cấp", SwingConstants.CENTER));
         }
     }
 
-    class NhanVienPanel extends JPanel {
-        public NhanVienPanel() {
+    class NhanVienGUI extends JPanel {
+        public NhanVienGUI() {
             setBackground(Color.WHITE);
             add(new JLabel("Đây là Nhân Viên", SwingConstants.CENTER));
         }
     }
 
-    class KhachHangPanel extends JPanel {
-        public KhachHangPanel() {
+    class KhachHangGUI extends JPanel {
+        public KhachHangGUI() {
             setBackground(Color.WHITE);
             add(new JLabel("Đây là Khách Hàng", SwingConstants.CENTER));
         }
     }
 
-    class PhieuNhapPanel extends JPanel {
-        public PhieuNhapPanel() {
+    class PhieuNhapGUI extends JPanel {
+        public PhieuNhapGUI() {
             setBackground(Color.WHITE);
             add(new JLabel("Đây là Phiếu Nhập", SwingConstants.CENTER));
         }
     }
 
-    class PhieuXuatPanel extends JPanel {
-        public PhieuXuatPanel() {
+    class PhieuXuatGUI extends JPanel {
+        public PhieuXuatGUI() {
             setBackground(Color.WHITE);
             add(new JLabel("Đây là Phiếu Xuất", SwingConstants.CENTER));
         }
     }
 
-    class KhuyenMaiPanel extends JPanel {
-        public KhuyenMaiPanel() {
+    class KhuyenMaiGUI extends JPanel {
+        public KhuyenMaiGUI() {
             setBackground(Color.WHITE);
             add(new JLabel("Đây là Khuyến Mãi", SwingConstants.CENTER));
         }
