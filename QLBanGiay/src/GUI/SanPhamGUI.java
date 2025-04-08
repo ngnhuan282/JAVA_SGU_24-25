@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -360,21 +362,58 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         btnEditMode.addActionListener(e -> toggleEditMode());
         pInput.add(btnEditMode);
 
-        tblDSSP.getSelectionModel().addListSelectionListener(e -> {
-            int row = tblDSSP.getSelectedRow();
-            if (row >= 0) {
-                txtMaSP.setText(tblDSSP.getValueAt(row, 0).toString());
-                txtTenSP.setText(tblDSSP.getValueAt(row, 1).toString());
-                cbLoaiSP.setSelectedItem(tblDSSP.getValueAt(row, 2).toString());
-                txtDonGia.setText(tblDSSP.getValueAt(row, 3).toString());
-                txtSoLuong.setText(tblDSSP.getValueAt(row, 4).toString());
-                txtDonViTinh.setText(tblDSSP.getValueAt(row, 5).toString());
-                // Giả sử các trường khác (màu sắc, kích thước, chất liệu, kiểu dáng) chưa được lưu trong bảng
-            }
-        });
+        tblDSSP.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				tblDSSPMouseClicked();
+			}
+		});
     }
-
-    private void toggleEditMode() {
+    
+    
+    public void tblDSSPMouseClicked()
+    {
+    	int i = tblDSSP.getSelectedRow();
+    	if(i >= 0)
+    	{
+    		txtMaSP.setText(tblDSSP.getValueAt(i, 0).toString());
+    		txtTenSP.setText(tblDSSP.getValueAt(i, 1).toString());
+    		cbLoaiSP.setSelectedItem(tblDSSP.getValueAt(i, 2).toString());
+    		txtDonGia.setText(tblDSSP.getValueAt(i, 3).toString());
+    		txtSoLuong.setText(tblDSSP.getValueAt(i, 4).toString());
+    		txtDonViTinh.setText(tblDSSP.getValueAt(i, 5).toString());
+    	}
+    }
+    
+    
+    public void toggleEditMode() 
+    {
         isEditMode = !isEditMode; // Đổi trạng thái chỉnh sửa
         txtMaSP.setEditable(isEditMode);
         txtTenSP.setEditable(isEditMode);
@@ -407,7 +446,9 @@ public class SanPhamGUI extends JPanel implements ActionListener {
                 break;
         }
     }
-
+    
+   
+    
     public void addProduct() {
         // Implement logic here
     }
@@ -430,7 +471,6 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         model.setValueAt(txtSoLuong.getText(), row, 4);
         model.setValueAt(txtDonViTinh.getText(), row, 5);
         JOptionPane.showMessageDialog(this, "Cập nhật sản phẩm thành công", "Thành công", JOptionPane.INFORMATION_MESSAGE);
-        // TODO: Thêm logic lưu vào database nếu cần
     }
 
     public void deleteProduct() {
@@ -445,6 +485,7 @@ public class SanPhamGUI extends JPanel implements ActionListener {
                 model.removeRow(i);
                 JOptionPane.showMessageDialog(this, "Xóa sản phẩm " + tenSP + " thành công",
                         "Thành công", JOptionPane.INFORMATION_MESSAGE);
+                clearForm();
             }
         } else {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm để xóa",
@@ -465,7 +506,23 @@ public class SanPhamGUI extends JPanel implements ActionListener {
             cbLoaiSP.addItem(tenLoai);
         }
     }
-
+    
+    public void clearForm()
+    {
+    	txtMaSP.setText("");
+    	txtTenSP.setText("");
+    	txtDonViTinh.setText("");
+    	txtSoLuong.setText("");
+    	txtDonGia.setText("");
+    	txtChatLieu.setText("");
+    	txtKieuDang.setText("");
+    	rbDen.setSelected(false);
+    	rbTrang.setSelected(false);
+    	rbXam.setSelected(false);
+    	cbLoaiSP.setSelectedIndex(0);
+    	spinKichThuoc.setValue(38);
+    }
+    
     public static void main(String[] args) {
         JFrame frame = new JFrame("Test SanPhamGUI");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

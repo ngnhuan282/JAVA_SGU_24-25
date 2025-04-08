@@ -7,8 +7,9 @@ import DTO.LoaiDTO;
 public class LoaiBUS {
     private static ArrayList<LoaiDTO> dsloai;
 
-    public LoaiBUS() {
-        // Không khởi tạo sẵn dsloai trong constructor
+    public LoaiBUS() 
+    {
+       
     }
 
     public static ArrayList<LoaiDTO> getDsloai() {

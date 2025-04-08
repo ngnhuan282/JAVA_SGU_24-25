@@ -1,8 +1,23 @@
 package GUI;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Window;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.Vector;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
+
 import BUS.LoaiBUS;
 import DTO.LoaiDTO;
 
@@ -15,7 +30,8 @@ public class LoaiSPDialog extends JDialog {
     private JButton btnEditMode;
     private boolean isEditMode = false;
 
-    public LoaiSPDialog(Window window) {
+    public LoaiSPDialog(Window window) 
+    {
         super(window, "Quản lý loại sản phẩm");
         loaiBUS = new LoaiBUS();
         initComponents();
@@ -97,26 +113,68 @@ public class LoaiSPDialog extends JDialog {
         btnEditMode.addActionListener(e -> toggleEditMode());
         getContentPane().add(btnEditMode);
 
-        tblLoai.getSelectionModel().addListSelectionListener(e -> {
-            int row = tblLoai.getSelectedRow();
-            if (row >= 0) {
-                txtMaLoai.setText(tblLoai.getValueAt(row, 0).toString());
-                txtTenLoai.setText(tblLoai.getValueAt(row, 1).toString());
-            }
-        });
+        tblLoai.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+//				clearForm();
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				tblLoaiMouseClicked();
+			}
+		});
     }
-
-    private void toggleEditMode() {
+    public void clearForm()
+    {
+    	txtMaLoai.setText("");
+    	txtTenLoai.setText("");
+    }
+    
+    public void tblLoaiMouseClicked()
+    {
+    	int i = tblLoai.getSelectedRow();
+    	if(i >= 0)
+    	{
+    		txtMaLoai.setText(tblLoai.getValueAt(i, 0).toString());
+    		txtTenLoai.setText(tblLoai.getValueAt(i, 1).toString());
+    	}
+    }
+    
+    public void toggleEditMode() 
+    {
         isEditMode = !isEditMode;
         txtTenLoai.setEditable(isEditMode);
     }
 
-    private void loadDataToTable() {
+    public void loadDataToTable() 
+    {
         modelLoai.setRowCount(0);
-        if (loaiBUS.getDsloai() != null) {
-            for (LoaiDTO loai : loaiBUS.getDsloai()) {
+        if (loaiBUS.getDsloai() != null) 
+        {
+            for (LoaiDTO loai : loaiBUS.getDsloai()) 
                 modelLoai.addRow(new Object[]{loai.getMaLoaiSP(), loai.getTenLoaiSP()});
-            }
         }
     }
 
@@ -127,55 +185,83 @@ public class LoaiSPDialog extends JDialog {
         LoaiDTO loai = new LoaiDTO(maLoai, tenLoai); 
         if (loaiBUS.add(loai)) 
         {
-            loadDataToTable();
             txtMaLoai.setText("");
             txtTenLoai.setText("");
             JOptionPane.showMessageDialog(this, "Thêm loại SP thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+            Vector row = new Vector();
+            row.add(maLoai);
+            row.add(tenLoai);
+            modelLoai.addRow(row);
+            tblLoai.setModel(modelLoai);
         } 
         else 
             JOptionPane.showMessageDialog(this, "Thêm thất bại! Tên loại không hợp lệ hoặc đã tồn tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
         
     }
 
-    public void suaLoai() {
-        if (!isEditMode) {
-            JOptionPane.showMessageDialog(this, "Vui lòng bật chế độ sửa!", "Lỗi", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        int row = tblLoai.getSelectedRow();
-        if (row < 0) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn loại để sửa!", "Lỗi", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        int maLoai = Integer.parseInt(txtMaLoai.getText().trim());
-        String tenLoai = txtTenLoai.getText().trim();
-        LoaiDTO loai = new LoaiDTO(maLoai, tenLoai);
-        if (loaiBUS.update(loai)) {
-            loadDataToTable();
-            JOptionPane.showMessageDialog(this, "Cập nhật thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(this, "Cập nhật thất bại! Tên loại không hợp lệ hoặc đã tồn tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
+    public void suaLoai() 
+    {
+    	if(isEditMode == false)
+    	{
+    		JOptionPane.showMessageDialog(this, "Vui lòng bật chế độ sửa!", "Lỗi", JOptionPane.WARNING_MESSAGE);
+    		return;
+    	}
+    	int i = tblLoai.getSelectedRow();
+    	if(i >= 0)
+    	{
+    		LoaiDTO loai = new LoaiDTO();
+    		int maLoai = Integer.parseInt(txtMaLoai.getText());
+    		String tenLoai = txtTenLoai.getText();
+    		loai.setMaLoaiSP(maLoai); loai.setTenLoaiSP(tenLoai);
+    		
+    		LoaiBUS loaiBUS = new LoaiBUS();
+    		if(loaiBUS.update(loai))
+    		{
+    			Vector row = new Vector();
+        		row.add(maLoai);
+        		row.add(tenLoai);
+        		modelLoai.setValueAt(maLoai, i, 0);
+        		modelLoai.setValueAt(tenLoai, i, 1);
+        		tblLoai.setModel(modelLoai);
+        		JOptionPane.showMessageDialog(this, "Cập nhật thành công", 
+        										"Thành công", JOptionPane.INFORMATION_MESSAGE);
+    		}
+    		else
+    			JOptionPane.showMessageDialog(this, "Cập nhật thất bại !", 
+    											"Thất bại", JOptionPane.ERROR_MESSAGE);
+    	}
+    	else
+    		JOptionPane.showMessageDialog(this, "Vui lòng chọn một dòng dữ liệu để cập nhật",
+    										"Lỗi", JOptionPane.ERROR_MESSAGE);
+    		
     }
 
-    public void xoaLoai() {
-        int row = tblLoai.getSelectedRow();
-        if (row < 0) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn loại để xóa!", "Lỗi", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        int maLoai = Integer.parseInt(txtMaLoai.getText().trim());
-        int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa loại '" + txtTenLoai.getText() + "' không?",
-                "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
-        if (confirm == JOptionPane.YES_OPTION) {
-            if (loaiBUS.delete(maLoai)) {
-                loadDataToTable();
-                txtMaLoai.setText("");
-                txtTenLoai.setText("");
-                JOptionPane.showMessageDialog(this, "Xóa thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(this, "Xóa thất bại! Không tìm thấy loại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            }
+    public void xoaLoai() 
+    {
+        int i = tblLoai.getSelectedRow();
+        if(i >= 0)
+        {
+        	int maLoai = Integer.parseInt(txtMaLoai.getText());
+        	int confirm = JOptionPane.showConfirmDialog(this, "Bạn có muốn xóa sản phẩm có mã" +maLoai+"không ?",
+        												"Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+        	if(confirm == JOptionPane.YES_OPTION)
+        	{	
+        		LoaiBUS loaiBUS = new LoaiBUS();
+        		if(loaiBUS.delete(maLoai))
+            	{
+        			clearForm();
+        			modelLoai.removeRow(i);
+        			tblLoai.setModel(modelLoai);
+        			JOptionPane.showMessageDialog(this, "Xóa thành công !", 
+        											"Thành công", JOptionPane.INFORMATION_MESSAGE);
+            	}
+        		else
+        			JOptionPane.showMessageDialog(this, "Xóa thất bại !",
+        											"Thất bại", JOptionPane.ERROR_MESSAGE);
+        	}
+        else
+        	JOptionPane.showMessageDialog(this, "Vui lòng chọn ít nhất 1 dòng dữ liệu để xóa",
+        									"Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
 
