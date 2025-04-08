@@ -29,7 +29,7 @@ public class SanPhamBUS {
 	{
 		if(sp.getMaSP().isEmpty()) return "Vui lòng nhập mã sản phẩm";
 		if(sp.getTenSP().isEmpty()) return "Vui lòng nhập tên sản phẩm";
-		if(sp.getMaLoaiSP().isEmpty()) return "Vui lòng nhập mã loại sản phẩm";
+		if(sp.getMaLoaiSP() <=0) return "Vui lòng nhập mã loại sản phẩm";
 		if(sp.getDonGia() <= 0) return "Đơn giá phải lớn hơn 0";
 		if(sp.getSoLuong() <= 0) return "Số lượng phải lốn hôn 0";
 		if(sp.getDonViTinh().isEmpty()) return "Vui lòng nhập đơn vị tính";
@@ -54,8 +54,8 @@ public class SanPhamBUS {
 		if(dssp == null)
 			dssp = new ArrayList<SanPhamDTO>();
 		
-		if(sp.getMaSP().isEmpty() || sp.getTenSP().isEmpty() || sp.getMaLoaiSP().isEmpty()
-				|| sp.getDonViTinh().isEmpty())
+		if(sp.getMaSP().isEmpty() || sp.getTenSP().isEmpty() || 
+				sp.getDonViTinh().isEmpty())
 		{
 			System.out.println("Vui lòng nhập đầy đủ thông tin");
 			return;

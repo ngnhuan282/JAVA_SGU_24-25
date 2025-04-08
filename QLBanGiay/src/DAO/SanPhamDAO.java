@@ -30,7 +30,7 @@ public class SanPhamDAO {
 				int soLuong = rs.getInt("SoLuong");
 				double donGia = rs.getDouble("DonGia");
 				String donViTinh = rs.getString("DonViTinh");
-				String maLoaiSP = rs.getString("MaLoaiSP");
+				int maLoaiSP = rs.getInt("MaLoaiSP");
 				
 				SanPhamDTO sp = new SanPhamDTO(maSP, tenSP, soLuong, donGia, donViTinh, maLoaiSP);
 				dssp.add(sp);
@@ -65,8 +65,8 @@ public class SanPhamDAO {
 		sql += "SoLuong='" + sp.getSoLuong() + "', ";
 		sql += "DonGia='" + sp.getDonGia() + "', ";
 		sql += "DonViTinh='" + sp.getDonViTinh() + "', ";
-		sql += "MaLoaiSP='" + sp.getMaLoaiSP() + ")";
-		
+		sql += "MaLoaiSP='" + sp.getMaLoaiSP() + " ";
+		sql += "WHERE MaSP= '" + sp.getMaSP() + "'";
 		mysql.executeUpdate(sql);
 		mysql.disConnect();
 	}

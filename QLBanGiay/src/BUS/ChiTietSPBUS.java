@@ -13,12 +13,20 @@ public class ChiTietSPBUS {
 		
 	}
 	
+	public static ArrayList<ChiTietSPDTO> getDsCTSP() {
+		return dsCTSP;
+	}
+
+	public static void setDsCTSP(ArrayList<ChiTietSPDTO> dsCTSP) {
+		ChiTietSPBUS.dsCTSP = dsCTSP;
+	}
+
 	public void docDSCTSP(String maSP)
 	{
 		if(dsCTSP == null)
 			dsCTSP = new ArrayList<ChiTietSPDTO>();
 		ChiTietSPDAO dao = new ChiTietSPDAO();
-		dao.docDSCTSP(maSP);
+		dsCTSP = dao.docDSCTSP(maSP);
 	}
 	
 	public void add(ChiTietSPDTO ctsp)
