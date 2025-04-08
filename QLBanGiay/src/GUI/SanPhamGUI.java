@@ -1,14 +1,39 @@
 package GUI;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
-public class SanPhamGUI extends JPanel {
+public class SanPhamGUI extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
     private DefaultTableModel model;
     private JTable tblDSSP;
+    private JTextField txtSearch;
     private JTextField txtMaSP, txtTenSP, txtDonGia, txtSoLuong, txtDonViTinh, txtChatLieu, txtKieuDang;
     private JComboBox<String> cbLoaiSP;
     private JRadioButton rbDen, rbTrang, rbXam;
@@ -28,9 +53,105 @@ public class SanPhamGUI extends JPanel {
     }
 
     private void initComponents() {
-        setPreferredSize(new Dimension(1248, 654));
+        setPreferredSize(new Dimension(1248, 757));
         setLayout(null);
         setBackground(Color.WHITE);
+
+        // Header
+        JPanel pHeaderMain = new JPanel();
+        pHeaderMain.setBounds(0, 0, 1206, 100);
+        pHeaderMain.setBackground(Color.WHITE);
+        pHeaderMain.setLayout(null);
+        add(pHeaderMain);
+
+        JPanel pLeftHeader = new JPanel();
+        pLeftHeader.setBorder(new TitledBorder(null, "Chức năng", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        pLeftHeader.setBackground(Color.WHITE);
+        pLeftHeader.setBounds(2, 0, 512, 100);
+        pHeaderMain.add(pLeftHeader);
+        pLeftHeader.setLayout(null);
+
+        Box horizontalBox = Box.createHorizontalBox();
+        horizontalBox.setBorder(UIManager.getBorder("Button.border"));
+        horizontalBox.setBounds(0, 0, 512, 111);
+        pLeftHeader.add(horizontalBox);
+
+        JButton btnThem = new JButton("Thêm");
+        horizontalBox.add(btnThem);
+        btnThem.setFocusPainted(false);
+        btnThem.setActionCommand("Thêm");
+        btnThem.addActionListener(this);
+        btnThem.setBackground(Color.WHITE);
+        btnThem.setBorderPainted(false);
+        btnThem.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/add48.png")));
+        btnThem.setFont(new Font("Arial", Font.PLAIN, 15));
+        btnThem.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnThem.setHorizontalTextPosition(SwingConstants.CENTER);
+        btnThem.setPreferredSize(new Dimension(120, 140));
+
+        JButton btnSua = new JButton("Sửa");
+        horizontalBox.add(btnSua);
+        btnSua.setFocusPainted(false);
+        btnSua.setActionCommand("Sửa");
+        btnSua.addActionListener(this);
+        btnSua.setBorderPainted(false);
+        btnSua.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnSua.setPreferredSize(new Dimension(120, 140));
+        btnSua.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/edit48.png")));
+        btnSua.setHorizontalTextPosition(SwingConstants.CENTER);
+        btnSua.setFont(new Font("Arial", Font.PLAIN, 15));
+        btnSua.setBackground(Color.WHITE);
+
+        JButton btnXoa = new JButton("Xóa");
+        horizontalBox.add(btnXoa);
+        btnXoa.setFocusPainted(false);
+        btnXoa.setActionCommand("Xóa");
+        btnXoa.addActionListener(this);
+        btnXoa.setBorderPainted(false);
+        btnXoa.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnXoa.setPreferredSize(new Dimension(120, 140));
+        btnXoa.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/remove48.png")));
+        btnXoa.setHorizontalTextPosition(SwingConstants.CENTER);
+        btnXoa.setFont(new Font("Arial", Font.PLAIN, 15));
+        btnXoa.setBackground(Color.WHITE);
+
+        JButton btnXuatExcel = new JButton("Xuất Excel");
+        horizontalBox.add(btnXuatExcel);
+        btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnXuatExcel.setPreferredSize(new Dimension(120, 140));
+        btnXuatExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/excel48.png")));
+        btnXuatExcel.setHorizontalTextPosition(SwingConstants.CENTER);
+        btnXuatExcel.setFont(new Font("Arial", Font.PLAIN, 15));
+        btnXuatExcel.setBorderPainted(false);
+        btnXuatExcel.setBackground(Color.WHITE);
+
+        JButton btnNhapExcel = new JButton("Nhập Excel");
+        horizontalBox.add(btnNhapExcel);
+        btnNhapExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnNhapExcel.setPreferredSize(new Dimension(120, 140));
+        btnNhapExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/bill48.png")));
+        btnNhapExcel.setHorizontalTextPosition(SwingConstants.CENTER);
+        btnNhapExcel.setFont(new Font("Arial", Font.PLAIN, 15));
+        btnNhapExcel.setBorderPainted(false);
+        btnNhapExcel.setBackground(Color.WHITE);
+
+        txtSearch = new JTextField();
+        txtSearch.setBounds(771, 31, 290, 27);
+        pHeaderMain.add(txtSearch);
+        txtSearch.setColumns(10);
+
+        JComboBox<String> cboxSearch = new JComboBox<>();
+        cboxSearch.setFont(new Font("Arial", Font.PLAIN, 14));
+        cboxSearch.setBounds(682, 30, 79, 28);
+        cboxSearch.setBackground(Color.WHITE);
+        cboxSearch.setForeground(Color.BLACK);
+        cboxSearch.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        pHeaderMain.add(cboxSearch);
+
+        JButton btnSearch = new JButton("");
+        btnSearch.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/search30.png")));
+        btnSearch.setBounds(1071, 22, 66, 39);
+        pHeaderMain.add(btnSearch);
 
         // Table
         tblDSSP = new JTable(model);
@@ -40,7 +161,7 @@ public class SanPhamGUI extends JPanel {
         tblDSSP.setFont(new Font("Arial", Font.PLAIN, 13));
         tblDSSP.getTableHeader().setFont(new Font("Arial", Font.BOLD, 13));
         JScrollPane scrollPane = new JScrollPane(tblDSSP);
-        scrollPane.setBounds(591, 40, 613, 402); // Điều chỉnh y từ 140 thành 40
+        scrollPane.setBounds(591, 140, 613, 402);
         scrollPane.getVerticalScrollBar().setUI(new ModernScrollBarUI());
         scrollPane.getHorizontalScrollBar().setUI(new ModernScrollBarUI());
         add(scrollPane);
@@ -49,7 +170,7 @@ public class SanPhamGUI extends JPanel {
         JPanel pInput = new JPanel();
         pInput.setBorder(UIManager.getBorder("TextField.border"));
         pInput.setBackground(Color.WHITE);
-        pInput.setBounds(48, 40, 502, 402); // Điều chỉnh y từ 140 thành 40
+        pInput.setBounds(48, 140, 502, 402);
         add(pInput);
         pInput.setLayout(null);
 
@@ -205,6 +326,24 @@ public class SanPhamGUI extends JPanel {
         pInput.add(btnLoaiSP);
     }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String command = e.getActionCommand();
+        switch (command) {
+            case "Thêm":
+                addProduct();
+                break;
+            case "Sửa":
+                updateProduct();
+                break;
+            case "Xóa":
+                deleteProduct();
+                break;
+            default:
+                break;
+        }
+    }
+
     public void addProduct() {
         // Implement logic here
     }
@@ -299,7 +438,7 @@ public class SanPhamGUI extends JPanel {
     public static void main(String[] args) {
         JFrame frame = new JFrame("Test SanPhamGUI");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1248, 654);
+        frame.setSize(1248, 757);
         frame.getContentPane().add(new SanPhamGUI());
         frame.setVisible(true);
     }

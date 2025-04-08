@@ -9,19 +9,13 @@ import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
 
 public class MainGUI extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
@@ -30,8 +24,6 @@ public class MainGUI extends JFrame implements ActionListener {
     private String color = "#FF5252";
     private CardLayout cardLayout;
     private JPanel pContent;
-    private JTextField txtSearch;
-    private JButton btnThem, btnSua, btnXoa, btnXuatExcel, btnNhapExcel;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
@@ -209,107 +201,11 @@ public class MainGUI extends JFrame implements ActionListener {
         contentPane.add(pMain);
         pMain.setLayout(null);
 
-        JPanel pHeaderMain = new JPanel();
-        pHeaderMain.setBounds(0, 0, 1206, 100);
-        pHeaderMain.setBackground(Color.WHITE);
-        pMain.add(pHeaderMain);
-        pHeaderMain.setLayout(null);
-
-        // Chức năng trong header
-        JPanel pLeftHeader = new JPanel();
-        pLeftHeader.setBorder(new TitledBorder(null, "Chức năng", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        pLeftHeader.setBackground(Color.WHITE);
-        pLeftHeader.setBounds(2, 0, 512, 100);
-        pHeaderMain.add(pLeftHeader);
-        pLeftHeader.setLayout(null);
-
-        Box horizontalBox = Box.createHorizontalBox();
-        horizontalBox.setBorder(UIManager.getBorder("Button.border"));
-        horizontalBox.setBounds(0, 0, 512, 111);
-        pLeftHeader.add(horizontalBox);
-
-        btnThem = new JButton("Thêm");
-        horizontalBox.add(btnThem);
-        btnThem.setFocusPainted(false);
-        btnThem.setActionCommand("Thêm");
-        btnThem.addActionListener(this);
-        btnThem.setBackground(Color.WHITE);
-        btnThem.setBorderPainted(false);
-        btnThem.setIcon(new ImageIcon(MainGUI.class.getResource("/image/add48.png")));
-        btnThem.setFont(new Font("Arial", Font.PLAIN, 15));
-        btnThem.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnThem.setHorizontalTextPosition(SwingConstants.CENTER);
-        btnThem.setPreferredSize(new Dimension(120, 140));
-
-        btnSua = new JButton("Sửa");
-        horizontalBox.add(btnSua);
-        btnSua.setFocusPainted(false);
-        btnSua.setActionCommand("Sửa");
-        btnSua.addActionListener(this);
-        btnSua.setBorderPainted(false);
-        btnSua.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnSua.setPreferredSize(new Dimension(120, 140));
-        btnSua.setIcon(new ImageIcon(MainGUI.class.getResource("/image/edit48.png")));
-        btnSua.setHorizontalTextPosition(SwingConstants.CENTER);
-        btnSua.setFont(new Font("Arial", Font.PLAIN, 15));
-        btnSua.setBackground(Color.WHITE);
-
-        btnXoa = new JButton("Xóa");
-        horizontalBox.add(btnXoa);
-        btnXoa.setFocusPainted(false);
-        btnXoa.setActionCommand("Xóa");
-        btnXoa.addActionListener(this);
-        btnXoa.setBorderPainted(false);
-        btnXoa.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnXoa.setPreferredSize(new Dimension(120, 140));
-        btnXoa.setIcon(new ImageIcon(MainGUI.class.getResource("/image/remove48.png")));
-        btnXoa.setHorizontalTextPosition(SwingConstants.CENTER);
-        btnXoa.setFont(new Font("Arial", Font.PLAIN, 15));
-        btnXoa.setBackground(Color.WHITE);
-
-        btnXuatExcel = new JButton("Xuất Excel");
-        horizontalBox.add(btnXuatExcel);
-        btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnXuatExcel.setPreferredSize(new Dimension(120, 140));
-        btnXuatExcel.setIcon(new ImageIcon(MainGUI.class.getResource("/image/excel48.png")));
-        btnXuatExcel.setHorizontalTextPosition(SwingConstants.CENTER);
-        btnXuatExcel.setFont(new Font("Arial", Font.PLAIN, 15));
-        btnXuatExcel.setBorderPainted(false);
-        btnXuatExcel.setBackground(Color.WHITE);
-
-        btnNhapExcel = new JButton("Nhập Excel");
-        horizontalBox.add(btnNhapExcel);
-        btnNhapExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnNhapExcel.setPreferredSize(new Dimension(120, 140));
-        btnNhapExcel.setIcon(new ImageIcon(MainGUI.class.getResource("/image/bill48.png")));
-        btnNhapExcel.setHorizontalTextPosition(SwingConstants.CENTER);
-        btnNhapExcel.setFont(new Font("Arial", Font.PLAIN, 15));
-        btnNhapExcel.setBorderPainted(false);
-        btnNhapExcel.setBackground(Color.WHITE);
-
-        txtSearch = new JTextField();
-        txtSearch.setBounds(771, 31, 290, 27);
-        pHeaderMain.add(txtSearch);
-        txtSearch.setColumns(10);
-
-        JComboBox<String> cboxSearch = new JComboBox<>();
-        cboxSearch.setFont(new Font("Arial", Font.PLAIN, 14));
-        cboxSearch.setBounds(682, 30, 79, 28);
-        cboxSearch.setBackground(Color.WHITE);
-        cboxSearch.setForeground(Color.BLACK);
-        cboxSearch.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-        pHeaderMain.add(cboxSearch);
-
-        JButton btnSearch = new JButton("");
-        btnSearch.setIcon(new ImageIcon(MainGUI.class.getResource("/image/search30.png")));
-        btnSearch.setBounds(1071, 22, 66, 39);
-        pHeaderMain.add(btnSearch);
-
         // CardLayout for content
         cardLayout = new CardLayout();
         pContent = new JPanel(cardLayout);
         pContent.setBackground(Color.WHITE);
-        pContent.setBounds(0, 103, 1248, 654);
+        pContent.setBounds(0, 0, 1248, 757); // Điều chỉnh để chiếm toàn bộ không gian
         pMain.add(pContent);
 
         // Add panels to CardLayout
@@ -356,15 +252,6 @@ public class MainGUI extends JFrame implements ActionListener {
                 break;
             case "ĐĂNG XUẤT":
                 System.exit(0);
-                break;
-            case "Thêm":
-                // Gọi phương thức thêm từ panel hiện tại (nếu cần)
-                break;
-            case "Sửa":
-                // Gọi phương thức sửa từ panel hiện tại (nếu cần)
-                break;
-            case "Xóa":
-                // Gọi phương thức xóa từ panel hiện tại (nếu cần)
                 break;
         }
     }
@@ -419,3 +306,5 @@ public class MainGUI extends JFrame implements ActionListener {
         }
     }
 }
+    
+ 
