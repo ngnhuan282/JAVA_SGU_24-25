@@ -22,8 +22,8 @@ public class LoaiDAO {
 			ResultSet rs = mysql.executeQuery(sql);
 			while(rs.next())
 			{
-				int maLoai = rs.getInt(0);
-				String tenLoai = rs.getString(1);
+				int maLoai = rs.getInt("MaLoaiSP");
+				String tenLoai = rs.getString("TenLoaiSP");
 				LoaiDTO loai = new LoaiDTO(maLoai, tenLoai);
 				dsloai.add(loai);
 			}
@@ -37,8 +37,7 @@ public class LoaiDAO {
 	public void add(LoaiDTO loai)
 	{
 		try {
-			String sql = "INSERT INTO PhanLoai VALUES(";
-			sql += "'" + loai.getMaLoaiSP() + "', ";
+			String sql = "INSERT INTO PhanLoai (TenLoaiSP) VALUES(";
 			sql += "'" + loai.getTenLoaiSP() + "')";
 			mysql.executeUpdate(sql);
 		} catch (Exception e) {

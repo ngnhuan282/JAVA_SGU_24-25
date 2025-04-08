@@ -67,7 +67,7 @@ public class LoaiSanPhamGUI extends JFrame {
         txtTenLoai.setBounds(280, 260, 200, 25);
         getContentPane().add(txtTenLoai);
 
-        // Nút thêm loại
+        
         ImageIcon addIcon = new ImageIcon(getClass().getResource("/image/add20.png"));
         btnSuaLoai = new JButton("Cập nhật", new ImageIcon(LoaiSanPhamGUI.class.getResource("/image/edit20.png")));
         btnSuaLoai.setFont(new Font("Arial", Font.PLAIN, 13));
@@ -76,7 +76,7 @@ public class LoaiSanPhamGUI extends JFrame {
         btnSuaLoai.setBackground(Color.decode("#7986CB"));
         getContentPane().add(btnSuaLoai);
 
-        // Nút xóa loại
+    
         ImageIcon removeIcon = new ImageIcon(getClass().getResource("/image/remove20.png"));
         btnXoaLoai = new JButton("Xóa", removeIcon);
         btnXoaLoai.setFont(new Font("Arial", Font.PLAIN, 13));
