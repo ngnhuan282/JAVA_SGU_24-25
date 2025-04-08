@@ -26,7 +26,7 @@ public class LoaiSPDialog extends JDialog {
         setModal(true);
     }
 
-    private void initComponents() {
+    public void initComponents() {
         getContentPane().setLayout(null);
 
         JLabel lbTitle = new JLabel("QUẢN LÝ LOẠI SẢN PHẨM", SwingConstants.CENTER);
@@ -120,21 +120,24 @@ public class LoaiSPDialog extends JDialog {
         }
     }
 
-    private void themLoai() {
+    public void themLoai() 
+    {
         String tenLoai = txtTenLoai.getText().trim();
         int maLoai = loaiBUS.getNextID();
-        LoaiDTO loai = new LoaiDTO(maLoai, tenLoai); // 0 vì MaLoaiSP tự tăng
-        if (loaiBUS.add(loai)) {
+        LoaiDTO loai = new LoaiDTO(maLoai, tenLoai); 
+        if (loaiBUS.add(loai)) 
+        {
             loadDataToTable();
             txtMaLoai.setText("");
             txtTenLoai.setText("");
             JOptionPane.showMessageDialog(this, "Thêm loại SP thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
-        } else {
+        } 
+        else 
             JOptionPane.showMessageDialog(this, "Thêm thất bại! Tên loại không hợp lệ hoặc đã tồn tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
+        
     }
 
-    private void suaLoai() {
+    public void suaLoai() {
         if (!isEditMode) {
             JOptionPane.showMessageDialog(this, "Vui lòng bật chế độ sửa!", "Lỗi", JOptionPane.WARNING_MESSAGE);
             return;
@@ -155,7 +158,7 @@ public class LoaiSPDialog extends JDialog {
         }
     }
 
-    private void xoaLoai() {
+    public void xoaLoai() {
         int row = tblLoai.getSelectedRow();
         if (row < 0) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn loại để xóa!", "Lỗi", JOptionPane.WARNING_MESSAGE);
