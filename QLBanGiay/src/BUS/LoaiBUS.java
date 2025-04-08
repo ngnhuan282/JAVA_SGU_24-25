@@ -19,58 +19,78 @@ public class LoaiBUS {
         LoaiBUS.dsloai = dsloai;
     }
 
-    public void docDSLoai() {
-        if (dsloai == null) 
-            dsloai = new ArrayList<>();
-        
-        LoaiDAO loaiDAO = new LoaiDAO();
-        dsloai = loaiDAO.docDSLoai();
-    }
-
-    public void add(LoaiDTO loai) 
+    public void docDSLoai()
     {
-        if (loai.getTenLoaiSP() == null || loai.getTenLoaiSP().trim().isEmpty()) 
-            return; 
-        
-        if (dsloai == null) 
-            dsloai = new ArrayList<>(); // Khởi tạo nếu chưa có
-        
-        LoaiDAO loaiDAO = new LoaiDAO();
-        loaiDAO.add(loai);
-        dsloai = loaiDAO.docDSLoai();
+    	if(dsloai == null)
+    		dsloai = new ArrayList<LoaiDTO>();
+    	LoaiDAO loaiDAO = new LoaiDAO();
+    	dsloai = loaiDAO.docDSLoai();
     }
-
-    public void update(LoaiDTO loai) 
+    
+    public int getNextID() 
     {
-        if (dsloai == null || dsloai.isEmpty()) 
-            return; 
-        
-        for (int i = 0; i < dsloai.size(); i++) 
+        int max = 0;
+        for (LoaiDTO loai : dsloai) 
         {
-            if (dsloai.get(i).getMaLoaiSP() == loai.getMaLoaiSP()) 
+            if (loai.getMaLoaiSP() > max) 
             {
-                LoaiDAO loaiDAO = new LoaiDAO();
-                loaiDAO.update(loai);
-                dsloai.set(i, loai);
-                return;
+                max = loai.getMaLoaiSP();
             }
         }
+        return max + 1;
+    }
+    
+    public boolean add(LoaiDTO loai)
+    {
+    	if(loai.getTenLoaiSP().isEmpty() || loai.getTenLoaiSP() == null)
+    		return false;
+    	
+    	for(LoaiDTO x : dsloai)
+    	{
+    		if(x.getMaLoaiSP() == loai.getMaLoaiSP())
+    			return false;
+    	}
+    	
+    	LoaiDAO loaiDAO = new LoaiDAO();
+    	loaiDAO.add(loai);
+    	dsloai.add(loai);
+    	return true;
+    }
+    
+    public boolean update(LoaiDTO loai)
+    {
+    	if(loai.getMaLoaiSP() <= 0)
+    		return false;
+    	if(loai.getTenLoaiSP().isEmpty() || loai.getTenLoaiSP() == null)
+    		return false;
+    	
+    	for(int i=0; i < dsloai.size(); i++)
+    	{
+    		if(dsloai.get(i).getMaLoaiSP() == loai.getMaLoaiSP())
+    		{
+    			LoaiDAO loaiDAO = new LoaiDAO();
+    			loaiDAO.update(loai);
+    			dsloai.set(i, loai);
+    			return true;
+    		}
+    	}
+    	return false;
     }
 
-    public void delete(int maLoaiSP) 
+    public boolean delete(int maLoai)
     {
-        if (dsloai == null || dsloai.isEmpty()) 
-            return; 
-        
-        for (int i = 0; i < dsloai.size(); i++) 
-        {
-            if (dsloai.get(i).getMaLoaiSP() == maLoaiSP)
-            {
-                LoaiDAO loaiDAO = new LoaiDAO();
-                loaiDAO.delete(maLoaiSP);
-                dsloai.remove(i);
-                return;
-            }
-        }
+    	if(maLoai <= 0)
+    		return false;
+    	for(int i=0; i < dsloai.size(); i++)
+    	{
+    		if(dsloai.get(i).getMaLoaiSP() == maLoai)
+    		{
+    			LoaiDAO loaiDAO = new LoaiDAO();
+    			loaiDAO.delete(maLoai);
+    			dsloai.remove(i);
+    			return true;
+    		}
+    	}
+    	return false;
     }
 }

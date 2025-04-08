@@ -10,7 +10,12 @@ public class LoaiDTO {
 	}
 	
 	public LoaiDTO(int maLoaiSP, String tenLoaiSP) {
+		super();
 		this.maLoaiSP = maLoaiSP;
+		this.tenLoaiSP = tenLoaiSP;
+	}
+
+	public LoaiDTO(String tenLoaiSP) {
 		this.tenLoaiSP = tenLoaiSP;
 	}
 
