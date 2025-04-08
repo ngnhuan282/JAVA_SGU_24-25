@@ -1,26 +1,8 @@
 package GUI;
 
-import java.awt.Color;
-import java.awt.Font;
-
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class SanPhamPanel extends JPanel {
@@ -40,13 +22,14 @@ public class SanPhamPanel extends JPanel {
     }
 
     private void loadDataDemo() {
-        model.addRow(new Object[]{"SP001", "Nike Air Force 1", "Nike", 2500000, 10, "Đôi"});
-        model.addRow(new Object[]{"SP002", "Adidas Ultraboost", "Adidas", 2800000, 5, "Đôi"});
-        model.addRow(new Object[]{"SP003", "Converse Chuck Taylor", "Converse", 1500000, 8, "Đôi"});
-        // Thêm dữ liệu demo khác nếu cần
+        for (int i = 1; i <= 25; i++) {
+            model.addRow(new Object[]{"SP" + i, "Sản phẩm " + i, "Loại " + i, 1000000 * i, 10, "Đôi"});
+        }
     }
 
     private void initComponents() {
+        // Đặt kích thước cố định để công cụ kéo thả nhận diện
+        setPreferredSize(new Dimension(1248, 654));
         setLayout(null);
         setBackground(Color.WHITE);
 
@@ -57,8 +40,15 @@ public class SanPhamPanel extends JPanel {
         tblDSSP.setFillsViewportHeight(true);
         tblDSSP.setFont(new Font("Arial", Font.PLAIN, 13));
         tblDSSP.getTableHeader().setFont(new Font("Arial", Font.BOLD, 13));
+
+        // Tạo JScrollPane và áp dụng ModernScrollBarUI
         JScrollPane scrollPane = new JScrollPane(tblDSSP);
         scrollPane.setBounds(591, 40, 613, 402);
+
+        // Áp dụng thanh cuộn tùy chỉnh kiểu Chrome
+        scrollPane.getVerticalScrollBar().setUI(new ModernScrollBarUI());
+        scrollPane.getHorizontalScrollBar().setUI(new ModernScrollBarUI());
+
         add(scrollPane);
 
         // Form
@@ -201,6 +191,7 @@ public class SanPhamPanel extends JPanel {
         lbHeaderSP.setHorizontalAlignment(SwingConstants.CENTER);
         lbHeaderSP.setFont(new Font("Arial", Font.BOLD, 15));
         lbHeaderSP.setBackground(Color.decode("#00C853"));
+        lbHeaderSP.setOpaque(true); // Đảm bảo màu nền hiển thị
         lbHeaderSP.setBounds(0, 10, 502, 45);
         pInput.add(lbHeaderSP);
 
@@ -309,5 +300,14 @@ public class SanPhamPanel extends JPanel {
         dialog.getContentPane().add(btnXoaLoai);
 
         dialog.setVisible(true);
+    }
+
+    // Tạm thời để kiểm tra giao diện trong công cụ kéo thả
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Test SanPhamPanel");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(1248, 654);
+        frame.add(new SanPhamPanel());
+        frame.setVisible(true);
     }
 }
