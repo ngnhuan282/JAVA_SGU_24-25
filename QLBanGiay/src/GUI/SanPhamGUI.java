@@ -43,33 +43,39 @@ public class SanPhamGUI extends JPanel implements ActionListener {
     private SanPhamBUS spBUS;
     private boolean isEditMode = false;
 
-    public SanPhamGUI() {
+    public SanPhamGUI() 
+    {
         Object[] header = {"Mã SP", "Tên SP", "Loại", "Giá", "Số lượng", "ĐVT"};
         model = new DefaultTableModel(header, 0);
         loaiBUS = new LoaiBUS();
         spBUS = new SanPhamBUS();
         loaiBUS.docDSLoai();
         initComponents();
+
         loadDataToTable();
         loadLoaiSPToComboBox();
     }
 
-    private void loadDataToTable() {
+    private void loadDataToTable() 
+    {
         model.setRowCount(0);
-        for (SanPhamDTO sp : spBUS.getDssp()) {
+        for (SanPhamDTO sp : spBUS.getDssp()) 
+        {
             String tenLoaiSP = "";
-            for (DTO.LoaiDTO loai : LoaiBUS.getDsloai()) {
-                if (loai.getMaLoaiSP() == sp.getMaLoaiSP()) {
+            for (DTO.LoaiDTO loai : LoaiBUS.getDsloai()) 
+                if (loai.getMaLoaiSP() == sp.getMaLoaiSP()) 
+                {
                     tenLoaiSP = loai.getTenLoaiSP();
                     break;
                 }
-            }
+            
             model.addRow(new Object[]{
                 sp.getMaSP(), sp.getTenSP(), tenLoaiSP, sp.getDonGia(), sp.getSoLuong(), sp.getDonViTinh()
             });
         }
     }
-
+    
+    
     private void loadLoaiSPToComboBox() 
     {
         cbLoaiSP.removeAllItems();
@@ -169,7 +175,7 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         txtSearch.setColumns(10);
 
         cboxSearch = new JComboBox<>();
-        cboxSearch.setFont(new Font("Arial", Font.PLAIN, 14));
+        cboxSearch.setFont(new Font("Arial", Font.PLAIN, 13));
         cboxSearch.setBounds(682, 30, 79, 28);
         cboxSearch.setBackground(Color.WHITE);
         cboxSearch.setForeground(Color.BLACK);
@@ -268,7 +274,7 @@ public class SanPhamGUI extends JPanel implements ActionListener {
 
         JLabel lbDonViTinh = new JLabel("Đơn vị tính");
         lbDonViTinh.setFont(new Font("Arial", Font.PLAIN, 14));
-        lbDonViTinh.setBounds(233, 198, 112, 17);
+        lbDonViTinh.setBounds(233, 198, 133, 17);
         pInput.add(lbDonViTinh);
 
         txtDonViTinh = new JTextField();
