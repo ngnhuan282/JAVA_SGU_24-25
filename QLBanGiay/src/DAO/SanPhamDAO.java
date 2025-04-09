@@ -65,7 +65,7 @@ public class SanPhamDAO {
 		sql += "SoLuong='" + sp.getSoLuong() + "', ";
 		sql += "DonGia='" + sp.getDonGia() + "', ";
 		sql += "DonViTinh='" + sp.getDonViTinh() + "', ";
-		sql += "MaLoaiSP='" + sp.getMaLoaiSP() + " ";
+		sql += "MaLoaiSP='" + sp.getMaLoaiSP() + "'";
 		sql += "WHERE MaSP= '" + sp.getMaSP() + "'";
 		mysql.executeUpdate(sql);
 		mysql.disConnect();
@@ -73,7 +73,7 @@ public class SanPhamDAO {
 	
 	public void delete(String MaSP)
 	{
-		String sql = "DELETE FROM SanPham WHERE MaSP ='" +MaSP + "'";
+		String sql = "DELETE FROM SanPham WHERE MaSP = '" +MaSP + "'";
 		mysql.executeUpdate(sql);
 		mysql.disConnect();
 	}
