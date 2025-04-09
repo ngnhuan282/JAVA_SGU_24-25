@@ -158,17 +158,17 @@ public class MainGUI extends JFrame implements ActionListener {
         btnKhachHangGUI.addActionListener(this);
         pNavItem.add(btnKhachHangGUI);
 
-        JButton btnPhieuNhapGUI = new JButton("PHIẾU NHẬP");
-        btnPhieuNhapGUI.setIcon(new ImageIcon(MainGUI.class.getResource("/image/phieuNhap.png")));
-        btnPhieuNhapGUI.setOpaque(true);
-        btnPhieuNhapGUI.setHorizontalAlignment(SwingConstants.LEFT);
-        btnPhieuNhapGUI.setForeground(Color.WHITE);
-        btnPhieuNhapGUI.setFont(new Font("Verdana", Font.BOLD, 14));
-        btnPhieuNhapGUI.setBorderPainted(false);
-        btnPhieuNhapGUI.setBackground(Color.decode(color));
-        btnPhieuNhapGUI.setBounds(20, 193, 200, 35);
-        btnPhieuNhapGUI.addActionListener(this);
-        pNavItem.add(btnPhieuNhapGUI);
+        JButton btnHoaDon = new JButton("HÓA ĐƠN");
+        btnHoaDon.setIcon(new ImageIcon(MainGUI.class.getResource("/image/phieuNhap.png")));
+        btnHoaDon.setOpaque(true);
+        btnHoaDon.setHorizontalAlignment(SwingConstants.LEFT);
+        btnHoaDon.setForeground(Color.WHITE);
+        btnHoaDon.setFont(new Font("Verdana", Font.BOLD, 14));
+        btnHoaDon.setBorderPainted(false);
+        btnHoaDon.setBackground(Color.decode(color));
+        btnHoaDon.setBounds(20, 193, 200, 35);
+        btnHoaDon.addActionListener(this);
+        pNavItem.add(btnHoaDon);
 
         JButton btnPhieuXuat = new JButton("PHIẾU XUẤT");
         btnPhieuXuat.setIcon(new ImageIcon(MainGUI.class.getResource("/image/phieuXuat.png")));
