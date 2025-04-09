@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -28,6 +29,7 @@ import javax.swing.table.DefaultTableModel;
 
 import BUS.LoaiBUS;
 import BUS.SanPhamBUS;
+import DTO.LoaiDTO;
 import DTO.SanPhamDTO;
 
 public class SanPhamGUI extends JPanel implements ActionListener {
@@ -68,13 +70,13 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         }
     }
 
-    private void loadLoaiSPToComboBox() {
+    private void loadLoaiSPToComboBox() 
+    {
         cbLoaiSP.removeAllItems();
-        if (LoaiBUS.getDsloai() != null) {
-            for (DTO.LoaiDTO loai : LoaiBUS.getDsloai()) {
+        LoaiBUS loaiBUS = new LoaiBUS();
+        if (LoaiBUS.getDsloai() != null) 
+            for (LoaiDTO loai : LoaiBUS.getDsloai()) 
                 cbLoaiSP.addItem(loai.getTenLoaiSP());
-            }
-        }
     }
 
     public void initComponents() {
@@ -149,7 +151,7 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         btnNhapExcel.setPreferredSize(new Dimension(100, 140));
         horizontalBox.add(btnNhapExcel);
 
-        btnXuatExcel = new JButton("Xuất Excel", new ImageIcon(SanPhamGUI.class.getResource("/image/bill48.png")));
+        btnXuatExcel = new JButton("Xuất Excel", new ImageIcon(SanPhamGUI.class.getResource("/image/xuatexcel54.png")));
         btnXuatExcel.setFocusPainted(false);
         btnXuatExcel.setActionCommand("Xuất Excel");
         btnXuatExcel.addActionListener(this);
@@ -185,7 +187,7 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         JPanel pInput = new JPanel();
         pInput.setBorder(UIManager.getBorder("TextField.border"));
         pInput.setBackground(Color.WHITE);
-        pInput.setBounds(349, 110, 497, 405);
+        pInput.setBounds(349, 110, 497, 268);
         add(pInput);
         pInput.setLayout(null);
 
@@ -292,7 +294,7 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         tblDSSP.setFont(new Font("Arial", Font.PLAIN, 13));
         tblDSSP.getTableHeader().setFont(new Font("Arial", Font.BOLD, 13));
         JScrollPane scrollPane = new JScrollPane(tblDSSP);
-        scrollPane.setBounds(145, 515, 964, 232);
+        scrollPane.setBounds(153, 403, 964, 283);
         add(scrollPane);
 
         tblDSSP.addMouseListener(new MouseListener() {
@@ -307,7 +309,8 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         });
     }
 
-    public void tblDSSPMouseClicked() {
+    public void tblDSSPMouseClicked() 
+    {
         int i = tblDSSP.getSelectedRow();
         if (i >= 0) {
             txtMaSP.setText(tblDSSP.getValueAt(i, 0).toString());
@@ -319,7 +322,8 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         }
     }
 
-    public void toggleEditMode() {
+    public void toggleEditMode() 
+    {
         isEditMode = !isEditMode;
         txtMaSP.setEditable(isEditMode);
         txtTenSP.setEditable(isEditMode);
@@ -341,41 +345,46 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         }
     }
 
-    public void addProduct() {
-        if (!isEditMode) {
+    public void addProduct() 
+    {
+        if (!isEditMode) 
+        {
             JOptionPane.showMessageDialog(this, "Vui lòng bật chế độ chỉnh sửa trước!", "Lỗi", JOptionPane.WARNING_MESSAGE);
             return;
         }
         String maSP = txtMaSP.getText().trim();
         String tenSP = txtTenSP.getText().trim();
         int selectedIndex = cbLoaiSP.getSelectedIndex();
-        if (selectedIndex < 0) {
+        if (selectedIndex < 0) 
+        {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn loại sản phẩm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
         int maLoaiSP = loaiBUS.getDsloai().get(selectedIndex).getMaLoaiSP();
-        String donGiaStr = txtDonGia.getText().trim();
-        String soLuongStr = txtSoLuong.getText().trim();
+        double donGia = Double.parseDouble(txtDonGia.getText());
+        int soLuong = Integer.parseInt(txtSoLuong.getText());
         String donViTinh = txtDonViTinh.getText().trim();
-
         try {
-            double donGia = Double.parseDouble(donGiaStr);
-            int soLuong = Integer.parseInt(soLuongStr);
-
             SanPhamDTO sp = new SanPhamDTO(maSP, tenSP, soLuong, donGia, donViTinh, maLoaiSP);
-            if (spBUS.addSP(sp)) {
-                model.addRow(new Object[]{maSP, tenSP, cbLoaiSP.getSelectedItem().toString(), donGia, soLuong, donViTinh});
+            if (spBUS.addSP(sp)) 
+            {
+            	String tenLoaiSP = cbLoaiSP.getSelectedItem().toString();
+            	Vector row = new Vector();
+            	row.add(maSP); row.add(tenSP); row.add(tenLoaiSP);
+            	row.add(donGia); row.add(soLuong); row.add(donViTinh);
+                model.addRow(row);
+                tblDSSP.setModel(model);
                 JOptionPane.showMessageDialog(this, "Thêm sản phẩm thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
                 clearForm();
-            } else {
+            } else 
                 JOptionPane.showMessageDialog(this, "Thêm sản phẩm thất bại. Vui lòng kiểm tra lại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            }
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Đơn giá và số lượng phải là số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    public void updateProduct() {
+    public void updateProduct() 
+    {
         if (!isEditMode) {
             JOptionPane.showMessageDialog(this, "Vui lòng bật chế độ chỉnh sửa trước!", "Lỗi", JOptionPane.WARNING_MESSAGE);
             return;
@@ -389,7 +398,8 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         String maSP = txtMaSP.getText().trim();
         String tenSP = txtTenSP.getText().trim();
         int selectedIndex = cbLoaiSP.getSelectedIndex();
-        if (selectedIndex < 0) {
+        if (selectedIndex < 0) 
+        {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn loại sản phẩm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -403,44 +413,51 @@ public class SanPhamGUI extends JPanel implements ActionListener {
             int soLuong = Integer.parseInt(soLuongStr);
 
             SanPhamDTO sp = new SanPhamDTO(maSP, tenSP, soLuong, donGia, donViTinh, maLoaiSP);
-            if (spBUS.updateSP(sp)) {
+            if (spBUS.updateSP(sp)) 
+            {
+            	String tenLoaiSP = cbLoaiSP.getSelectedItem().toString();
                 model.setValueAt(maSP, row, 0);
                 model.setValueAt(tenSP, row, 1);
-                model.setValueAt(cbLoaiSP.getSelectedItem().toString(), row, 2);
+                model.setValueAt(tenLoaiSP, row, 2);
                 model.setValueAt(donGia, row, 3);
                 model.setValueAt(soLuong, row, 4);
                 model.setValueAt(donViTinh, row, 5);
+                tblDSSP.setModel(model); 
                 JOptionPane.showMessageDialog(this, "Cập nhật sản phẩm thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
-            } else {
+            } else 
                 JOptionPane.showMessageDialog(this, "Cập nhật sản phẩm thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            }
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Đơn giá và số lượng phải là số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    public void deleteProduct() {
+    public void deleteProduct() 
+    {
         int i = tblDSSP.getSelectedRow();
-        if (i >= 0) {
+        if (i >= 0) 
+        {
             String maSP = tblDSSP.getValueAt(i, 0).toString();
             String tenSP = tblDSSP.getValueAt(i, 1).toString();
             int confirm = JOptionPane.showConfirmDialog(this,
                     "Bạn có chắc muốn xóa sản phẩm " + tenSP + " có mã " + maSP + " không?",
                     "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION) {
-                if (spBUS.deleteSP(maSP)) {
+            if (confirm == JOptionPane.YES_OPTION) 
+            {
+                if (spBUS.deleteSP(maSP)) 
+                {
                     model.removeRow(i);
+                    tblDSSP.setModel(model);
                     JOptionPane.showMessageDialog(this, "Xóa sản phẩm " + tenSP + " thành công",
                             "Thành công", JOptionPane.INFORMATION_MESSAGE);
                     clearForm();
-                } else {
+                } else 
                     JOptionPane.showMessageDialog(this, "Xóa sản phẩm thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                }
+                
             }
-        } else {
+        } 
+        else 
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm để xóa",
                     "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
     }
 
     public void nhapExcel() {
@@ -453,7 +470,8 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         // TODO: Thêm logic xuất ra Excel nếu cần
     }
 
-    public void openLoaiSPDialog() {
+    public void openLoaiSPDialog() 
+    {
         LoaiSPDialog dialog = new LoaiSPDialog(SwingUtilities.getWindowAncestor(this));
         dialog.setVisible(true);
         loadLoaiSPToComboBox();
