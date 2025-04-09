@@ -3,14 +3,14 @@ package DTO;
 public class ChiTietHDDTO {
 	private String maHD;
 	private String maSP;
-	private String soLuong;
+	private int soLuong;
 	private double donGia;
 	private double thanhTien;
 	
 	public ChiTietHDDTO() {
 	}
 
-	public ChiTietHDDTO(String maHD, String maSP, String soLuong, double donGia, double thanhTien) {
+	public ChiTietHDDTO(String maHD, String maSP, int soLuong, double donGia, double thanhTien) {
 		this.maHD = maHD;
 		this.maSP = maSP;
 		this.soLuong = soLuong;
@@ -34,11 +34,11 @@ public class ChiTietHDDTO {
 		this.maSP = maSP;
 	}
 
-	public String getSoLuong() {
+	public int getSoLuong() {
 		return soLuong;
 	}
 
-	public void setSoLuong(String soLuong) {
+	public void setSoLuong(int soLuong) {
 		this.soLuong = soLuong;
 	}
 
@@ -57,6 +57,16 @@ public class ChiTietHDDTO {
 	public void setThanhTien(double thanhTien) {
 		this.thanhTien = thanhTien;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+	    if (this == obj) return true; 
+	    if (obj == null || getClass() != obj.getClass()) return false; 
+	    ChiTietHDDTO other = (ChiTietHDDTO) obj; 
+
+	    return this.maHD.equals(other.maHD) && this.maSP.equals(other.maSP) && this.soLuong == other.soLuong && this.donGia == other.donGia && this.thanhTien == other.thanhTien;
+	}
+
 	
 	
 	

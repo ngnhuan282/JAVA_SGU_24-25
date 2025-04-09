@@ -25,6 +25,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
+import javax.swing.plaf.metal.MetalScrollBarUI;
 import javax.swing.table.DefaultTableModel;
 
 import BUS.LoaiBUS;
