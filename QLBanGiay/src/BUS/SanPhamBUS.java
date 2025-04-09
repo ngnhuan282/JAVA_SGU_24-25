@@ -117,4 +117,17 @@ public class SanPhamBUS {
         System.out.println("Không tìm thấy sản phẩm để cập nhật: " + sp.getMaSP());
         return false;
     }
+    
+    public ArrayList<SanPhamDTO> searchSP(String tuKhoa, String tieuChi)
+    {
+    	ArrayList<SanPhamDTO> result = new ArrayList<SanPhamDTO>();
+    	for(SanPhamDTO sp : dssp)
+    	{
+    		if(tieuChi.equals("Mã SP") && sp.getMaSP().equalsIgnoreCase(tuKhoa))
+    			result.add(sp);
+    		if(tieuChi.equals("Tên SP") && sp.getTenSP().equalsIgnoreCase(tuKhoa))
+    			result.add(sp);
+    	}
+    	return result;
+    }
 }

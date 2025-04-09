@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -38,7 +40,7 @@ public class SanPhamGUI extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
     private DefaultTableModel model;
     private JTable tblDSSP;
-    private JTextField txtSearch, txtMaSP, txtTenSP, txtDonGia, txtSoLuong, txtDonViTinh, txtChatLieu, txtKieuDang;
+    private JTextField txtMaSP, txtTenSP, txtDonGia, txtSoLuong, txtDonViTinh, txtChatLieu, txtKieuDang;
     private JSpinner spinnerKichThuoc;
     private JRadioButton rbDen, rbTrang, rbXam;
     private ButtonGroup mauSacGroup;
@@ -47,6 +49,7 @@ public class SanPhamGUI extends JPanel implements ActionListener {
     private LoaiBUS loaiBUS;
     private SanPhamBUS spBUS;
     private boolean isEditMode = false;
+    private JTextField txtSearch;
 
     public SanPhamGUI() 
     {
@@ -86,7 +89,8 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         }
     }
 
-    private void loadLoaiSPToComboBox() {
+    private void loadLoaiSPToComboBox() 
+    {
         cbLoaiSP.removeAllItems();
         if (LoaiBUS.getDsloai() != null) {
             for (DTO.LoaiDTO loai : LoaiBUS.getDsloai()) {
@@ -95,7 +99,8 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         }
     }
 
-    public void initComponents() {
+    public void initComponents() 
+    {
         setPreferredSize(new Dimension(1248, 757));
         setLayout(null);
         setBackground(Color.WHITE);
@@ -178,24 +183,36 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         btnXuatExcel.setBackground(Color.WHITE);
         btnXuatExcel.setPreferredSize(new Dimension(100, 140));
         horizontalBox.add(btnXuatExcel);
-
-        txtSearch = new JTextField();
-        txtSearch.setBounds(771, 31, 290, 27);
-        pHeaderMain.add(txtSearch);
-        txtSearch.setColumns(10);
-
-        cboxSearch = new JComboBox<>();
-        cboxSearch.setFont(new Font("Arial", Font.PLAIN, 14));
-        cboxSearch.setBounds(682, 30, 79, 28);
-        cboxSearch.setBackground(Color.WHITE);
+        
+        JButton btnLamMoi = new JButton("Làm mới");
+        btnLamMoi.setBackground(Color.WHITE);
+        btnLamMoi.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/reload30.png")));
+        btnLamMoi.setFont(new Font("Arial", Font.PLAIN, 13));
+        btnLamMoi.setBounds(1045, 31, 126, 28);
+        btnLamMoi.setActionCommand("Reload");
+        btnLamMoi.addActionListener(this);
+        pHeaderMain.add(btnLamMoi);
+        
+        String [] listKeyWord = {"Mã SP", "Tên SP"};
+        cboxSearch = new JComboBox<String>(listKeyWord);
         cboxSearch.setForeground(Color.BLACK);
+        cboxSearch.setFont(new Font("Arial", Font.PLAIN, 13));
         cboxSearch.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-        cboxSearch.addItem("Mã SP");
-        cboxSearch.addItem("Tên SP");
+        cboxSearch.setBackground(Color.WHITE);
+        cboxSearch.setBounds(569, 31, 79, 28);
         pHeaderMain.add(cboxSearch);
-
+       
+        
+        txtSearch = new JTextField();
+        txtSearch.setColumns(10);
+        txtSearch.setBounds(658, 32, 290, 27);
+        pHeaderMain.add(txtSearch);
+        
         JButton btnSearch = new JButton("", new ImageIcon(SanPhamGUI.class.getResource("/image/search30.png")));
-        btnSearch.setBounds(1071, 22, 66, 39);
+        btnSearch.setBackground(Color.WHITE);
+        btnSearch.setActionCommand("Tìm kiếm");
+        btnSearch.addActionListener(this);
+        btnSearch.setBounds(958, 29, 66, 30);
         pHeaderMain.add(btnSearch);
 
         // Form
@@ -434,11 +451,46 @@ public class SanPhamGUI extends JPanel implements ActionListener {
             case "Thêm": addProduct(); break;
             case "Sửa": updateProduct(); break;
             case "Xóa": deleteProduct(); break;
+            case "Reload": loadDataToTable(); break;
+            case "Tìm kiếm": timKiem(); break;
             case "Nhập Excel": nhapExcel(); break;
             case "Xuất Excel": xuatExcel(); break;
         }
     }
-
+    
+    public void timKiem()
+    {
+    	String tuKhoa = txtSearch.getText().trim();
+    	String tieuChi = cboxSearch.getSelectedItem().toString();
+    	SanPhamBUS spBUS = new SanPhamBUS();
+    	ArrayList<SanPhamDTO> result = spBUS.searchSP(tuKhoa, tieuChi);
+    
+    	model.setRowCount(0);
+    	for(SanPhamDTO sp : result)
+    	{
+    		String tenLoaiSP = "";
+    		for(DTO.LoaiDTO loai : LoaiBUS.getDsloai())
+    		{
+    			if(loai.getMaLoaiSP() == sp.getMaLoaiSP())
+    			{
+    				tenLoaiSP = loai.getTenLoaiSP();
+    				break;
+    			}
+    		}
+    		Vector row = new Vector();
+        	row.add(sp.getMaSP()); row.add(sp.getTenSP()); 	row.add(tenLoaiSP);
+        	row.add(sp.getDonGia()); row.add(sp.getSoLuong()); row.add(sp.getDonViTinh());
+        	row.add(sp.getMauSac()); row.add(sp.getKichThuoc());
+        	row.add(sp.getChatLieu()); row.add(sp.getKieuDang());
+        	model.addRow(row);
+       
+    	}
+    	tblDSSP.setModel(model);
+    	if(result.isEmpty())
+    		JOptionPane.showMessageDialog(this, "Không tìm thấy sản phẩm", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    
     public void addProduct() 
     {
         if (!isEditMode) 
