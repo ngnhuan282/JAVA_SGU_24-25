@@ -31,8 +31,13 @@ public class SanPhamDAO {
 				double donGia = rs.getDouble("DonGia");
 				String donViTinh = rs.getString("DonViTinh");
 				int maLoaiSP = rs.getInt("MaLoaiSP");
+				String chatLieu = rs.getString("ChatLieu");
+				String kieuDang = rs.getString("KieuDang");
+				String mauSac = rs.getString("MauSac");
+				int kichThuoc = rs.getInt("KichThuoc");
 				
-				SanPhamDTO sp = new SanPhamDTO(maSP, tenSP, soLuong, donGia, donViTinh, maLoaiSP);
+				SanPhamDTO sp = new SanPhamDTO(maSP, tenSP, soLuong, donGia, donViTinh, maLoaiSP,
+											mauSac, kichThuoc, chatLieu, kieuDang);
 				dssp.add(sp);
 			}
 			rs.close();
@@ -46,12 +51,16 @@ public class SanPhamDAO {
 	public void add(SanPhamDTO sp)
 	{
 		String sql = "INSERT INTO SanPham VALUES(";
-		sql += "'" +sp.getMaSP() + "', ";
-		sql += "'" +sp.getTenSP() + "', ";
-		sql += "'" +sp.getSoLuong() + "', ";
-		sql += "'" +sp.getDonGia() + "', ";
-		sql += "'" +sp.getDonViTinh() + "', ";
-		sql += "'" +sp.getMaLoaiSP() + "')";
+		sql += "'" + sp.getMaSP() + "', ";
+        sql += "'" + sp.getTenSP() + "', ";
+        sql += "'" + sp.getSoLuong() + "', ";
+        sql += "'" + sp.getDonGia() + "', ";  
+        sql += "'" + sp.getDonViTinh() + "', ";
+        sql += "'" + sp.getMaLoaiSP() + "', ";
+        sql += "'" + sp.getMauSac() + "', ";
+        sql += "'" + sp.getKichThuoc() + "', "; 
+        sql += "'" + sp.getChatLieu() + "', ";
+        sql += "'" + sp.getKieuDang() + "')";
 		
 		mysql.executeUpdate(sql);
 		mysql.disConnect();
@@ -65,7 +74,11 @@ public class SanPhamDAO {
 		sql += "SoLuong='" + sp.getSoLuong() + "', ";
 		sql += "DonGia='" + sp.getDonGia() + "', ";
 		sql += "DonViTinh='" + sp.getDonViTinh() + "', ";
-		sql += "MaLoaiSP='" + sp.getMaLoaiSP() + "'";
+		sql += "MaLoaiSP='" + sp.getMaLoaiSP() + "', ";
+		sql += "ChatLieu='" + sp.getChatLieu() + "', ";
+		sql += "MauSac='" + sp.getMauSac() + "', ";
+		sql += "KieuDang='" + sp.getKieuDang() + "', ";
+		sql += "KichThuoc='" + sp.getKichThuoc() + "',";
 		sql += "WHERE MaSP= '" + sp.getMaSP() + "'";
 		mysql.executeUpdate(sql);
 		mysql.disConnect();

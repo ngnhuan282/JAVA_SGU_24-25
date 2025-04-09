@@ -7,10 +7,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -18,26 +18,30 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
-import javax.swing.plaf.metal.MetalScrollBarUI;
 import javax.swing.table.DefaultTableModel;
 
 import BUS.LoaiBUS;
 import BUS.SanPhamBUS;
-import DTO.LoaiDTO;
 import DTO.SanPhamDTO;
 
 public class SanPhamGUI extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
     private DefaultTableModel model;
     private JTable tblDSSP;
-    private JTextField txtSearch, txtMaSP, txtTenSP, txtDonGia, txtSoLuong, txtDonViTinh;
+    private JTextField txtSearch, txtMaSP, txtTenSP, txtDonGia, txtSoLuong, txtDonViTinh, txtChatLieu, txtKieuDang;
+    private JSpinner spinnerKichThuoc;
+    private JRadioButton rbDen, rbTrang, rbXam;
+    private ButtonGroup mauSacGroup;
     private JComboBox<String> cbLoaiSP, cboxSearch;
     private JButton btnEditMode, btnNhapExcel, btnXuatExcel;
     private LoaiBUS loaiBUS;
@@ -46,44 +50,49 @@ public class SanPhamGUI extends JPanel implements ActionListener {
 
     public SanPhamGUI() 
     {
-        Object[] header = {"Mã SP", "Tên SP", "Loại", "Giá", "Số lượng", "ĐVT"};
-        model = new DefaultTableModel(header, 0);
         loaiBUS = new LoaiBUS();
         spBUS = new SanPhamBUS();
-        loaiBUS.docDSLoai();
-        initComponents();
+        
+        Object[] header = {"Mã SP", "Tên SP", "Loại", "Giá", "Số lượng", "ĐVT", "Màu sắc", "Kích thước", "Chất liệu", "Kiểu dáng"};
+        model = new DefaultTableModel(header, 0);
+        tblDSSP = new JTable(model);
 
-        loadDataToTable();
+        initComponents();
+        loadDataToTable();  
         loadLoaiSPToComboBox();
     }
 
     private void loadDataToTable() 
     {
         model.setRowCount(0);
-        for (SanPhamDTO sp : spBUS.getDssp()) 
-        {
+        
+        // Đọc danh sách sản phẩm và loại
+        spBUS.docDSSP();
+        loaiBUS.docDSLoai();
+        
+        for (SanPhamDTO sp : spBUS.getDssp()) {
             String tenLoaiSP = "";
-            for (DTO.LoaiDTO loai : LoaiBUS.getDsloai()) 
-                if (loai.getMaLoaiSP() == sp.getMaLoaiSP()) 
-                {
+            for (DTO.LoaiDTO loai : LoaiBUS.getDsloai()) {
+                if (loai.getMaLoaiSP() == sp.getMaLoaiSP()) {
                     tenLoaiSP = loai.getTenLoaiSP();
                     break;
                 }
-            
+            }
             model.addRow(new Object[]{
-                sp.getMaSP(), sp.getTenSP(), tenLoaiSP, sp.getDonGia(), sp.getSoLuong(), sp.getDonViTinh()
+                sp.getMaSP(), sp.getTenSP(), tenLoaiSP, sp.getDonGia(), sp.getSoLuong(), 
+                sp.getDonViTinh(), sp.getMauSac(), sp.getKichThuoc(), sp.getChatLieu(), 
+                sp.getKieuDang()
             });
         }
     }
-    
-    
-    private void loadLoaiSPToComboBox() 
-    {
+
+    private void loadLoaiSPToComboBox() {
         cbLoaiSP.removeAllItems();
-        LoaiBUS loaiBUS = new LoaiBUS();
-        if (LoaiBUS.getDsloai() != null) 
-            for (LoaiDTO loai : LoaiBUS.getDsloai()) 
+        if (LoaiBUS.getDsloai() != null) {
+            for (DTO.LoaiDTO loai : LoaiBUS.getDsloai()) {
                 cbLoaiSP.addItem(loai.getTenLoaiSP());
+            }
+        }
     }
 
     public void initComponents() {
@@ -158,7 +167,7 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         btnNhapExcel.setPreferredSize(new Dimension(100, 140));
         horizontalBox.add(btnNhapExcel);
 
-        btnXuatExcel = new JButton("Xuất Excel", new ImageIcon(SanPhamGUI.class.getResource("/image/xuatexcel54.png")));
+        btnXuatExcel = new JButton("Xuất Excel", new ImageIcon(SanPhamGUI.class.getResource("/image/xuatexcel48.png")));
         btnXuatExcel.setFocusPainted(false);
         btnXuatExcel.setActionCommand("Xuất Excel");
         btnXuatExcel.addActionListener(this);
@@ -176,7 +185,7 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         txtSearch.setColumns(10);
 
         cboxSearch = new JComboBox<>();
-        cboxSearch.setFont(new Font("Arial", Font.PLAIN, 13));
+        cboxSearch.setFont(new Font("Arial", Font.PLAIN, 14));
         cboxSearch.setBounds(682, 30, 79, 28);
         cboxSearch.setBackground(Color.WHITE);
         cboxSearch.setForeground(Color.BLACK);
@@ -187,14 +196,13 @@ public class SanPhamGUI extends JPanel implements ActionListener {
 
         JButton btnSearch = new JButton("", new ImageIcon(SanPhamGUI.class.getResource("/image/search30.png")));
         btnSearch.setBounds(1071, 22, 66, 39);
-        btnSearch.addActionListener(e -> JOptionPane.showMessageDialog(this, "Chức năng Tìm kiếm chưa được triển khai!"));
         pHeaderMain.add(btnSearch);
 
         // Form
         JPanel pInput = new JPanel();
         pInput.setBorder(UIManager.getBorder("TextField.border"));
         pInput.setBackground(Color.WHITE);
-        pInput.setBounds(349, 110, 497, 268);
+        pInput.setBounds(349, 110, 497, 408);
         add(pInput);
         pInput.setLayout(null);
 
@@ -275,7 +283,7 @@ public class SanPhamGUI extends JPanel implements ActionListener {
 
         JLabel lbDonViTinh = new JLabel("Đơn vị tính");
         lbDonViTinh.setFont(new Font("Arial", Font.PLAIN, 14));
-        lbDonViTinh.setBounds(233, 198, 133, 17);
+        lbDonViTinh.setBounds(233, 198, 112, 17);
         pInput.add(lbDonViTinh);
 
         txtDonViTinh = new JTextField();
@@ -283,6 +291,71 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         txtDonViTinh.setBounds(233, 224, 168, 19);
         txtDonViTinh.setEditable(false);
         pInput.add(txtDonViTinh);
+
+        JLabel lbMauSac = new JLabel("Màu sắc");
+        lbMauSac.setFont(new Font("Arial", Font.PLAIN, 14));
+        lbMauSac.setBounds(10, 263, 112, 17);
+        pInput.add(lbMauSac);
+
+        rbDen = new JRadioButton("Đen");
+        rbDen.setFont(new Font("Arial", Font.PLAIN, 13));
+        rbDen.setBounds(10, 289, 60, 19);
+        rbDen.setEnabled(false);
+        rbDen.setBorderPainted(false);
+        rbDen.setBackground(null);
+        pInput.add(rbDen);
+
+        rbTrang = new JRadioButton("Trắng");
+        rbTrang.setFont(new Font("Arial", Font.PLAIN, 13));
+        rbTrang.setBounds(80, 289, 70, 19);
+        rbTrang.setBackground(null);
+        rbTrang.setEnabled(false);
+        pInput.add(rbTrang);
+
+        rbXam = new JRadioButton("Xám");
+        rbXam.setFont(new Font("Arial", Font.PLAIN, 13));
+        rbXam.setBounds(160, 289, 60, 19);
+        rbXam.setBackground(null);
+        rbXam.setEnabled(false);
+        pInput.add(rbXam);
+
+        mauSacGroup = new ButtonGroup();
+        mauSacGroup.add(rbDen);
+        mauSacGroup.add(rbTrang);
+        mauSacGroup.add(rbXam);
+
+        JLabel lbKichThuoc = new JLabel("Kích thước");
+        lbKichThuoc.setFont(new Font("Arial", Font.PLAIN, 14));
+        lbKichThuoc.setBounds(233, 263, 112, 17);
+        pInput.add(lbKichThuoc);
+
+        spinnerKichThuoc = new JSpinner(new SpinnerNumberModel(38, 38, 43, 1));
+        spinnerKichThuoc.setFont(new Font("Arial", Font.PLAIN, 13));
+        spinnerKichThuoc.setBounds(233, 289, 76, 19);
+        spinnerKichThuoc.setEnabled(false);
+        pInput.add(spinnerKichThuoc);
+
+        JLabel lbChatLieu = new JLabel("Chất liệu");
+        lbChatLieu.setFont(new Font("Arial", Font.PLAIN, 14));
+        lbChatLieu.setBounds(10, 328, 112, 17);
+        pInput.add(lbChatLieu);
+
+        txtChatLieu = new JTextField();
+        txtChatLieu.setFont(new Font("Arial", Font.PLAIN, 13));
+        txtChatLieu.setBounds(10, 354, 168, 19);
+        txtChatLieu.setEditable(false);
+        pInput.add(txtChatLieu);
+
+        JLabel lbKieuDang = new JLabel("Kiểu dáng");
+        lbKieuDang.setFont(new Font("Arial", Font.PLAIN, 14));
+        lbKieuDang.setBounds(233, 328, 112, 17);
+        pInput.add(lbKieuDang);
+
+        txtKieuDang = new JTextField();
+        txtKieuDang.setFont(new Font("Arial", Font.PLAIN, 13));
+        txtKieuDang.setBounds(233, 354, 168, 19);
+        txtKieuDang.setEditable(false);
+        pInput.add(txtKieuDang);
 
         btnEditMode = new JButton("", new ImageIcon(SanPhamGUI.class.getResource("/image/edit20.png")));
         btnEditMode.setFont(new Font("Arial", Font.PLAIN, 13));
@@ -294,14 +367,13 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         pInput.add(btnEditMode);
 
         // Table sản phẩm chính
-        tblDSSP = new JTable(model);
         tblDSSP.setBackground(Color.WHITE);
         tblDSSP.setBorder(UIManager.getBorder("Table.scrollPaneBorder"));
         tblDSSP.setFillsViewportHeight(true);
         tblDSSP.setFont(new Font("Arial", Font.PLAIN, 13));
         tblDSSP.getTableHeader().setFont(new Font("Arial", Font.BOLD, 13));
         JScrollPane scrollPane = new JScrollPane(tblDSSP);
-        scrollPane.setBounds(153, 403, 964, 283);
+        scrollPane.setBounds(146, 544, 964, 167);
         add(scrollPane);
 
         tblDSSP.addMouseListener(new MouseListener() {
@@ -326,6 +398,13 @@ public class SanPhamGUI extends JPanel implements ActionListener {
             txtDonGia.setText(tblDSSP.getValueAt(i, 3).toString());
             txtSoLuong.setText(tblDSSP.getValueAt(i, 4).toString());
             txtDonViTinh.setText(tblDSSP.getValueAt(i, 5).toString());
+            String mauSac = tblDSSP.getValueAt(i, 6).toString();
+            if (mauSac.equals("Đen")) rbDen.setSelected(true);
+            else if (mauSac.equals("Trắng")) rbTrang.setSelected(true);
+            else if (mauSac.equals("Xám")) rbXam.setSelected(true);
+            spinnerKichThuoc.setValue(Integer.parseInt(tblDSSP.getValueAt(i, 7).toString()));
+            txtChatLieu.setText(tblDSSP.getValueAt(i, 8).toString());
+            txtKieuDang.setText(tblDSSP.getValueAt(i, 9).toString());
         }
     }
 
@@ -338,12 +417,20 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         txtSoLuong.setEditable(isEditMode);
         txtDonViTinh.setEditable(isEditMode);
         cbLoaiSP.setEnabled(isEditMode);
+        rbDen.setEnabled(isEditMode);
+        rbTrang.setEnabled(isEditMode);
+        rbXam.setEnabled(isEditMode);
+        spinnerKichThuoc.setEnabled(isEditMode);
+        txtChatLieu.setEditable(isEditMode);
+        txtKieuDang.setEditable(isEditMode);
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e) 
+    {
         String command = e.getActionCommand();
-        switch (command) {
+        switch (command) 
+        {
             case "Thêm": addProduct(); break;
             case "Sửa": updateProduct(); break;
             case "Xóa": deleteProduct(); break;
@@ -368,18 +455,29 @@ public class SanPhamGUI extends JPanel implements ActionListener {
             return;
         }
         int maLoaiSP = loaiBUS.getDsloai().get(selectedIndex).getMaLoaiSP();
-        double donGia = Double.parseDouble(txtDonGia.getText());
-        int soLuong = Integer.parseInt(txtSoLuong.getText());
+        String donGiaStr = txtDonGia.getText().trim();
+        String soLuongStr = txtSoLuong.getText().trim();
         String donViTinh = txtDonViTinh.getText().trim();
+        String mauSac = rbDen.isSelected() ? "Đen" : rbTrang.isSelected() ? "Trắng" : rbXam.isSelected() ? "Xám" : "";
+        int kichThuoc = Integer.parseInt(spinnerKichThuoc.getValue().toString());
+        String chatLieu = txtChatLieu.getText().trim();
+        String kieuDang = txtKieuDang.getText().trim();
+        
+        if (mauSac.isEmpty()) 
+        {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn màu sắc!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         try {
-            SanPhamDTO sp = new SanPhamDTO(maSP, tenSP, soLuong, donGia, donViTinh, maLoaiSP);
+            double donGia = Double.parseDouble(donGiaStr);
+            int soLuong = Integer.parseInt(soLuongStr);
+
+            SanPhamDTO sp = new SanPhamDTO(maSP, tenSP, soLuong, donGia, donViTinh, maLoaiSP, mauSac, kichThuoc, chatLieu, kieuDang);
             if (spBUS.addSP(sp)) 
             {
-            	String tenLoaiSP = cbLoaiSP.getSelectedItem().toString();
-            	Vector row = new Vector();
-            	row.add(maSP); row.add(tenSP); row.add(tenLoaiSP);
-            	row.add(donGia); row.add(soLuong); row.add(donViTinh);
-                model.addRow(row);
+                String tenLoaiSP = cbLoaiSP.getSelectedItem().toString();
+                model.addRow(new Object[]{maSP, tenSP, tenLoaiSP, donGia, soLuong, donViTinh, mauSac, kichThuoc, chatLieu, kieuDang});
                 tblDSSP.setModel(model);
                 JOptionPane.showMessageDialog(this, "Thêm sản phẩm thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
                 clearForm();
@@ -392,12 +490,14 @@ public class SanPhamGUI extends JPanel implements ActionListener {
 
     public void updateProduct() 
     {
-        if (!isEditMode) {
+        if (!isEditMode) 
+        {
             JOptionPane.showMessageDialog(this, "Vui lòng bật chế độ chỉnh sửa trước!", "Lỗi", JOptionPane.WARNING_MESSAGE);
             return;
         }
         int row = tblDSSP.getSelectedRow();
-        if (row < 0) {
+        if (row < 0) 
+        {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm để sửa!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -414,22 +514,35 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         String donGiaStr = txtDonGia.getText().trim();
         String soLuongStr = txtSoLuong.getText().trim();
         String donViTinh = txtDonViTinh.getText().trim();
+        String mauSac = rbDen.isSelected() ? "Đen" : rbTrang.isSelected() ? "Trắng" : rbXam.isSelected() ? "Xám" : "";
+        int kichThuoc = Integer.parseInt(spinnerKichThuoc.getValue().toString());
+        String chatLieu = txtChatLieu.getText().trim();
+        String kieuDang = txtKieuDang.getText().trim();
+
+        if (mauSac.isEmpty()) 
+        {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn màu sắc!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         try {
             double donGia = Double.parseDouble(donGiaStr);
             int soLuong = Integer.parseInt(soLuongStr);
 
-            SanPhamDTO sp = new SanPhamDTO(maSP, tenSP, soLuong, donGia, donViTinh, maLoaiSP);
-            if (spBUS.updateSP(sp)) 
-            {
-            	String tenLoaiSP = cbLoaiSP.getSelectedItem().toString();
+            SanPhamDTO sp = new SanPhamDTO(maSP, tenSP, soLuong, donGia, donViTinh, maLoaiSP, mauSac, kichThuoc, chatLieu, kieuDang);
+            if (spBUS.updateSP(sp)) {
+                String tenLoaiSP = cbLoaiSP.getSelectedItem().toString();
                 model.setValueAt(maSP, row, 0);
                 model.setValueAt(tenSP, row, 1);
                 model.setValueAt(tenLoaiSP, row, 2);
                 model.setValueAt(donGia, row, 3);
                 model.setValueAt(soLuong, row, 4);
                 model.setValueAt(donViTinh, row, 5);
-                tblDSSP.setModel(model); 
+                model.setValueAt(mauSac, row, 6);
+                model.setValueAt(kichThuoc, row, 7);
+                model.setValueAt(chatLieu, row, 8);
+                model.setValueAt(kieuDang, row, 9);
+                tblDSSP.setModel(model);
                 JOptionPane.showMessageDialog(this, "Cập nhật sản phẩm thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
             } else 
                 JOptionPane.showMessageDialog(this, "Cập nhật sản phẩm thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -440,19 +553,16 @@ public class SanPhamGUI extends JPanel implements ActionListener {
 
     public void deleteProduct() 
     {
-        int i = tblDSSP.getSelectedRow();
-        if (i >= 0) 
-        {
-            String maSP = tblDSSP.getValueAt(i, 0).toString();
-            String tenSP = tblDSSP.getValueAt(i, 1).toString();
+        int row = tblDSSP.getSelectedRow();
+        if (row >= 0) {
+            String maSP = tblDSSP.getValueAt(row, 0).toString();
+            String tenSP = tblDSSP.getValueAt(row, 1).toString();
             int confirm = JOptionPane.showConfirmDialog(this,
                     "Bạn có chắc muốn xóa sản phẩm " + tenSP + " có mã " + maSP + " không?",
                     "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION) 
-            {
-                if (spBUS.deleteSP(maSP)) 
-                {
-                    model.removeRow(i);
+            if (confirm == JOptionPane.YES_OPTION) {
+                if (spBUS.deleteSP(maSP)) {
+                    model.removeRow(row);
                     tblDSSP.setModel(model);
                     JOptionPane.showMessageDialog(this, "Xóa sản phẩm " + tenSP + " thành công",
                             "Thành công", JOptionPane.INFORMATION_MESSAGE);
@@ -461,20 +571,17 @@ public class SanPhamGUI extends JPanel implements ActionListener {
                     JOptionPane.showMessageDialog(this, "Xóa sản phẩm thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 
             }
-        } 
-        else 
+        } else 
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm để xóa",
                     "Lỗi", JOptionPane.ERROR_MESSAGE);
     }
 
     public void nhapExcel() {
         JOptionPane.showMessageDialog(this, "Chức năng Nhập Excel chưa được triển khai!");
-        // TODO: Thêm logic nhập từ Excel nếu cần
     }
 
     public void xuatExcel() {
         JOptionPane.showMessageDialog(this, "Chức năng Xuất Excel chưa được triển khai!");
-        // TODO: Thêm logic xuất ra Excel nếu cần
     }
 
     public void openLoaiSPDialog() 
@@ -484,13 +591,18 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         loadLoaiSPToComboBox();
     }
 
-    public void clearForm() {
+    public void clearForm() 
+    {
         txtMaSP.setText("");
         txtTenSP.setText("");
         txtDonGia.setText("");
         txtSoLuong.setText("");
         txtDonViTinh.setText("");
-        cbLoaiSP.setSelectedIndex(0);
+        mauSacGroup.clearSelection();
+        spinnerKichThuoc.setValue(38);
+        txtChatLieu.setText("");
+        txtKieuDang.setText("");
+        cbLoaiSP.setSelectedIndex(-1);
     }
 
     public static void main(String[] args) {
