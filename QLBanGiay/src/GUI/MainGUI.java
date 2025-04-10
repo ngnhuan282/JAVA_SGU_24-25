@@ -279,13 +279,6 @@ public class MainGUI extends JFrame implements ActionListener {
         }
     }
 
-    class NhaCungCapGUI extends JPanel {
-        public NhaCungCapGUI() {
-            setBackground(Color.WHITE);
-            add(new JLabel("Đây là Nhà Cung Cấp", SwingConstants.CENTER));
-        }
-    }
-
     class NhanVienGUI extends JPanel {
         public NhanVienGUI() {
             setBackground(Color.WHITE);
