@@ -50,37 +50,37 @@ public class ThongKeGUI extends JPanel {
         pTongQuan.add(lblHeader);
 
         // 4 Panel trang trí trong Tab Tổng quan
-        // Panel 1: Sản phẩm
-        JPanel pSanPham = createDecorativePanel("Sản phẩm trong kho", "14", "/image/productTK100.png");
+        // Panel 1: Sản phẩm (Màu xanh nhạt)
+        JPanel pSanPham = createDecorativePanel("Sản phẩm trong kho", "14", "/image/productTK100.png", Color.decode("#E3F2FD"));
         pSanPham.setBounds(20, 70, 580, 280);
         pTongQuan.add(pSanPham);
 
-        // Panel 2: Khách hàng
-        JPanel pKhachHang = createDecorativePanel("Khách hàng trực tiếp", "18", "/image/clientIcon.png");
+        // Panel 2: Khách hàng (Màu hồng nhạt)
+        JPanel pKhachHang = createDecorativePanel("Khách hàng trực tiếp", "18", "/image/customerTK100.png", Color.decode("#FFEBEE"));
         pKhachHang.setBounds(620, 70, 580, 280);
         pTongQuan.add(pKhachHang);
 
-        // Panel 3: Nhân viên
-        JPanel pNhanVien = createDecorativePanel("Nhân viên đang hoạt động", "5", "/image/employeeIcon.png");
+        // Panel 3: Nhân viên (Màu vàng nhạt)
+        JPanel pNhanVien = createDecorativePanel("Nhân viên đang hoạt động", "5", "/image/employeeTK100.png", Color.decode("#FFFDE7"));
         pNhanVien.setBounds(20, 370, 580, 280);
         pTongQuan.add(pNhanVien);
 
-        // Panel 4: Doanh thu
-        JPanel pDoanhThu = createDecorativePanel("Doanh thu tháng này", "26.580.000đ", "/image/chart20.png");
+        // Panel 4: Doanh thu (Màu xanh lá nhạt)
+        JPanel pDoanhThu = createDecorativePanel("Doanh thu tháng này", "26.580.000đ", "/image/chartTK100.png", Color.decode("#E8F5E9"));
         pDoanhThu.setBounds(620, 370, 580, 280);
         pTongQuan.add(pDoanhThu);
     }
 
     // Phương thức tạo panel trang trí
-    private JPanel createDecorativePanel(String title, String value, String iconPath) {
+    private JPanel createDecorativePanel(String title, String value, String iconPath, Color backgroundColor) {
         JPanel panel = new JPanel();
-        panel.setBackground(new Color(245, 245, 245));
+        panel.setBackground(backgroundColor); // Áp dụng màu nền cho panel
         panel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
         panel.setLayout(null);
 
         // Icon (ẩn phía dưới nội dung)
         ImageIcon originalIcon = new ImageIcon(ThongKeGUI.class.getResource(iconPath));
-        ImageIcon fadedIcon = createFadedIcon(originalIcon, 0.5f); // Làm mờ icon với opacity 0.3
+        ImageIcon fadedIcon = createFadedIcon(originalIcon, 0.5f); // Opacity 0.5
         JLabel lblIcon = new JLabel(fadedIcon);
         lblIcon.setBounds(400, 120, 150, 150); // Đặt icon ở góc phải dưới
         panel.add(lblIcon);
