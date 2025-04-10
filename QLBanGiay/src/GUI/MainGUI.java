@@ -193,6 +193,17 @@ public class MainGUI extends JFrame implements ActionListener {
         btnKhuyenMaiGUI.setBounds(20, 265, 200, 35);
         btnKhuyenMaiGUI.addActionListener(this);
         pNavItem.add(btnKhuyenMaiGUI);
+        
+        JButton btnThongKe = new JButton("THỐNG KÊ");
+        btnThongKe.setOpaque(true);
+        btnThongKe.setIcon(new ImageIcon(MainGUI.class.getResource("/image/chart20.png")));
+        btnThongKe.setHorizontalAlignment(SwingConstants.LEFT);
+        btnThongKe.setForeground(Color.WHITE);
+        btnThongKe.setFont(new Font("Verdana", Font.BOLD, 14));
+        btnThongKe.setBorderPainted(false);
+        btnThongKe.setBackground(new Color(255, 82, 82));
+        btnThongKe.setBounds(20, 301, 200, 35);
+        pNavItem.add(btnThongKe);
 
         // Main content area
         JPanel pMain = new JPanel();

@@ -46,16 +46,13 @@ public class SanPhamGUI extends JPanel implements ActionListener {
     private ButtonGroup mauSacGroup;
     private JComboBox<String> cbLoaiSP, cboxSearch;
     private JButton btnEditMode, btnNhapExcel, btnXuatExcel;
-    private LoaiBUS loaiBUS;
-    private SanPhamBUS spBUS;
+    private LoaiBUS loaiBUS = new LoaiBUS();
+    private SanPhamBUS spBUS = new SanPhamBUS();
     private boolean isEditMode = false;
     private JTextField txtSearch;
 
     public SanPhamGUI() 
     {
-        loaiBUS = new LoaiBUS();
-        spBUS = new SanPhamBUS();
-        
         Object[] header = {"Mã SP", "Tên SP", "Loại", "Giá", "Số lượng", "ĐVT", "Màu sắc", "Kích thước", "Chất liệu", "Kiểu dáng"};
         model = new DefaultTableModel(header, 0);
         tblDSSP = new JTable(model);
