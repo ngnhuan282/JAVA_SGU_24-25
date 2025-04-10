@@ -7,11 +7,15 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -26,377 +30,296 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+
+import BUS.NhaCungCapBUS;
+
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 
-public class NhaCungCapGUI extends JFrame implements ActionListener{
+public class NhaCungCapGUI extends JPanel implements ActionListener{
 
 	private JPanel contentPane;
-	private int DEFAULT_WIDTH = 1200, DEFAULT_HEIGHT= 800;
+	private int DEFAULT_WIDTH = 1450, DEFAULT_HEIGHT = 800;
 	private String color = "#FF5252";
+	public DefaultTableModel model;
 	private JTable table;
-	private ArrayList<NCC> listNCC = new ArrayList<>();
+	private JPanel inforConent;
+	private JButton btnEditMode;
+	private JTextField txtSearch;
+	private JTextField txtMaNCC,txtTenNCC,txtSDT,txtDiaChi;
+	private NhaCungCapBUS nccBUS = new NhaCungCapBUS();	
+	private boolean isEditMode = false; 
 
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					NhaCungCapGUI frame = new NhaCungCapGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	 public static void main(String[] args) {
+	        JFrame frame = new JFrame("Test NCCGUI");
+	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	        frame.setSize(1248, 757);
+	        frame.getContentPane().add(new NhaCungCapGUI());
+	        frame.setVisible(true);
+	    }
 	
 	public NhaCungCapGUI()
 	{
+		String[] columnNames = { "Mã NCC", "Tên Nhà Cung Cấp", "Số Điện Thoại", "Địa Chỉ" };
+		model = new DefaultTableModel(columnNames, 0);
 		initComponents();
 	}
 
 	public void initComponents() {
-		setTitle("Hệ thống quản lý bán giày");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-		setLocationRelativeTo(null);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setPreferredSize(new Dimension(1248, 757));
+        setLayout(null);
+        setBackground(Color.WHITE);
+        
+        JPanel pHeaderMain = new JPanel();
+        pHeaderMain.setBounds(0, 0, 1206, 100);
+        pHeaderMain.setBackground(Color.WHITE);
+        pHeaderMain.setLayout(null);
+        add(pHeaderMain);
+        
+        JPanel pLeftHeader = new JPanel();
+        pLeftHeader.setBorder(new TitledBorder(null, "Chức năng", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        pLeftHeader.setBackground(Color.WHITE);
+        pLeftHeader.setBounds(2, 0, 512, 100);
+        pHeaderMain.add(pLeftHeader);
+        pLeftHeader.setLayout(null);
+        
+        Box horizontalBox = Box.createHorizontalBox();
+        horizontalBox.setBorder(UIManager.getBorder("Button.border"));
+        horizontalBox.setBounds(0, 0, 512, 111);
+        pLeftHeader.add(horizontalBox);
 
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
+        JButton btnThem = new JButton("Thêm");
+        horizontalBox.add(btnThem);
+        btnThem.setFocusPainted(false);
+        btnThem.setActionCommand("Thêm");
+        btnThem.addActionListener(this);
+        btnThem.setBackground(Color.WHITE);
+        btnThem.setBorderPainted(false);
+        btnThem.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/add48.png")));
+        btnThem.setFont(new Font("Arial", Font.PLAIN, 15));
+        btnThem.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnThem.setHorizontalTextPosition(SwingConstants.CENTER);
+        btnThem.setPreferredSize(new Dimension(120, 140));
+
+        JButton btnSua = new JButton("Sửa");
+        horizontalBox.add(btnSua);
+        btnSua.setFocusPainted(false);
+        btnSua.setActionCommand("Sửa");
+        btnSua.addActionListener(this);
+        btnSua.setBorderPainted(false);
+        btnSua.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnSua.setPreferredSize(new Dimension(120, 140));
+        btnSua.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/edit48.png")));
+        btnSua.setHorizontalTextPosition(SwingConstants.CENTER);
+        btnSua.setFont(new Font("Arial", Font.PLAIN, 15));
+        btnSua.setBackground(Color.WHITE);
+
+        JButton btnXoa = new JButton("Xóa");
+        horizontalBox.add(btnXoa);
+        btnXoa.setFocusPainted(false);
+        btnXoa.setActionCommand("Xóa");
+        btnXoa.addActionListener(this);
+        btnXoa.setBorderPainted(false);
+        btnXoa.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnXoa.setPreferredSize(new Dimension(120, 140));
+        btnXoa.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/remove48.png")));
+        btnXoa.setHorizontalTextPosition(SwingConstants.CENTER);
+        btnXoa.setFont(new Font("Arial", Font.PLAIN, 15));
+        btnXoa.setBackground(Color.WHITE);
+
+        JButton btnXuatExcel = new JButton("Xuất Excel");
+        horizontalBox.add(btnXuatExcel);
+        btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnXuatExcel.setPreferredSize(new Dimension(120, 140));
+        btnXuatExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/excel48.png")));
+        btnXuatExcel.setHorizontalTextPosition(SwingConstants.CENTER);
+        btnXuatExcel.setFont(new Font("Arial", Font.PLAIN, 15));
+        btnXuatExcel.setBorderPainted(false);
+        btnXuatExcel.setBackground(Color.WHITE);
+
+        JButton btnNhapExcel = new JButton("Nhập Excel");
+        horizontalBox.add(btnNhapExcel);
+        btnNhapExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnNhapExcel.setPreferredSize(new Dimension(120, 140));
+        btnNhapExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/bill48.png")));
+        btnNhapExcel.setHorizontalTextPosition(SwingConstants.CENTER);
+        btnNhapExcel.setFont(new Font("Arial", Font.PLAIN, 15));
+        btnNhapExcel.setBorderPainted(false);
+        btnNhapExcel.setBackground(Color.WHITE);
 		
-		JPanel pHeader = new JPanel();
-		pHeader.setBounds(5, 5, 1500, 1);
-		contentPane.add(pHeader);
-		pHeader.setLayout(null);
-		
-		JPanel pMain = new JPanel();
-		pMain.setBounds(205, 6, 979, 755);
-		contentPane.add(pMain);
-		pMain.setLayout(null);
-		
-		JPanel pHeaderMain = new JPanel();
-		pHeaderMain.setBounds(0, 0, 980, 100);
-		pHeaderMain.setBackground(Color.WHITE);
-		pMain.add(pHeaderMain);
-		
-		JPanel pNavbar = new JPanel();
-		pNavbar.setBounds(5, 6, 200, 800);
-		contentPane.add(pNavbar);
-		pNavbar.setLayout(null);
-		pNavbar.setPreferredSize(new Dimension(200, 800));
-		pNavbar.setBackground(Color.decode(color));
-		
-		JPanel pAccount = new JPanel();
-		pAccount.setBounds(0, 0, 200, 88);
-		pNavbar.add(pAccount);
-		pAccount.setBackground(Color.decode(color));
-		pAccount.setLayout(null);
-		
-        /************* PHẦN HIỂN THỊ THÔNG TIN TÀI KHOẢN ************/
-		JLabel lbInfo1 = new JLabel("Xin chào");
-		lbInfo1.setIcon(new ImageIcon(NhaCungCapGUI.class.getResource("/image/userIcon.png")));
-		lbInfo1.setVerticalTextPosition(SwingConstants.BOTTOM);
-		lbInfo1.setHorizontalTextPosition(SwingConstants.CENTER);
-		lbInfo1.setForeground(Color.WHITE);
-		lbInfo1.setBounds(0, 0, 200, 54);
-		lbInfo1.setFont(new Font("Verdana", Font.BOLD, 14));
-		lbInfo1.setHorizontalAlignment(SwingConstants.CENTER);
-		pAccount.add(lbInfo1);
-		
-		JLabel lbInfo2 = new JLabel("Admin !");
-		lbInfo2.setBounds(0, 55, 200, 33);
-		pAccount.add(lbInfo2);
-		lbInfo2.setForeground(Color.WHITE);
-		lbInfo2.setFont(new Font("Verdana", Font.BOLD, 14));
-		lbInfo2.setHorizontalAlignment(SwingConstants.CENTER);
-		
-		JPanel pNavItem = new JPanel();
-		pNavItem.setBounds(0, 87, 200, 713);
-		pNavItem.setBackground(Color.decode(color));
-		pNavbar.add(pNavItem);
-		pNavItem.setLayout(null);
-		
-		/************* NAVBAR ************/
-		JButton btnDangXuat = new JButton("ĐĂNG XUẤT");
-		btnDangXuat.setIcon(new ImageIcon(NhaCungCapGUI.class.getResource("/image/logoutIcon.png")));
-		btnDangXuat.setOpaque(true);
-		btnDangXuat.setHorizontalAlignment(SwingConstants.LEFT);
-		btnDangXuat.setForeground(Color.WHITE);
-		btnDangXuat.setFont(new Font("Verdana", Font.BOLD, 14));
-		btnDangXuat.setBorderPainted(false);
-		btnDangXuat.setBackground(Color.decode(color));
-		btnDangXuat.setBounds(0, 587, 200, 35);
-		pNavItem.add(btnDangXuat);
-		
-		JButton btnTrangChuGUI = new JButton("TRANG CHỦ");
-		btnTrangChuGUI.setIcon(new ImageIcon(NhaCungCapGUI.class.getResource("/image/homeIcon.png")));
-		btnTrangChuGUI.setOpaque(true);
-		btnTrangChuGUI.setHorizontalAlignment(SwingConstants.LEFT);
-		btnTrangChuGUI.setForeground(Color.WHITE);
-		btnTrangChuGUI.setFont(new Font("Verdana", Font.BOLD, 14));
-		btnTrangChuGUI.setBorderPainted(false);
-		btnTrangChuGUI.setBackground(Color.decode(color));
-		btnTrangChuGUI.setBounds(0, 0, 200, 35);
-		pNavItem.add(btnTrangChuGUI);
-		
-		JButton btnSanPhamGUI = new JButton("SẢN PHẨM");
-		btnSanPhamGUI.setIcon(new ImageIcon(NhaCungCapGUI.class.getResource("/image/productIcon.png")));
-		btnSanPhamGUI.setOpaque(true);
-		btnSanPhamGUI.setHorizontalAlignment(SwingConstants.LEFT);
-		btnSanPhamGUI.setForeground(Color.WHITE);
-		btnSanPhamGUI.setFont(new Font("Verdana", Font.BOLD, 14));
-		btnSanPhamGUI.setBorderPainted(false);
-		btnSanPhamGUI.setBackground(Color.decode(color));
-		btnSanPhamGUI.setBounds(0, 38, 200, 35);
-		pNavItem.add(btnSanPhamGUI);
-		
-		JButton btnNhaCungCapGUI = new JButton("NHÀ CUNG CẤP");
-		btnNhaCungCapGUI.setIcon(new ImageIcon(NhaCungCapGUI.class.getResource("/image/providerIcon.png")));
-		btnNhaCungCapGUI.setOpaque(true);
-		btnNhaCungCapGUI.setHorizontalAlignment(SwingConstants.LEFT);
-		btnNhaCungCapGUI.setForeground(Color.WHITE);
-		btnNhaCungCapGUI.setFont(new Font("Verdana", Font.BOLD, 14));
-		btnNhaCungCapGUI.setBorderPainted(false);
-		btnNhaCungCapGUI.setBackground(Color.decode(color));
-		btnNhaCungCapGUI.setBounds(0, 72, 200, 35);
-		pNavItem.add(btnNhaCungCapGUI);
-		
-		JButton btnNhanVienGUI = new JButton("NHÂN VIÊN");
-		btnNhanVienGUI.setIcon(new ImageIcon(NhaCungCapGUI.class.getResource("/image/employeeIcon.png")));
-		btnNhanVienGUI.setOpaque(true);
-		btnNhanVienGUI.setHorizontalAlignment(SwingConstants.LEFT);
-		btnNhanVienGUI.setForeground(Color.WHITE);
-		btnNhanVienGUI.setFont(new Font("Verdana", Font.BOLD, 14));
-		btnNhanVienGUI.setBorderPainted(false);
-		btnNhanVienGUI.setBackground(Color.decode(color));
-		btnNhanVienGUI.setBounds(0, 107, 200, 35);
-		pNavItem.add(btnNhanVienGUI);
-		
-		JButton btnKhachHangGUI = new JButton("KHÁCH HÀNG");
-		btnKhachHangGUI.setIcon(new ImageIcon(NhaCungCapGUI.class.getResource("/image/clientIcon.png")));
-		btnKhachHangGUI.setOpaque(true);
-		btnKhachHangGUI.setHorizontalAlignment(SwingConstants.LEFT);
-		btnKhachHangGUI.setForeground(Color.WHITE);
-		btnKhachHangGUI.setFont(new Font("Verdana", Font.BOLD, 14));
-		btnKhachHangGUI.setBorderPainted(false);
-		btnKhachHangGUI.setBackground(Color.decode(color));
-		btnKhachHangGUI.setBounds(0, 141, 200, 35);
-		pNavItem.add(btnKhachHangGUI);
-		
-		JButton btnPhieuNhapGUI = new JButton("PHIẾU NHẬP");
-		btnPhieuNhapGUI.setIcon(new ImageIcon(NhaCungCapGUI.class.getResource("/image/phieuNhap.png")));
-		btnPhieuNhapGUI.setOpaque(true);
-		btnPhieuNhapGUI.setHorizontalAlignment(SwingConstants.LEFT);
-		btnPhieuNhapGUI.setForeground(Color.WHITE);
-		btnPhieuNhapGUI.setFont(new Font("Verdana", Font.BOLD, 14));
-		btnPhieuNhapGUI.setBorderPainted(false);
-		btnPhieuNhapGUI.setBackground(Color.decode(color));
-		btnPhieuNhapGUI.setBounds(0, 173, 200, 35);
-		pNavItem.add(btnPhieuNhapGUI);
-		
-		JButton btnPhieuXuat = new JButton("PHIẾU XUẤT");
-		btnPhieuXuat.setIcon(new ImageIcon(NhaCungCapGUI.class.getResource("/image/phieuXuat.png")));
-		btnPhieuXuat.setOpaque(true);
-		btnPhieuXuat.setHorizontalAlignment(SwingConstants.LEFT);
-		btnPhieuXuat.setForeground(Color.WHITE);
-		btnPhieuXuat.setFont(new Font("Verdana", Font.BOLD, 14));
-		btnPhieuXuat.setBorderPainted(false);
-		btnPhieuXuat.setBackground(Color.decode(color));
-		btnPhieuXuat.setBounds(0, 207, 200, 35);
-		pNavItem.add(btnPhieuXuat);
-		
-		JButton btnKhuyenMaiGUI = new JButton("KHUYẾN MÃI");
-		btnKhuyenMaiGUI.setIcon(new ImageIcon(NhaCungCapGUI.class.getResource("/image/saleIcon.png")));
-		btnKhuyenMaiGUI.setOpaque(true);
-		btnKhuyenMaiGUI.setHorizontalAlignment(SwingConstants.LEFT);
-		btnKhuyenMaiGUI.setForeground(Color.WHITE);
-		btnKhuyenMaiGUI.setFont(new Font("Verdana", Font.BOLD, 14));
-		btnKhuyenMaiGUI.setBorderPainted(false);
-		btnKhuyenMaiGUI.setBackground(Color.decode(color));
-		btnKhuyenMaiGUI.setBounds(0, 242, 200, 35);
-		pNavItem.add(btnKhuyenMaiGUI);
-		
-		
-		/************* PHẦN HEADER ************/
-		pHeaderMain.setPreferredSize(new Dimension(DEFAULT_WIDTH, 100));
-		pHeaderMain.setLayout(null);
-		
-		JPanel pLeftHeader = new JPanel();
-		pLeftHeader.setBackground(Color.WHITE);
-		pLeftHeader.setBounds(0, 0, 539, 100);
-		pHeaderMain.add(pLeftHeader);
-		pLeftHeader.setLayout(null);
-		
-		/************* PHẦN CHỨC NĂNG ************/
-		JButton btnThem = new JButton("THÊM");
-		btnThem.setActionCommand("Thêm");
-		btnThem.addActionListener(this);
-		btnThem.setBackground(Color.WHITE);
-		btnThem.setBorderPainted(false);
-		btnThem.setIcon(new ImageIcon(NhaCungCapGUI.class.getResource("/image/addIcon.png")));
-		btnThem.setFont(new Font("Verdana", Font.BOLD, 14));
-		btnThem.setBounds(0, 0, 93, 100);
-		btnThem.setVerticalTextPosition(SwingConstants.BOTTOM);
-		btnThem.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnThem.setPreferredSize(new Dimension(120, 140));
-		pLeftHeader.add(btnThem);
-		
-		JButton btnSua = new JButton("SỬA");
-		btnSua.setActionCommand("Sửa");
-		btnSua.addActionListener(this);
-		btnSua.setBorderPainted(false);
-		btnSua.setVerticalTextPosition(SwingConstants.BOTTOM);
-		btnSua.setPreferredSize(new Dimension(120, 140));
-		btnSua.setIcon(new ImageIcon(NhaCungCapGUI.class.getResource("/image/editIcon.png")));
-		btnSua.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnSua.setFont(new Font("Verdana", Font.BOLD, 14));
-		btnSua.setBackground(Color.WHITE);
-		btnSua.setBounds(94, 0, 93, 100);
-		pLeftHeader.add(btnSua);
-		
-		JButton btnXoa = new JButton("XÓA");
-		btnXoa.setActionCommand("Xóa");
-		btnXoa.addActionListener(this);
-		btnXoa.setBorderPainted(false);
-		btnXoa.setVerticalTextPosition(SwingConstants.BOTTOM);
-		btnXoa.setPreferredSize(new Dimension(120, 140));
-		btnXoa.setIcon(new ImageIcon(NhaCungCapGUI.class.getResource("/image/deleteIcon.png")));
-		btnXoa.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnXoa.setFont(new Font("Verdana", Font.BOLD, 14));
-		btnXoa.setBackground(Color.WHITE);
-		btnXoa.setBounds(187, 0, 93, 100);
-		pLeftHeader.add(btnXoa);
-		
-		JButton btnXuatExcel = new JButton("XUẤT EXCEL");
-		btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
-		btnXuatExcel.setPreferredSize(new Dimension(120, 140));
-		btnXuatExcel.setIcon(new ImageIcon(NhaCungCapGUI.class.getResource("/image/excelIcon.png")));
-		btnXuatExcel.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnXuatExcel.setFont(new Font("Verdana", Font.BOLD, 14));
-		btnXuatExcel.setBorderPainted(false);
-		btnXuatExcel.setBackground(Color.WHITE);
-		btnXuatExcel.setBounds(279, 0, 137, 100);
-		pLeftHeader.add(btnXuatExcel);
-		
-		JButton btnNhapExcel = new JButton("NHẬP EXCEL");
-		btnNhapExcel.setBounds(405, 0, 137, 100);
-		pLeftHeader.add(btnNhapExcel);
-		btnNhapExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
-		btnNhapExcel.setPreferredSize(new Dimension(120, 140));
-		btnNhapExcel.setIcon(new ImageIcon(NhaCungCapGUI.class.getResource("/image/sheetIcon.png")));
-		btnNhapExcel.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnNhapExcel.setFont(new Font("Verdana", Font.BOLD, 14));
-		btnNhapExcel.setBorderPainted(false);
-		btnNhapExcel.setBackground(Color.WHITE);
-		
-		JPanel PanelTable = new JPanel();
-		PanelTable.setBounds(10, 111, 959, 633);
-		pMain.add(PanelTable);
-		PanelTable.setLayout(null);
-		
-		//khoi tao table voi cac header cot co san
-		String[] columnNames = { "Mã NCC", "Tên Nhà Cung Cấp", "Số Điện Thoại", "Địa Chỉ" };
-		DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-		table = new JTable(model);
-		table.setFont(new Font("Verdana", Font.PLAIN, 12));
-		table.setGridColor(new Color(200, 200, 200));
-		table.getTableHeader().setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
-		
-		table.setRowHeight(23);
-		table.getTableHeader().setPreferredSize(new Dimension(0, 23));
-		table.getTableHeader().setFont(new Font("Verdana", Font.PLAIN, 12));
-		
-		table.getColumnModel().getColumn(0).setPreferredWidth(20);
-		table.getColumnModel().getColumn(1).setPreferredWidth(270);
-		table.getColumnModel().getColumn(2).setPreferredWidth(30);
-		table.getColumnModel().getColumn(3).setPreferredWidth(350);
-		
-		JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.setBounds(10, 11, 939, 611);
-		scrollPane.setBorder(BorderFactory.createMatteBorder(0, 1, 1, 1, new Color(220, 220, 220))); //do dai vien tren duoi trai phai
-		
-		
-		//test du lieu co san 
-		NCC ncc1 = new NCC("A", "Công ty A", "0123456789", "HCM");
-		NCC ncc2 = new NCC("B", "Công ty B", "0123456789", "HCM");
-		NCC ncc3 = new NCC("C", "Công ty C", "0123456789", "HCM");
-		NCC ncc4 = new NCC("D", "Công ty D", "0123456789", "HCM");
-		NCC ncc5 = new NCC("E", "Công ty E", "0123456789", "HCM");
-		NCC ncc6 = new NCC("F", "Công ty F", "0123456789", "HCM");
-		NCC ncc7 = new NCC("G", "Công ty G", "0123456789", "HCM");
-		listNCC.add(ncc1);
-		listNCC.add(ncc2);
-		listNCC.add(ncc3);
-		listNCC.add(ncc4);
-		listNCC.add(ncc5); 
-		listNCC.add(ncc6);
-		listNCC.add(ncc7);
-		/////////////////////
-		
-		ListNCC();
-		
-		PanelTable.add(scrollPane);
-	}
+        txtSearch = new JTextField();
+        txtSearch.setBounds(771, 31, 290, 27);
+        pHeaderMain.add(txtSearch);
+        txtSearch.setColumns(10);
+
+        JComboBox<String> cboxSearch = new JComboBox<>();
+        cboxSearch.setFont(new Font("Arial", Font.PLAIN, 14));
+        cboxSearch.setBounds(682, 30, 79, 28);
+        cboxSearch.setBackground(Color.WHITE);
+        cboxSearch.setForeground(Color.BLACK);
+        cboxSearch.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        pHeaderMain.add(cboxSearch);
+
+        JButton btnSearch = new JButton("");
+        btnSearch.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/search30.png")));
+        btnSearch.setBounds(1071, 22, 66, 39);
+        pHeaderMain.add(btnSearch);
+        
+        JPanel pContent = new JPanel();
+//      pContent.setBackground(Color.white);
+        pContent.setBackground(SystemColor.control);;
+        pContent.setBounds(0, 103, 1248, 654); // Đặt bên dưới pHeaderMain
+        pContent.setLayout(null);
+        add(pContent);  
+        
+        inforConent = new JPanel();
+        inforConent.setBackground(new Color(255, 255, 255));
+        inforConent.setBounds(10, 10, 255, 634);
+        pContent.add(inforConent);
+        inforConent.setLayout(null);
+        
+        JLabel lbMaNCC = new JLabel("Mã nhà cung cấp");
+        lbMaNCC.setFont(new Font("Verdana", Font.BOLD, 12));
+        lbMaNCC.setBounds(10, 20, 127, 30);
+        inforConent.add(lbMaNCC);
+        
+        txtMaNCC = new JTextField();
+        txtMaNCC.setBounds(10, 61, 235, 35);
+        inforConent.add(txtMaNCC);
+        txtMaNCC.setColumns(10);
+        txtMaNCC.setEditable(false);
+        txtMaNCC.setFocusable(false);
+        
+        txtTenNCC = new JTextField();
+        txtTenNCC.setColumns(10);
+        txtTenNCC.setBounds(10, 161, 235, 35);
+        inforConent.add(txtTenNCC);
+        txtTenNCC.setEditable(false);
+        txtTenNCC.setFocusable(false);
+        
+        JLabel lbTenNCC = new JLabel("Tên nhà cung cấp");
+        lbTenNCC.setFont(new Font("Verdana", Font.BOLD, 12));
+        lbTenNCC.setBounds(10, 120, 127, 30);
+        inforConent.add(lbTenNCC);
+        
+        txtSDT = new JTextField();
+        txtSDT.setColumns(10);
+        txtSDT.setBounds(10, 261, 235, 35);
+        inforConent.add(txtSDT);
+        txtSDT.setEditable(false);
+        txtSDT.setFocusable(false);
+        
+        JLabel lbSDT = new JLabel("Số điện thoại");
+        lbSDT.setFont(new Font("Verdana", Font.BOLD, 12));
+        lbSDT.setBounds(10, 220, 127, 30);
+        inforConent.add(lbSDT);
+        
+        txtDiaChi = new JTextField();
+        txtDiaChi.setColumns(10);
+        txtDiaChi.setBounds(10, 361, 235, 35);
+        inforConent.add(txtDiaChi);
+        txtDiaChi.setEditable(false);
+        txtDiaChi.setFocusable(false);
+        
+        JLabel lbDiaChi = new JLabel("Địa chỉ");
+        lbDiaChi.setFont(new Font("Verdana", Font.BOLD, 12));
+        lbDiaChi.setBounds(10, 320, 127, 30);
+        inforConent.add(lbDiaChi);      
+        
+        //Cac button bi an
+		btnEditMode = new JButton("");
+		btnEditMode.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/edit20.png")));
+		btnEditMode.setFocusPainted(false);
+        btnEditMode.setBorderPainted(false);
+        btnEditMode.setBackground(null);
+        btnEditMode.setBounds(208, 11, 37, 20);
+        btnEditMode.addActionListener(e->toggleEditMode());
+        inforConent.add(btnEditMode);   
+    
+      //khoi tao table voi cac header cot co san
+      		table = new JTable(model);
+      		// Gọi hàm khi click chuột
+      		table.getSelectionModel().addListSelectionListener(e->getInforFromTable());
+      		//khong cho edit truc tiep 
+//      		table.setDefaultEditor(Object.class, null);
+//      		//khong cho thay doi cot
+//      		table.getTableHeader().setReorderingAllowed(false); 
+      		
+//      		//chon hang roi lay thong tin 
+//      		table.getSelectionModel().addListSelectionListener(e->{});
+      		
+      		table.setFont(new Font("Verdana", Font.PLAIN, 12));
+      		table.setGridColor(new Color(200, 200, 200));
+      		table.getTableHeader().setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
+      		
+      		table.setRowHeight(23);
+      		table.getTableHeader().setPreferredSize(new Dimension(0, 23));
+      		table.getTableHeader().setFont(new Font("Verdana", Font.BOLD, 12));
+      		
+      		table.getColumnModel().getColumn(0).setPreferredWidth(10);
+      		table.getColumnModel().getColumn(1).setPreferredWidth(270);
+      		table.getColumnModel().getColumn(2).setPreferredWidth(43);
+      		table.getColumnModel().getColumn(3).setPreferredWidth(350);
+      		
+      		//can giua
+      		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+      		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+      		table.setDefaultRenderer(Object.class, centerRenderer);
+      		
+            JScrollPane scrollPane = new JScrollPane(table);
+            scrollPane.setBounds(275, 10, 914, 633);
+            scrollPane.setBorder(BorderFactory.createMatteBorder(0, 1, 1, 1, new Color(220, 220, 220))); //do dai vien tren duoi trai phai
+            scrollPane.getVerticalScrollBar().setUI(new ModernScrollBarUI());
+            scrollPane.getHorizontalScrollBar().setUI(new ModernScrollBarUI());
+            pContent.add(scrollPane);			
+      		
+      		
+              
+            nccBUS.docDSNCC();
+            nccBUS.updateTable(model);
+        }
 	
-	public class NCC{ //can co class NCC de tao duoc array
-		public String maNCC;
-		public String tenNCC;
-		public String SDT;
-		public String diaChi;
-		
-		public NCC(String maNCC,String tenNCC, String SDT,String diaChi) {
-			this.maNCC=maNCC;
-			this.tenNCC=tenNCC;
-			this.SDT=SDT;
-			this.diaChi=diaChi;
+		public void getInforFromTable() {
+			int selectedRow =table.getSelectedRow();
+			if(selectedRow>=0) {
+				txtMaNCC.setText(model.getValueAt(selectedRow, 0).toString());
+				txtTenNCC.setText(model.getValueAt(selectedRow, 1).toString());
+				txtSDT.setText(model.getValueAt(selectedRow, 2).toString());
+				txtDiaChi.setText(model.getValueAt(selectedRow, 3).toString());
+			}
 		}
 		
-		 	public String getMaNCC() { 
-			 return this.maNCC; 
-			 }
-
-		    public String getTenNCC() { 
-		    	return this.tenNCC; 
-		    }
-		    public String getSDT() {
-		    	return this.SDT; 
-		    }
-		    public String getDiaChi() { 
-		    	return this.diaChi; 
-		    }
-		   
-
-			public void setMaNCC(String maNCC) {
-				this.maNCC = maNCC;
-			}
-
-			public void setTenNCC(String tenNCC) {
-				this.tenNCC = tenNCC;
-			}
-
-			public void setSDT(String sDT) {
-				SDT = sDT;
-			}
-
-			public void setDiaChi(String diaChi) {
-				this.diaChi = diaChi;
-			}
-	}
-	
-	
-	public void ListNCC(){//set array list
-
-		DefaultTableModel model = (DefaultTableModel) table.getModel();
-		model.setRowCount(0);
+		public void toggleEditMode() {
+			isEditMode = !isEditMode;
+			txtMaNCC.setEditable(isEditMode);
+			txtMaNCC.setFocusable(isEditMode);
+			txtTenNCC.setEditable(isEditMode);
+			txtTenNCC.setFocusable(isEditMode);
+			txtSDT.setEditable(isEditMode);
+			txtSDT.setFocusable(isEditMode);
+			txtDiaChi.setEditable(isEditMode);
+			txtDiaChi.setFocusable(isEditMode);
+		}
 		
-		for(NCC ncc : listNCC)
-			model.addRow(new Object[] {ncc.getMaNCC(), ncc.getTenNCC(), ncc.getSDT(), ncc.getDiaChi()});
-	}
+		public void toggleEditInTheEnd() {
+			isEditMode=false;
+			txtMaNCC.setEditable(false);
+			txtMaNCC.setFocusable(false);
+			txtTenNCC.setEditable(false);
+			txtTenNCC.setFocusable(false);
+			txtSDT.setEditable(false);
+			txtSDT.setFocusable(false);
+			txtDiaChi.setEditable(false);
+			txtDiaChi.setFocusable(false);
+		}
+	
 	
 //Main eventtttttttttttttttt
 	@Override
@@ -404,307 +327,155 @@ public class NhaCungCapGUI extends JFrame implements ActionListener{
 		// TODO Auto-generated method stub
 		String command = e.getActionCommand();
 		if(command.equals("Thêm"))
-			openAddNCCGUI();
+			addNCC();
 		else if(command.equals("Sửa")) 
-			openEditNCCGUI();
+			editNCC();
 		else if(command.equals("Xóa"))
 			deleteNCC();
 	}
 	
-	
 	public void deleteNCC() {
 		int selectedRow = table.getSelectedRow();
-		if(selectedRow == -1) {
-			JOptionPane.showMessageDialog(null, "Vui lòng chọn một nhà cung cấp để xóa!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-	        return;
-		}
+		if(selectedRow < 0)
+			{
+				JOptionPane.showMessageDialog(null,"Vui lòng chọn một nhà cung cấp để xóa !", "Lỗi", JOptionPane.ERROR_MESSAGE);
+				return;
+			}	
 		
-		int confirm = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn xóa nhà cung cấp này?","Xác nhận",JOptionPane.YES_NO_OPTION);
+		String maNCC = table.getValueAt(selectedRow, 0).toString();
+		int confirm = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn xóa nhà cung cấp này?","Xóa Nhà Cung Cấp",JOptionPane.YES_NO_OPTION);
 		if(confirm == JOptionPane.YES_OPTION)
 		{
-			String maNCC = table.getValueAt(selectedRow, 0).toString();
-		
-			listNCC.removeIf(ncc -> ncc.getMaNCC().equals(maNCC));
-			
-			DefaultTableModel model = (DefaultTableModel) table.getModel();
-			model.setRowCount(0);
-			
-			for(NCC ncc : listNCC)
-				model.addRow(new Object[] {ncc.getMaNCC(), ncc.getTenNCC(), ncc.getSDT(), ncc.getDiaChi()});
+			nccBUS.deleteNCC(maNCC);
+			//update model
+			model.removeRow(selectedRow);
+
+			//reset textfield
+			JOptionPane.showMessageDialog(null, "Xóa nhà cung cấp thành công !", "Thông Báo", JOptionPane.INFORMATION_MESSAGE);	
+			clearFields();
+			toggleEditInTheEnd();
 		}
 	}
 	
 	
-	public void openAddNCCGUI() {
+	public void addNCC() {
+		String maNCC = txtMaNCC.getText().trim();
+		String tenNCC = txtTenNCC.getText().trim();
+		String sdt = txtSDT.getText().trim();
+		String diaChi = txtDiaChi.getText().trim();
 		
-	    JDialog addNCCDialog = new JDialog(this, "Thêm Nhà Cung Cấp", true); 
-	    addNCCDialog.setBounds(100, 100, 550, 372);
-	    addNCCDialog.setLocationRelativeTo(this);
-	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		if (maNCC.isEmpty() || tenNCC.isEmpty() || sdt.isEmpty() || diaChi.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin !", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 		
-	    addNCCDialog.setSize(366,427);
-	    addNCCDialog.setLocationRelativeTo(this);
-    	
-    	JPanel MainPanel = new JPanel();
-    	MainPanel.setBounds(10, 11, 597, 454);
-    	getContentPane().add(MainPanel);
-    	MainPanel.setLayout(null);
-    	
-    	JPanel TitlePanel = new JPanel();
-    	TitlePanel.setBounds(0, 0, 350, 51);
-    	TitlePanel.setBackground(Color.decode(color));
-    	MainPanel.add(TitlePanel);
-    	TitlePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 15)); // tu dong canh giua
-    	
-    	JLabel lbAdd = new JLabel("THÊM NHÀ CUNG CẤP\r\n");
-    	lbAdd.setForeground(Color.WHITE);
-    	lbAdd.setFont(new Font("Verdana", Font.BOLD, 14));
-    	TitlePanel.add(lbAdd);
-    	
-    	JLabel lbMaNCC = new JLabel("Mã Nhà Cung Cấp");
-    	lbMaNCC.setFont(new Font("Verdana", Font.BOLD, 12));
-    	lbMaNCC.setBounds(30, 62, 132, 23);
-    	MainPanel.add(lbMaNCC);
-    	
-    	JTextField txtMaNCC = new JTextField();
-    	txtMaNCC.setBounds(30, 87, 290, 33);
-    	MainPanel.add(txtMaNCC);
-    	txtMaNCC.setColumns(10);
-    	
-    	JLabel lbTenNCC = new JLabel("Tên Nhà Cung Cấp");
-    	lbTenNCC.setFont(new Font("Verdana", Font.BOLD, 12));
-    	lbTenNCC.setBounds(30, 131, 132, 14);
-    	MainPanel.add(lbTenNCC);
-    	
-    	JTextField txtTenNCC = new JTextField();
-    	txtTenNCC.setColumns(10);
-    	txtTenNCC.setBounds(30, 156, 290, 33);
-    	MainPanel.add(txtTenNCC);
-    	
-    	JLabel lbSDT = new JLabel("Số Điện Thoại");
-    	lbSDT.setFont(new Font("Verdana", Font.BOLD, 12));
-    	lbSDT.setBounds(30, 200, 132, 14);
-    	MainPanel.add(lbSDT);
-    	
-    	JTextField txtSDT = new JTextField();
-    	txtSDT.setColumns(10);
-    	txtSDT.setBounds(30, 225, 290, 33);
-    	MainPanel.add(txtSDT);
-    	
-    	JLabel lbDiaChi = new JLabel("Địa Chỉ");
-    	lbDiaChi.setFont(new Font("Verdana", Font.BOLD, 12));
-    	lbDiaChi.setBounds(30, 269, 132, 14);
-    	MainPanel.add(lbDiaChi);
-    	
-    	JTextField txtDiaChi = new JTextField();
-    	txtDiaChi.setColumns(10);
-    	txtDiaChi.setBounds(30, 294, 290, 33);
-    	MainPanel.add(txtDiaChi);
-    	
-    	JButton btnAdd = new JButton("Thêm");
-    	btnAdd.setFont(new Font("Verdana", Font.BOLD, 12));
-    	btnAdd.setBounds(30, 338, 138, 33);
-    	btnAdd.setBackground(new Color(51, 204, 102));
-    	btnAdd.setOpaque(true);
-    	btnAdd.setBorderPainted(false);
-    	btnAdd.setForeground(Color.WHITE);    	
-    	MainPanel.add(btnAdd);
-    	
-    	JButton btnCancel = new JButton("Hủy");
-    	btnCancel.setFont(new Font("Verdana", Font.BOLD, 12));
-    	btnCancel.setBounds(175, 338, 145, 33);
-    	btnCancel.setOpaque(true);
-    	btnCancel.setBorderPainted(false);
-    	btnCancel.setBackground(new Color(225,20,60));
-    	btnCancel.setForeground(Color.WHITE);
-    	MainPanel.add(btnCancel);
-    	
-    	
-    	//nut huy
-    	btnCancel.addActionListener(e -> addNCCDialog.dispose());
-    	
-    	//Su Kien Them dialog
-    	btnAdd.addActionListener(e -> {
-	
-				String maNCC = txtMaNCC.getText().trim();
-				String tenNCC = txtTenNCC.getText().trim();
-				String sdt = txtSDT.getText().trim();
-				String diaChi = txtDiaChi.getText().trim();
-				
-				if (maNCC.isEmpty() || tenNCC.isEmpty() || sdt.isEmpty() || diaChi.isEmpty()) {
-		             JOptionPane.showMessageDialog(addNCCDialog, "Vui lòng nhập đầy đủ thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-		             return;
-		            }
-				if (isDuplicateNCC(maNCC)) {
-					 JOptionPane.showMessageDialog(addNCCDialog, "Mã nhà cung cấp đã tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-					 return;
-				}
-				
-				listNCC.add(new NCC(maNCC,tenNCC,sdt,diaChi));
-				
-				
-				ListNCC();
-				
-				addNCCDialog.dispose();
-			
-			
-		});
-    	addNCCDialog.getContentPane().add(MainPanel);
-    	addNCCDialog.setVisible(true);
-	}
+		if (regex(maNCC,tenNCC,sdt,diaChi)) {
+			 return;
+		 }
+		
+		if (nccBUS.isDuplicateNCC(maNCC)) {
+			 JOptionPane.showMessageDialog(null, "Mã nhà cung cấp đã tồn tại !", "Lỗi", JOptionPane.ERROR_MESSAGE);
+			 return;
+		}
+		
+		if (nccBUS.isDuplicateSDT(sdt)) {
+			 JOptionPane.showMessageDialog(null, "Số điện thoại đã tồn tại !", "Lỗi", JOptionPane.ERROR_MESSAGE);
+			 return;
+		}
+		
+		nccBUS.addNCC(maNCC, tenNCC, sdt, diaChi);
+		//update table
+		model.addRow(new Object[] { maNCC, tenNCC, sdt, diaChi });
+		
+		JOptionPane.showMessageDialog(null, "Thêm nhà cung cấp thành công !", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+		clearFields();
+		toggleEditInTheEnd();
 
-	
-	public boolean isDuplicateNCC(String maNCC) {
-		for(NCC ncc : listNCC) 
-			if(ncc.getMaNCC().equals(maNCC))
-				return true;
-		return false;
 	}
 	
 	
-	
-	public void openEditNCCGUI() {
+	public void clearFields() {
+		txtMaNCC.setText("");
+    	txtTenNCC.setText("");
+    	txtSDT.setText("");
+    	txtDiaChi.setText("");
+	}
+		
+	public void editNCC() {
+		
+		if(!isEditMode) {
+			JOptionPane.showMessageDialog(this, "Vui lòng bật chế độ chỉnh sửa trước !", "Lỗi", JOptionPane.WARNING_MESSAGE);
+            return;
+		}
+		
 		//lay dong dc selected
 		int selectedRow = table.getSelectedRow();
-		if(selectedRow == -1)
+		if(selectedRow < 0)
 		{
-			JOptionPane.showMessageDialog(null,"Vui lòng chọn một nhà cung cấp để sửa!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null,"Vui lòng chọn một nhà cung cấp để sửa !", "Lỗi", JOptionPane.ERROR_MESSAGE);
 			return;
 		}			
-		
-		String maNCC =table.getValueAt(selectedRow, 0).toString();
-		String tenNCC =table.getValueAt(selectedRow, 1).toString();
-		String sdt =table.getValueAt(selectedRow, 2).toString();
-		String diaChi =table.getValueAt(selectedRow, 3).toString();
-		
-		//////
-	    JDialog editNCCDialog = new JDialog(this, "Sửa Thông Tin Nhà Cung Cấp", true); 
-	    editNCCDialog.setBounds(100, 100, 550, 372);
-	    editNCCDialog.setLocationRelativeTo(this);
-	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-	    editNCCDialog.setSize(366,427);
-	    editNCCDialog.setLocationRelativeTo(this);
-    	
-    	JPanel MainPanel = new JPanel();
-    	MainPanel.setBounds(10, 11, 597, 454);
-    	getContentPane().add(MainPanel);
-    	MainPanel.setLayout(null);
-    	
-    	JPanel TitlePanel = new JPanel();
-    	TitlePanel.setBounds(0, 0, 350, 51);
-    	TitlePanel.setBackground(Color.decode(color));
-    	MainPanel.add(TitlePanel);
-    	TitlePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 15));
-    	
-    	JLabel lbAdd = new JLabel("SỬA THÔNG TIN\r\n");
-    	lbAdd.setForeground(Color.WHITE);
-    	lbAdd.setFont(new Font("Verdana", Font.BOLD, 14));
-    	TitlePanel.add(lbAdd);
-    	
-    	JLabel lbMaNCC = new JLabel("Mã Nhà Cung Cấp");
-    	lbMaNCC.setFont(new Font("Verdana", Font.BOLD, 12));
-    	lbMaNCC.setBounds(30, 62, 132, 23);
-    	MainPanel.add(lbMaNCC);
-    	
-    	JTextField txtMaNCC = new JTextField(maNCC);
-    	txtMaNCC.setBounds(30, 87, 290, 33);
-    	MainPanel.add(txtMaNCC);
-    	txtMaNCC.setColumns(10);
-    	
-    	JLabel lbTenNCC = new JLabel("Tên Nhà Cung Cấp");
-    	lbTenNCC.setFont(new Font("Verdana", Font.BOLD, 12));
-    	lbTenNCC.setBounds(30, 131, 132, 14);
-    	MainPanel.add(lbTenNCC);
-    	
-    	JTextField txtTen = new JTextField(tenNCC);
-    	txtTen.setColumns(10);
-    	txtTen.setBounds(30, 156, 290, 33);
-    	MainPanel.add(txtTen);
-    	
-    	JLabel lbSDT = new JLabel("Số Điện Thoại");
-    	lbSDT.setFont(new Font("Verdana", Font.BOLD, 12));
-    	lbSDT.setBounds(30, 200, 132, 14);
-    	MainPanel.add(lbSDT);
-    	
-    	JTextField txtSDT = new JTextField(sdt);
-    	txtSDT.setColumns(10);
-    	txtSDT.setBounds(30, 225, 290, 33);	
-    	MainPanel.add(txtSDT);
-    	
-    	JLabel lbDiaChi = new JLabel("Địa Chỉ");
-    	lbDiaChi.setFont(new Font("Verdana", Font.BOLD, 12));
-    	lbDiaChi.setBounds(30, 269, 132, 14);
-    	MainPanel.add(lbDiaChi);
-    	
-    	JTextField txtDiaChi = new JTextField(diaChi);
-    	txtDiaChi.setColumns(10);
-    	txtDiaChi.setBounds(30, 294, 290, 33);
-    	MainPanel.add(txtDiaChi);
-    	
-    	JButton btnEdit = new JButton("Sửa");
-    	btnEdit.setFont(new Font("Verdana", Font.BOLD, 12));
-    	btnEdit.setBounds(30, 338, 138, 33);
-    	btnEdit.setBackground(new Color(51, 204, 102));
-    	btnEdit.setOpaque(true);
-    	btnEdit.setBorderPainted(false);
-    	btnEdit.setForeground(Color.WHITE);
-    	MainPanel.add(btnEdit);
-    	
-    	JButton btnCancel = new JButton("Hủy");
-    	btnCancel.setFont(new Font("Verdana", Font.BOLD, 12));
-    	btnCancel.setBounds(175, 338, 145, 33);
-    	btnCancel.setOpaque(true);
-    	btnCancel.setBorderPainted(false);
-    	btnCancel.setBackground(new Color(225,20,60));
-    	btnCancel.setForeground(Color.WHITE);
-    	MainPanel.add(btnCancel);
-    	
-    	 // Sự kiện nút Hủy
-        btnCancel.addActionListener(e -> editNCCDialog.dispose());
-    	
-   
-    	//su kiem sua
-    	btnEdit.addActionListener(e -> {
-    		String newMaNCC = txtMaNCC.getText().trim();
-			String newTenNCC = txtTen.getText().trim();
+			
+		String maNCC = model.getValueAt(selectedRow, 0).toString();
+//		String tenNCC =model.getValueAt(selectedRow, 1).toString();
+		String sdt =model.getValueAt(selectedRow, 2).toString();
+//		String diaChi =model.getValueAt(selectedRow, 3).toString();
+				
+        //event 
+//		for (ActionListener listener : btnEdit.getActionListeners()) {
+//		        btnEdit.removeActionListener(listener);
+//		}
+        	String newMaNCC = txtMaNCC.getText().trim();
+			String newTenNCC = txtTenNCC.getText().trim();
 			String newSDT = txtSDT.getText().trim();
 			String newDiaChi = txtDiaChi.getText().trim();
 			
 			 if (newMaNCC.isEmpty() || newTenNCC.isEmpty() || newSDT.isEmpty() || newDiaChi.isEmpty()) {
-		            JOptionPane.showMessageDialog(editNCCDialog, "Vui lòng nhập đầy đủ thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+		            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin !", "Lỗi", JOptionPane.ERROR_MESSAGE);
 		            return;
 		        }
+			 
+			 if (regex(newMaNCC,newTenNCC,newSDT,newDiaChi)) {
+				 return;
+			 }
+			 
+			if(nccBUS.checkEdit(newMaNCC, maNCC)){
+				JOptionPane.showMessageDialog(null,"Đã tồn tại mã nhà cung cấp này trong danh sách!" ,  "Lỗi", JOptionPane.ERROR_MESSAGE);
+	            return;
+	        }
 			
+			if(nccBUS.checkSDT(newSDT, sdt)){
+				JOptionPane.showMessageDialog(null,"Đã tồn tại số điện thoại này trong danh sách!" ,  "Lỗi", JOptionPane.ERROR_MESSAGE);
+	            return;
+	        }
 			
-			//luu thay doi
-			for(NCC ncc : listNCC)
-			{
-				if(ncc.getMaNCC().equals(newMaNCC)&&!ncc.getMaNCC().equals(maNCC))
-				{		
-					JOptionPane.showMessageDialog(editNCCDialog,"Đã tồn tại mã nhà cung cấp này trong danh sách!" ,  "Lỗi", JOptionPane.ERROR_MESSAGE);
-					return;
-				}	
-			}
-			
-			for(NCC ncc : listNCC) {
-				if(ncc.getMaNCC().equals(maNCC)) {
-					ncc.setMaNCC(newMaNCC);
-					ncc.setTenNCC(newTenNCC);
-					ncc.setSDT(newSDT);
-					ncc.setDiaChi(newDiaChi);
-					break;
-				}
-			}	
-			
-			ListNCC();
-			
-			editNCCDialog.dispose();
-		});
-    	
-    	
-    	
-    	editNCCDialog.getContentPane().add(MainPanel);
-    	editNCCDialog.setVisible(true);
+        	nccBUS.editNCC(newMaNCC, newTenNCC, newSDT, newDiaChi, maNCC);
+        	
+        	//update table
+        	
+        	model.setValueAt(newMaNCC, selectedRow, 0);        	
+        	model.setValueAt(newTenNCC, selectedRow, 1);  
+        	model.setValueAt(newSDT, selectedRow, 2);  
+        	model.setValueAt(newDiaChi, selectedRow, 3);  
+        	    	
+        	//reset text fields
+        	clearFields();
+        	toggleEditInTheEnd();
+        	JOptionPane.showMessageDialog(null, "Sửa thông tin thành công !", "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
+	}		
+	
+	//check regex
+	public boolean regex(String maNCC,String tenNCC,String sdt,String diaChi) {
+		if(!maNCC.matches("^[a-zA-Z0-9]+$")) {
+			JOptionPane.showMessageDialog(null, "Mã nhà cung cấp chỉ được chứa chữ và số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+			return true;
+		}
+		if(!sdt.matches("^\\d{10}$")) {
+			JOptionPane.showMessageDialog(null, "Số điện thoại phải gồm đúng 10 chữ số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+			return true;
+		}
+		
+		return false;
 	}
+
 }
