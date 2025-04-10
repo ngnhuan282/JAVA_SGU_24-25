@@ -170,17 +170,17 @@ public class MainGUI extends JFrame implements ActionListener {
         btnHoaDon.addActionListener(this);
         pNavItem.add(btnHoaDon);
 
-        JButton btnPhieuXuat = new JButton("PHIẾU XUẤT");
-        btnPhieuXuat.setIcon(new ImageIcon(MainGUI.class.getResource("/image/phieuXuat.png")));
-        btnPhieuXuat.setOpaque(true);
-        btnPhieuXuat.setHorizontalAlignment(SwingConstants.LEFT);
-        btnPhieuXuat.setForeground(Color.WHITE);
-        btnPhieuXuat.setFont(new Font("Verdana", Font.BOLD, 14));
-        btnPhieuXuat.setBorderPainted(false);
-        btnPhieuXuat.setBackground(Color.decode(color));
-        btnPhieuXuat.setBounds(20, 229, 200, 35);
-        btnPhieuXuat.addActionListener(this);
-        pNavItem.add(btnPhieuXuat);
+        JButton btnPhieuNhap = new JButton("PHIẾU NHẬP");
+        btnPhieuNhap.setIcon(new ImageIcon(MainGUI.class.getResource("/image/phieuXuat.png")));
+        btnPhieuNhap.setOpaque(true);
+        btnPhieuNhap.setHorizontalAlignment(SwingConstants.LEFT);
+        btnPhieuNhap.setForeground(Color.WHITE);
+        btnPhieuNhap.setFont(new Font("Verdana", Font.BOLD, 14));
+        btnPhieuNhap.setBorderPainted(false);
+        btnPhieuNhap.setBackground(Color.decode(color));
+        btnPhieuNhap.setBounds(20, 229, 200, 35);
+        btnPhieuNhap.addActionListener(this);
+        pNavItem.add(btnPhieuNhap);
 
         JButton btnKhuyenMaiGUI = new JButton("KHUYẾN MÃI");
         btnKhuyenMaiGUI.setIcon(new ImageIcon(MainGUI.class.getResource("/image/saleIcon.png")));
@@ -203,6 +203,7 @@ public class MainGUI extends JFrame implements ActionListener {
         btnThongKe.setBorderPainted(false);
         btnThongKe.setBackground(new Color(255, 82, 82));
         btnThongKe.setBounds(20, 301, 200, 35);
+        btnThongKe.addActionListener(this);
         pNavItem.add(btnThongKe);
 
         // Main content area
@@ -228,7 +229,7 @@ public class MainGUI extends JFrame implements ActionListener {
         pContent.add(new PhieuNhapGUI(), "PhieuNhap");
         pContent.add(new PhieuXuatGUI(), "PhieuXuat");
         pContent.add(new KhuyenMaiGUI(), "KhuyenMai");
-
+        pContent.add(new ThongKeGUI(), "ThongKe");
         // Default panel
         cardLayout.show(pContent, "TrangChu");
     }
@@ -260,6 +261,9 @@ public class MainGUI extends JFrame implements ActionListener {
                 break;
             case "KHUYẾN MÃI":
                 cardLayout.show(pContent, "KhuyenMai");
+                break;
+            case "THỐNG KÊ":
+                cardLayout.show(pContent, "ThongKe");
                 break;
             case "ĐĂNG XUẤT":
                 System.exit(0);
