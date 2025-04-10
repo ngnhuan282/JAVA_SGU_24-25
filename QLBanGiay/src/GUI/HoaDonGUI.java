@@ -44,12 +44,13 @@ import DTO.NhanVienDTO;
 import DTO.SanPhamDTO;
 
 import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.plaf.metal.MetalScrollBarUI;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.JTextField;
 
-public class HoaDonGUI extends JFrame implements ActionListener{
+public class HoaDonGUI extends JPanel implements ActionListener{
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -85,18 +86,15 @@ public class HoaDonGUI extends JFrame implements ActionListener{
 
 	/**
 	 * Launch the application.
+	 * @throws SQLException 
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					HoaDonGUI frame = new HoaDonGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+	public static void main(String[] args) throws SQLException {
+		JFrame frame = new JFrame("Hóa đơn");
+		frame.setTitle("Hệ thống quản lý bán giày");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(1248, 757);
+		frame.getContentPane().add(new HoaDonGUI());
+		frame.setVisible(true);
 	}
 
 	/**
@@ -114,178 +112,178 @@ public class HoaDonGUI extends JFrame implements ActionListener{
 	}
 	
 	public void initComponents() {
-		setTitle("Hệ thống quản lý bán giày");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-		setLocationRelativeTo(null);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+//		setPreferredSize(new Dimension(1248, 757));
+//		setLayout(null);
+//		setBackground(Color.white);
+//		setTitle("Hệ thống quản lý bán giày");
+//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+//		setLocationRelativeTo(null);
+//		contentPane = new JPanel();
+//		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		
-		JPanel pHeader = new JPanel();
-		pHeader.setBounds(5, 5, 1500, 1);
-		contentPane.add(pHeader);
-		pHeader.setLayout(null);
-		
-		JPanel pMain = new JPanel();
-		pMain.setBounds(205, 6, 1300, 800);
-		contentPane.add(pMain);
-		pMain.setLayout(new BoxLayout(pMain, BoxLayout.X_AXIS));
+//		setContentPane(contentPane);
+//		contentPane.setLayout(null);
+//		
+//		JPanel pMain = new JPanel();
+//		pMain.setBounds(205, 6, 1300, 800);
+//		contentPane.add(pMain);
+//		pMain.setLayout(new BoxLayout(pMain, BoxLayout.X_AXIS));
 		
 		JPanel pHeaderMain = new JPanel();
+		pHeaderMain.setBounds(0, 0, 1206, 100);
 		pHeaderMain.setBackground(Color.WHITE);
-		pMain.add(pHeaderMain);
+		add(pHeaderMain);
 		
-		JPanel pNavbar = new JPanel();
-		pNavbar.setBounds(5, 6, 200, 800);
-		contentPane.add(pNavbar);
-		pNavbar.setLayout(null);
-		pNavbar.setPreferredSize(new Dimension(200, 800));
-		pNavbar.setBackground(Color.decode(color));
+//		JPanel pNavbar = new JPanel();
+//		pNavbar.setBounds(5, 6, 200, 800);
+//		contentPane.add(pNavbar);
+//		pNavbar.setLayout(null);
+//		pNavbar.setPreferredSize(new Dimension(200, 800));
+//		pNavbar.setBackground(Color.decode(color));
 		
-		JPanel pAccount = new JPanel();
-		pAccount.setBounds(0, 0, 200, 88);
-		pNavbar.add(pAccount);
-		pAccount.setBackground(Color.decode(color));
-		pAccount.setLayout(null);
+//		JPanel pAccount = new JPanel();
+//		pAccount.setBounds(0, 0, 200, 88);
+////		pNavbar.add(pAccount);
+//		pAccount.setBackground(Color.decode(color));
+//		pAccount.setLayout(null);
 		
         /************* PHẦN HIỂN THỊ THÔNG TIN TÀI KHOẢN ************/
-		JLabel lbInfo1 = new JLabel("Xin chào");
-		lbInfo1.setIcon(new ImageIcon(KhachHangGUI.class.getResource("/image/userIcon.png")));
-		lbInfo1.setVerticalTextPosition(SwingConstants.BOTTOM);
-		lbInfo1.setHorizontalTextPosition(SwingConstants.CENTER);
-		lbInfo1.setForeground(Color.WHITE);
-		lbInfo1.setBounds(0, 0, 200, 54);
-		lbInfo1.setFont(new Font("Verdana", Font.BOLD, 14));
-		lbInfo1.setHorizontalAlignment(SwingConstants.CENTER);
-		pAccount.add(lbInfo1);
-		
-		JLabel lbInfo2 = new JLabel("Admin !");
-		lbInfo2.setBounds(0, 55, 200, 33);
-		pAccount.add(lbInfo2);
-		lbInfo2.setForeground(Color.WHITE);
-		lbInfo2.setFont(new Font("Verdana", Font.BOLD, 14));
-		lbInfo2.setHorizontalAlignment(SwingConstants.CENTER);
-		
-		JPanel pNavItem = new JPanel();
-		pNavItem.setBounds(0, 87, 200, 713);
-		pNavItem.setBackground(Color.decode(color));
-		pNavbar.add(pNavItem);
-		pNavItem.setLayout(null);
-		
-		/************* NAVBAR ************/
-		JButton btnDangXuat = new JButton("ĐĂNG XUẤT");
-		btnDangXuat.setIcon(new ImageIcon(KhachHangGUI.class.getResource("/image/logoutIcon.png")));
-		btnDangXuat.setOpaque(true);
-		btnDangXuat.setHorizontalAlignment(SwingConstants.LEFT);
-		btnDangXuat.setForeground(Color.WHITE);
-		btnDangXuat.setFont(new Font("Verdana", Font.BOLD, 14));
-		btnDangXuat.setBorderPainted(false);
-		btnDangXuat.setBackground(Color.decode(color));
-		btnDangXuat.setBounds(0, 587, 200, 35);
-		pNavItem.add(btnDangXuat);
-		
-		JPanel panel_2 = new JPanel();
-		panel_2.setBounds(0, 0, 10, 10);
-		pNavItem.add(panel_2);
-		
-		JButton btnTrangChuGUI = new JButton("TRANG CHỦ");
-		btnTrangChuGUI.setIcon(new ImageIcon(KhachHangGUI.class.getResource("/image/homeIcon.png")));
-		btnTrangChuGUI.setOpaque(true);
-		btnTrangChuGUI.setHorizontalAlignment(SwingConstants.LEFT);
-		btnTrangChuGUI.setForeground(Color.WHITE);
-		btnTrangChuGUI.setFont(new Font("Verdana", Font.BOLD, 14));
-		btnTrangChuGUI.setBorderPainted(false);
-		btnTrangChuGUI.setBackground(Color.decode(color));
-		btnTrangChuGUI.setBounds(0, 0, 200, 35);
-		pNavItem.add(btnTrangChuGUI);
-		
-		JButton btnSanPhamGUI = new JButton("SẢN PHẨM");
-		btnSanPhamGUI.addActionListener(this);
-		btnSanPhamGUI.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/productIcon.png")));
-		btnSanPhamGUI.setOpaque(true);
-		btnSanPhamGUI.setHorizontalAlignment(SwingConstants.LEFT);
-		btnSanPhamGUI.setForeground(Color.WHITE);
-		btnSanPhamGUI.setFont(new Font("Verdana", Font.BOLD, 14));
-		btnSanPhamGUI.setBorderPainted(false);
-		btnSanPhamGUI.setBackground(Color.decode(color));
-		btnSanPhamGUI.setBounds(0, 38, 200, 35);
-		pNavItem.add(btnSanPhamGUI);
-		
-		JButton btnNhaCungCapGUI = new JButton("NHÀ CUNG CẤP");
-		btnNhaCungCapGUI.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/providerIcon.png")));
-		btnNhaCungCapGUI.setOpaque(true);
-		btnNhaCungCapGUI.setHorizontalAlignment(SwingConstants.LEFT);
-		btnNhaCungCapGUI.setForeground(Color.WHITE);
-		btnNhaCungCapGUI.setFont(new Font("Verdana", Font.BOLD, 14));
-		btnNhaCungCapGUI.setBorderPainted(false);
-		btnNhaCungCapGUI.setBackground(Color.decode(color));
-		btnNhaCungCapGUI.setBounds(0, 72, 200, 35);
-		pNavItem.add(btnNhaCungCapGUI);
-		
-		JButton btnNhanVienGUI = new JButton("NHÂN VIÊN");
-		btnNhanVienGUI.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/employeeIcon.png")));
-		btnNhanVienGUI.setOpaque(true);
-		btnNhanVienGUI.setHorizontalAlignment(SwingConstants.LEFT);
-		btnNhanVienGUI.setForeground(Color.WHITE);
-		btnNhanVienGUI.setFont(new Font("Verdana", Font.BOLD, 14));
-		btnNhanVienGUI.setBorderPainted(false);
-		btnNhanVienGUI.setBackground(Color.decode(color));
-		btnNhanVienGUI.setBounds(0, 104, 200, 35);
-		pNavItem.add(btnNhanVienGUI);
-		
-		JButton btnKhachHangGUI = new JButton("KHÁCH HÀNG");
-		btnKhachHangGUI.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/clientIcon.png")));
-		btnKhachHangGUI.setOpaque(true);
-		btnKhachHangGUI.setHorizontalAlignment(SwingConstants.LEFT);
-		btnKhachHangGUI.setForeground(Color.WHITE);
-		btnKhachHangGUI.setFont(new Font("Verdana", Font.BOLD, 14));
-		btnKhachHangGUI.setBorderPainted(false);
-		btnKhachHangGUI.setBackground(Color.decode(color));
-		btnKhachHangGUI.setBounds(0, 141, 200, 35);
-		pNavItem.add(btnKhachHangGUI);
-		
-		JButton btnPhieuNhapGUI = new JButton("PHIẾU NHẬP");
-		btnPhieuNhapGUI.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/phieuNhap.png")));
-		btnPhieuNhapGUI.setOpaque(true);
-		btnPhieuNhapGUI.setHorizontalAlignment(SwingConstants.LEFT);
-		btnPhieuNhapGUI.setForeground(Color.WHITE);
-		btnPhieuNhapGUI.setFont(new Font("Verdana", Font.BOLD, 14));
-		btnPhieuNhapGUI.setBorderPainted(false);
-		btnPhieuNhapGUI.setBackground(Color.decode(color));
-		btnPhieuNhapGUI.setBounds(0, 173, 200, 35);
-		pNavItem.add(btnPhieuNhapGUI);
-		
-		JButton btnPhieuXuat = new JButton("PHIẾU XUẤT");
-		btnPhieuXuat.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/phieuXuat.png")));
-		btnPhieuXuat.setOpaque(true);
-		btnPhieuXuat.setHorizontalAlignment(SwingConstants.LEFT);
-		btnPhieuXuat.setForeground(Color.WHITE);
-		btnPhieuXuat.setFont(new Font("Verdana", Font.BOLD, 14));
-		btnPhieuXuat.setBorderPainted(false);
-		btnPhieuXuat.setBackground(Color.decode(color));
-		btnPhieuXuat.setBounds(0, 207, 200, 35);
-		pNavItem.add(btnPhieuXuat);
-		
-		JButton btnKhuyenMaiGUI = new JButton("KHUYẾN MÃI");
-		btnKhuyenMaiGUI.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/saleIcon.png")));
-		btnKhuyenMaiGUI.setOpaque(true);
-		btnKhuyenMaiGUI.setHorizontalAlignment(SwingConstants.LEFT);
-		btnKhuyenMaiGUI.setForeground(Color.WHITE);
-		btnKhuyenMaiGUI.setFont(new Font("Verdana", Font.BOLD, 14));
-		btnKhuyenMaiGUI.setBorderPainted(false);
-		btnKhuyenMaiGUI.setBackground(Color.decode(color));
-		btnKhuyenMaiGUI.setBounds(0, 242, 200, 35);
-		pNavItem.add(btnKhuyenMaiGUI);
+//		JLabel lbInfo1 = new JLabel("Xin chào");
+//		lbInfo1.setIcon(new ImageIcon(KhachHangGUI.class.getResource("/image/userIcon.png")));
+//		lbInfo1.setVerticalTextPosition(SwingConstants.BOTTOM);
+//		lbInfo1.setHorizontalTextPosition(SwingConstants.CENTER);
+//		lbInfo1.setForeground(Color.WHITE);
+//		lbInfo1.setBounds(0, 0, 200, 54);
+//		lbInfo1.setFont(new Font("Verdana", Font.BOLD, 14));
+//		lbInfo1.setHorizontalAlignment(SwingConstants.CENTER);
+//		pAccount.add(lbInfo1);
+//		
+//		JLabel lbInfo2 = new JLabel("Admin !");
+//		lbInfo2.setBounds(0, 55, 200, 33);
+//		pAccount.add(lbInfo2);
+//		lbInfo2.setForeground(Color.WHITE);
+//		lbInfo2.setFont(new Font("Verdana", Font.BOLD, 14));
+//		lbInfo2.setHorizontalAlignment(SwingConstants.CENTER);
+//		
+//		JPanel pNavItem = new JPanel();
+//		pNavItem.setBounds(0, 87, 200, 713);
+//		pNavItem.setBackground(Color.decode(color));
+//		pNavbar.add(pNavItem);
+//		pNavItem.setLayout(null);
+//		
+//		/************* NAVBAR ************/
+//		JButton btnDangXuat = new JButton("ĐĂNG XUẤT");
+//		btnDangXuat.setIcon(new ImageIcon(KhachHangGUI.class.getResource("/image/logoutIcon.png")));
+//		btnDangXuat.setOpaque(true);
+//		btnDangXuat.setHorizontalAlignment(SwingConstants.LEFT);
+//		btnDangXuat.setForeground(Color.WHITE);
+//		btnDangXuat.setFont(new Font("Verdana", Font.BOLD, 14));
+//		btnDangXuat.setBorderPainted(false);
+//		btnDangXuat.setBackground(Color.decode(color));
+//		btnDangXuat.setBounds(0, 587, 200, 35);
+//		pNavItem.add(btnDangXuat);
+//		
+//		JPanel panel_2 = new JPanel();
+//		panel_2.setBounds(0, 0, 10, 10);
+//		pNavItem.add(panel_2);
+//		
+//		JButton btnTrangChuGUI = new JButton("TRANG CHỦ");
+//		btnTrangChuGUI.setIcon(new ImageIcon(KhachHangGUI.class.getResource("/image/homeIcon.png")));
+//		btnTrangChuGUI.setOpaque(true);
+//		btnTrangChuGUI.setHorizontalAlignment(SwingConstants.LEFT);
+//		btnTrangChuGUI.setForeground(Color.WHITE);
+//		btnTrangChuGUI.setFont(new Font("Verdana", Font.BOLD, 14));
+//		btnTrangChuGUI.setBorderPainted(false);
+//		btnTrangChuGUI.setBackground(Color.decode(color));
+//		btnTrangChuGUI.setBounds(0, 0, 200, 35);
+//		pNavItem.add(btnTrangChuGUI);
+//		
+//		JButton btnSanPhamGUI = new JButton("SẢN PHẨM");
+//		btnSanPhamGUI.addActionListener(this);
+//		btnSanPhamGUI.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/productIcon.png")));
+//		btnSanPhamGUI.setOpaque(true);
+//		btnSanPhamGUI.setHorizontalAlignment(SwingConstants.LEFT);
+//		btnSanPhamGUI.setForeground(Color.WHITE);
+//		btnSanPhamGUI.setFont(new Font("Verdana", Font.BOLD, 14));
+//		btnSanPhamGUI.setBorderPainted(false);
+//		btnSanPhamGUI.setBackground(Color.decode(color));
+//		btnSanPhamGUI.setBounds(0, 38, 200, 35);
+//		pNavItem.add(btnSanPhamGUI);
+//		
+//		JButton btnNhaCungCapGUI = new JButton("NHÀ CUNG CẤP");
+//		btnNhaCungCapGUI.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/providerIcon.png")));
+//		btnNhaCungCapGUI.setOpaque(true);
+//		btnNhaCungCapGUI.setHorizontalAlignment(SwingConstants.LEFT);
+//		btnNhaCungCapGUI.setForeground(Color.WHITE);
+//		btnNhaCungCapGUI.setFont(new Font("Verdana", Font.BOLD, 14));
+//		btnNhaCungCapGUI.setBorderPainted(false);
+//		btnNhaCungCapGUI.setBackground(Color.decode(color));
+//		btnNhaCungCapGUI.setBounds(0, 72, 200, 35);
+//		pNavItem.add(btnNhaCungCapGUI);
+//		
+//		JButton btnNhanVienGUI = new JButton("NHÂN VIÊN");
+//		btnNhanVienGUI.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/employeeIcon.png")));
+//		btnNhanVienGUI.setOpaque(true);
+//		btnNhanVienGUI.setHorizontalAlignment(SwingConstants.LEFT);
+//		btnNhanVienGUI.setForeground(Color.WHITE);
+//		btnNhanVienGUI.setFont(new Font("Verdana", Font.BOLD, 14));
+//		btnNhanVienGUI.setBorderPainted(false);
+//		btnNhanVienGUI.setBackground(Color.decode(color));
+//		btnNhanVienGUI.setBounds(0, 104, 200, 35);
+//		pNavItem.add(btnNhanVienGUI);
+//		
+//		JButton btnKhachHangGUI = new JButton("KHÁCH HÀNG");
+//		btnKhachHangGUI.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/clientIcon.png")));
+//		btnKhachHangGUI.setOpaque(true);
+//		btnKhachHangGUI.setHorizontalAlignment(SwingConstants.LEFT);
+//		btnKhachHangGUI.setForeground(Color.WHITE);
+//		btnKhachHangGUI.setFont(new Font("Verdana", Font.BOLD, 14));
+//		btnKhachHangGUI.setBorderPainted(false);
+//		btnKhachHangGUI.setBackground(Color.decode(color));
+//		btnKhachHangGUI.setBounds(0, 141, 200, 35);
+//		pNavItem.add(btnKhachHangGUI);
+//		
+//		JButton btnPhieuNhapGUI = new JButton("PHIẾU NHẬP");
+//		btnPhieuNhapGUI.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/phieuNhap.png")));
+//		btnPhieuNhapGUI.setOpaque(true);
+//		btnPhieuNhapGUI.setHorizontalAlignment(SwingConstants.LEFT);
+//		btnPhieuNhapGUI.setForeground(Color.WHITE);
+//		btnPhieuNhapGUI.setFont(new Font("Verdana", Font.BOLD, 14));
+//		btnPhieuNhapGUI.setBorderPainted(false);
+//		btnPhieuNhapGUI.setBackground(Color.decode(color));
+//		btnPhieuNhapGUI.setBounds(0, 173, 200, 35);
+//		pNavItem.add(btnPhieuNhapGUI);
+//		
+//		JButton btnPhieuXuat = new JButton("PHIẾU XUẤT");
+//		btnPhieuXuat.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/phieuXuat.png")));
+//		btnPhieuXuat.setOpaque(true);
+//		btnPhieuXuat.setHorizontalAlignment(SwingConstants.LEFT);
+//		btnPhieuXuat.setForeground(Color.WHITE);
+//		btnPhieuXuat.setFont(new Font("Verdana", Font.BOLD, 14));
+//		btnPhieuXuat.setBorderPainted(false);
+//		btnPhieuXuat.setBackground(Color.decode(color));
+//		btnPhieuXuat.setBounds(0, 207, 200, 35);
+//		pNavItem.add(btnPhieuXuat);
+//		
+//		JButton btnKhuyenMaiGUI = new JButton("KHUYẾN MÃI");
+//		btnKhuyenMaiGUI.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/saleIcon.png")));
+//		btnKhuyenMaiGUI.setOpaque(true);
+//		btnKhuyenMaiGUI.setHorizontalAlignment(SwingConstants.LEFT);
+//		btnKhuyenMaiGUI.setForeground(Color.WHITE);
+//		btnKhuyenMaiGUI.setFont(new Font("Verdana", Font.BOLD, 14));
+//		btnKhuyenMaiGUI.setBorderPainted(false);
+//		btnKhuyenMaiGUI.setBackground(Color.decode(color));
+//		btnKhuyenMaiGUI.setBounds(0, 242, 200, 35);
+//		pNavItem.add(btnKhuyenMaiGUI);
 		
 		
 		/************* PHẦN HEADER ************/
-		pHeaderMain.setPreferredSize(new Dimension(DEFAULT_WIDTH, 100));
+		pHeaderMain.setPreferredSize(new Dimension(1245, 815));
 		pHeaderMain.setLayout(null);
 		
 		JPanel pLeftHeader = new JPanel();
+		 pLeftHeader.setBorder(new TitledBorder(null, "Chức năng", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		pLeftHeader.setBackground(Color.WHITE);
 		pLeftHeader.setBounds(0, 0, 542, 90);
 		pHeaderMain.add(pLeftHeader);
@@ -374,21 +372,21 @@ public class HoaDonGUI extends JFrame implements ActionListener{
                                         pHeaderMain.add(btnSearch);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(0, 91, 539, 374);
+		panel.setBounds(0, 91, 732, 374);
 		pHeaderMain.add(panel);
 		panel.setLayout(null);
 		
 //        scrollPane.getVerticalScrollBar().setUI(new MetalScrollBarUI());
 //        scrollPane.getHorizontalScrollBar().setUI(new MetalScrollBarUI());
 		
-		table = new JTable();
+		table =  new JTable();
 		table.setFillsViewportHeight(true);
 		table.setBackground(Color.WHITE);
 		table.setBorder(UIManager.getBorder("Table.scrollPaneBorder"));
 		table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 13));
 		table.setFont(new Font("Arial", Font.PLAIN, 13));
 		JScrollPane jScrollPane = new JScrollPane(table);
-		jScrollPane.setBounds(0, 0, 539, 375);
+		jScrollPane.setBounds(0, 0, 732, 375);
 		panel.add(jScrollPane);
 		table.setBounds(0, 91, 539, 312);
 		jScrollPane.setViewportView(table);
@@ -396,12 +394,12 @@ public class HoaDonGUI extends JFrame implements ActionListener{
 		jScrollPane.getVerticalScrollBar().setUI(new ModernScrollBarUI());
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(0, 464, 983, 286);
+		panel_1.setBounds(0, 464, 1177, 286);
 		pHeaderMain.add(panel_1);
 		panel_1.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(0, 0, 997, 286);
+		scrollPane.setBounds(0, 0, 1177, 286);
 		panel_1.add(scrollPane);
 		
 		table_1 = new JTable();
@@ -417,7 +415,7 @@ public class HoaDonGUI extends JFrame implements ActionListener{
 		JPanel panel_3 = new JPanel();
 		panel_3.setBorder(new LineBorder(Color.LIGHT_GRAY, 2, true));
 		panel_3.setBackground(Color.WHITE);
-		panel_3.setBounds(538, 91, 445, 374);
+		panel_3.setBounds(732, 91, 445, 374);
 		pHeaderMain.add(panel_3);
 		panel_3.setLayout(null);
 		
@@ -809,7 +807,6 @@ public class HoaDonGUI extends JFrame implements ActionListener{
 					 chiTietHDDTO = new ChiTietHDDTO(txtMaHD.getText(), txtMaSP.getText(), Integer.valueOf(txtSoLuong.getText()), Double.valueOf(table_1.getValueAt(selectedRowCTHD, 3).toString()), Double.valueOf(table_1.getValueAt(selectedRowCTHD, 4).toString()));
 					 for(ChiTietHDDTO x : listTemp) {
 						 if(x.equals(chiTietHDDTO)) {
-							 System.out.println("cc");
 							 break;
 						 }
 						 h++;

@@ -8,6 +8,7 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -36,11 +37,11 @@ public class MainGUI extends JFrame implements ActionListener {
         });
     }
 
-    public MainGUI() {
+    public MainGUI() throws SQLException {
         initComponents();
     }
 
-    private void initComponents() {
+    private void initComponents() throws SQLException {
         setTitle("Hệ thống quản lý bán giày");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -227,7 +228,7 @@ public class MainGUI extends JFrame implements ActionListener {
         pContent.add(new NhanVienGUI(), "NhanVien");
         pContent.add(new KhachHangGUI(), "KhachHang");
         pContent.add(new PhieuNhapGUI(), "PhieuNhap");
-        pContent.add(new PhieuXuatGUI(), "PhieuXuat");
+        pContent.add(new HoaDonGUI(), "PhieuXuat");
         pContent.add(new KhuyenMaiGUI(), "KhuyenMai");
         pContent.add(new ThongKeGUI(), "ThongKe");
         // Default panel
