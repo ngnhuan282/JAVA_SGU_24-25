@@ -34,7 +34,7 @@ public class KhachHangBUS {
 	}
 	
 	public boolean checkRegexId(String maKh) {
-		String regex = "KH\\d{3,6}$";
+		String regex = "KH\\d{2,6}$";
 		if(maKh.matches(regex))
 			return true;
 		return false;
@@ -49,7 +49,7 @@ public class KhachHangBUS {
 	}
 	
 	public boolean checkRegexHo(String ho) {
-		String regex = "^[^\\d]*$";
+		String regex = "^[A-ZÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ][a-zàáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]*(?: [A-ZÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ][a-zàáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]*)*$";
 		if(ho.matches(regex)) {
 			return true;
 		}
@@ -57,11 +57,29 @@ public class KhachHangBUS {
 	}
 	
 	public boolean checkRegexTen(String ten) {
-		String regex = "^[^\\d]*$";
+		String regex = "^[A-ZÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ][a-zàáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]*(?: [A-ZÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ][a-zàáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]*)*$";
 		if(ten.matches(regex)) {
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean checkDulicatePhone(String sdt) {
+		for(KhachHangDTO x : listKhachHang) {
+			if(x.getSdt().equals(sdt))
+				return true;
+		}
+		return false;
+	}
+	
+	public String getMaKH() {
+		int size = listKhachHang.size() + 1;
+		String maKH = "KH0" + size;
+		while(checkCustomerExist(maKH)) {
+			size++;
+			maKH = "KH0" + size;
+		}
+		return maKH;
 	}
 	
 	public void addCustomer(String maKh, String ho, String ten, String diaChi, String sdt) {

@@ -384,6 +384,15 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 		table.setBackground(Color.WHITE);
 		table.setBorder(UIManager.getBorder("Table.scrollPaneBorder"));
 		table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 13));
+		
+		table.setFont(new Font("Verdana", Font.PLAIN, 12));
+  		table.setGridColor(new Color(200, 200, 200));
+  		table.getTableHeader().setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
+  		
+  		table.setRowHeight(23);
+  		table.getTableHeader().setPreferredSize(new Dimension(0, 23));
+  		table.getTableHeader().setFont(new Font("Verdana", Font.BOLD, 12));	
+		
 		table.setFont(new Font("Arial", Font.PLAIN, 13));
 		JScrollPane jScrollPane = new JScrollPane(table);
 		jScrollPane.setBounds(0, 0, 732, 375);
@@ -408,6 +417,14 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 		table_1.getTableHeader().setFont(new Font("Arial", Font.BOLD, 13));
 		table_1.setFillsViewportHeight(true);
 		table_1.setFont(new Font("Arial", Font.PLAIN, 13));
+		
+		table_1.setFont(new Font("Verdana", Font.PLAIN, 12));
+		table_1.setGridColor(new Color(200, 200, 200));
+		table_1.getTableHeader().setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
+  		
+		table_1.setRowHeight(23);
+		table_1.getTableHeader().setPreferredSize(new Dimension(0, 23));
+		table_1.getTableHeader().setFont(new Font("Verdana", Font.BOLD, 12));	
 		scrollPane.setViewportView(table_1);
 		scrollPane.getHorizontalScrollBar().setUI(new ModernScrollBarUI());
 		scrollPane.getVerticalScrollBar().setUI(new ModernScrollBarUI());
@@ -426,30 +443,30 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 		panel_3.add(lblNewLabel);
 		
 		txtMaHD = new JTextField();
-		txtMaHD.setBounds(137, 61, 148, 31);
+		txtMaHD.setBounds(148, 61, 148, 31);
 		panel_3.add(txtMaHD);
 		txtMaHD.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("Mã hóa đơn");
 		lblNewLabel_1.setLabelFor(txtMaHD);
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblNewLabel_1.setBounds(20, 60, 67, 31);
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblNewLabel_1.setBounds(20, 60, 83, 31);
 		panel_3.add(lblNewLabel_1);
 		
 		JLabel lbMaKH = new JLabel("Mã khách hàng");
-		lbMaKH.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lbMaKH.setBounds(20, 142, 93, 31);
+		lbMaKH.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lbMaKH.setBounds(20, 142, 103, 31);
 		panel_3.add(lbMaKH);
 		
 		txtMaKH = new JTextField();
 		lbMaKH.setLabelFor(txtMaKH);
 		txtMaKH.setColumns(10);
-		txtMaKH.setBounds(137, 143, 148, 31);
+		txtMaKH.setBounds(148, 143, 148, 31);
 		panel_3.add(txtMaKH);
 		
 		JButton btnOpenMaKHList = new JButton("...");
 		
-		btnOpenMaKHList.setBounds(295, 148, 21, 21);
+		btnOpenMaKHList.setBounds(308, 148, 21, 21);
 		panel_3.add(btnOpenMaKHList);
 		btnOpenMaKHList.addActionListener(e -> {
 			JDialog dialog = new JDialog();
@@ -487,18 +504,18 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 		});
 		
 		JLabel lblMaNV = new JLabel("Mã nhân viên");
-		lblMaNV.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblMaNV.setBounds(20, 101, 83, 31);
+		lblMaNV.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblMaNV.setBounds(20, 101, 93, 31);
 		panel_3.add(lblMaNV);
 		
 		txtMaNV = new JTextField();
 		lblMaNV.setLabelFor(txtMaNV);
 		txtMaNV.setColumns(10);
-		txtMaNV.setBounds(137, 102, 148, 31);
+		txtMaNV.setBounds(148, 102, 148, 31);
 		panel_3.add(txtMaNV);
 		
 		JButton btnOpenMaNVList = new JButton("...");
-		btnOpenMaNVList.setBounds(295, 107, 21, 21);
+		btnOpenMaNVList.setBounds(308, 107, 21, 21);
 		panel_3.add(btnOpenMaNVList);
 		btnOpenMaNVList.addActionListener(e -> {
 			JDialog dialog = new JDialog();
@@ -537,14 +554,14 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 
 		
 		JLabel lblMSnPhm = new JLabel("Mã sản phẩm");
-		lblMSnPhm.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblMSnPhm.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblMSnPhm.setBounds(20, 183, 93, 31);
 		panel_3.add(lblMSnPhm);
 		
 		txtMaSP = new JTextField();
 		lblMSnPhm.setLabelFor(txtMaSP);
 		txtMaSP.setColumns(10);
-		txtMaSP.setBounds(137, 184, 148, 31);
+		txtMaSP.setBounds(148, 184, 148, 31);
 		panel_3.add(txtMaSP);
 		
 		JButton btnOpenMaSPList = new JButton("...");
@@ -583,18 +600,18 @@ public class HoaDonGUI extends JPanel implements ActionListener{
             	 }
              });
 		});
-		btnOpenMaSPList.setBounds(295, 194, 21, 21);
+		btnOpenMaSPList.setBounds(308, 189, 21, 21);
 		panel_3.add(btnOpenMaSPList);
 		
 		JLabel lblSoLuong = new JLabel("Số lượng");
-		lblSoLuong.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblSoLuong.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblSoLuong.setBounds(20, 224, 93, 31);
 		panel_3.add(lblSoLuong);
 		
 		txtSoLuong = new JTextField();
 		lblSoLuong.setLabelFor(txtSoLuong);
 		txtSoLuong.setColumns(10);
-		txtSoLuong.setBounds(137, 225, 148, 31);
+		txtSoLuong.setBounds(148, 225, 148, 31);
 		panel_3.add(txtSoLuong);
 		
 		btnComplete = new JButton("Hoàn tất hóa đơn");

@@ -228,7 +228,7 @@ public class MainGUI extends JFrame implements ActionListener {
         pContent.add(new NhanVienGUI(), "NhanVien");
         pContent.add(new KhachHangGUI(), "KhachHang");
         pContent.add(new PhieuNhapGUI(), "PhieuNhap");
-        pContent.add(new HoaDonGUI(), "PhieuXuat");
+        pContent.add(new HoaDonGUI(), "HoaDon");
         pContent.add(new KhuyenMaiGUI(), "KhuyenMai");
         pContent.add(new ThongKeGUI(), "ThongKe");
         // Default panel
@@ -257,8 +257,8 @@ public class MainGUI extends JFrame implements ActionListener {
             case "PHIẾU NHẬP":
                 cardLayout.show(pContent, "PhieuNhap");
                 break;
-            case "PHIẾU XUẤT":
-                cardLayout.show(pContent, "PhieuXuat");
+            case "HÓA ĐƠN":
+                cardLayout.show(pContent, "HoaDon");
                 break;
             case "KHUYẾN MÃI":
                 cardLayout.show(pContent, "KhuyenMai");
@@ -287,13 +287,7 @@ public class MainGUI extends JFrame implements ActionListener {
         }
     }
 
-    class KhachHangGUI extends JPanel {
-        public KhachHangGUI() {
-            setBackground(Color.WHITE);
-            add(new JLabel("Đây là Khách Hàng", SwingConstants.CENTER));
-        }
-    }
-
+    
     class PhieuNhapGUI extends JPanel {
         public PhieuNhapGUI() {
             setBackground(Color.WHITE);
