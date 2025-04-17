@@ -31,7 +31,7 @@ import javax.swing.table.DefaultTableModel;
 import BUS.NhanVienBUS;
 import DTO.NhanVienDTO;
 
-public class NhanVienGUI extends JPanel implements ActionListener {
+public class NVGUI extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
     private DefaultTableModel model;
     private JTable tblDSNV;
@@ -41,7 +41,7 @@ public class NhanVienGUI extends JPanel implements ActionListener {
     private NhanVienBUS nvBUS;
     private boolean isEditMode = false;
 
-    public NhanVienGUI() throws SQLException {
+    public NVGUI() throws SQLException {
         nvBUS = new NhanVienBUS();
         Object[] header = {"Mã NV", "Họ NV", "Tên NV", "Số Điện Thoại", "Lương Tháng"};
         model = new DefaultTableModel(header, 0);
@@ -534,7 +534,7 @@ public class NhanVienGUI extends JPanel implements ActionListener {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1248, 757);
         try {
-            frame.getContentPane().add(new NhanVienGUI());
+            frame.getContentPane().add(new NVGUI());
         } catch (SQLException e) {
             e.printStackTrace();
         }

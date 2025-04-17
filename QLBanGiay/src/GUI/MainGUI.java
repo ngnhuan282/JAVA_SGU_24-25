@@ -280,12 +280,19 @@ public class MainGUI extends JFrame implements ActionListener {
         }
     }
 
-    class NhanVienGUI extends JPanel {
-        public NhanVienGUI() {
-            setBackground(Color.WHITE);
-            add(new JLabel("Đây là Nhân Viên", SwingConstants.CENTER));
-        }
-    }
+//    class NhanVienGUI extends JPanel {
+//        public NhanVienGUI() {
+//            setBackground(Color.WHITE);
+//            add(new JLabel("Đây là Nhân Viên", SwingConstants.CENTER));
+//        }
+//    }
+    
+//    class NVGUI extends JPanel {
+//        public NVGUI() {
+//            setBackground(Color.WHITE);
+//            add(new JLabel("Đây là Nhân Viên", SwingConstants.CENTER));
+//        }
+//    }
 
     
     class PhieuNhapGUI extends JPanel {
