@@ -517,7 +517,13 @@ public class SanPhamGUI extends JPanel implements ActionListener {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn màu sắc!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
+        
+        if(spBUS.checkMaSP(maSP))
+        {
+        	JOptionPane.showMessageDialog(this, "Mã sản phẩm đã tồn tại !", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        	return;
+        }
+        
         try {
             double donGia = Double.parseDouble(donGiaStr);
             int soLuong = Integer.parseInt(soLuongStr);
@@ -573,7 +579,13 @@ public class SanPhamGUI extends JPanel implements ActionListener {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn màu sắc!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
+        
+        if(spBUS.checkMaSP(maSP))
+        {
+        	JOptionPane.showMessageDialog(this, "Mã sản phẩm đã tồn tại !", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        	return;
+        }
+        
         try {
             double donGia = Double.parseDouble(donGiaStr);
             int soLuong = Integer.parseInt(soLuongStr);
