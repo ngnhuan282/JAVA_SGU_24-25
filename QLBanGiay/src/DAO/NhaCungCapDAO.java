@@ -38,7 +38,7 @@ public class NhaCungCapDAO {
 			sql += "'" +ncc.getTenNCC()+"',";
 			sql += "'" +ncc.getDiaChi()+"',";
 			sql += "'" +ncc.getSDT()+"')";
-			System.out.println("SQL INSERT: " + sql); 
+//			System.out.println("SQL INSERT: " + sql); 
 			mysql.executeUpdate(sql);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -55,7 +55,7 @@ public class NhaCungCapDAO {
 			sql += "DiaChi= '"+ncc.getDiaChi()+"', ";
 			sql += "SDT= '"+ncc.getSDT()+"'";
 			sql += " WHERE MaNCC='"+maNCC+"'";
-			System.out.println("SQL UPDATE: " + sql); 
+//			System.out.println("SQL UPDATE: " + sql); 
 			mysql.executeUpdate(sql);			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

@@ -76,6 +76,20 @@ public class NhaCungCapBUS {
 		}
 	}
 	
+	
+	public ArrayList<NhaCungCapDTO> searchNCC(String tuKhoa, String tieuChi){
+		ArrayList<NhaCungCapDTO> result = new ArrayList<NhaCungCapDTO>();
+		for(NhaCungCapDTO ncc : listNCC) {
+			if(tieuChi.equals("Mã NCC") && ncc.getMaNCC().equalsIgnoreCase(tuKhoa)) 
+				result.add(ncc);
+			if(tieuChi.equals("Tên NCC") && ncc.getTenNCC().equalsIgnoreCase(tuKhoa))
+				result.add(ncc);
+			if(tieuChi.equals("SĐT") && ncc.getSDT().equalsIgnoreCase(tuKhoa))
+				result.add(ncc);
+		}
+		return result;
+	}
+	
 	//cac ham nhoooooooooooooo
 	
 	public boolean checkEdit(String newMaNCC,String maNCC) {

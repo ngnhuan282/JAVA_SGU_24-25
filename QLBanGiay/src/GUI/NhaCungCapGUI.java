@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -28,14 +29,18 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 import BUS.NhaCungCapBUS;
+import DTO.NhaCungCapDTO;
 
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
@@ -52,6 +57,7 @@ public class NhaCungCapGUI extends JPanel implements ActionListener{
 	private JPanel inforConent;
 	private JButton btnEditMode;
 	private JTextField txtSearch;
+	private JComboBox<String> cboxSearch;
 	private JTextField txtMaNCC,txtTenNCC,txtSDT,txtDiaChi;
 	private NhaCungCapBUS nccBUS = new NhaCungCapBUS();	
 	private boolean isEditMode = false; 
@@ -95,85 +101,98 @@ public class NhaCungCapGUI extends JPanel implements ActionListener{
         horizontalBox.setBounds(0, 0, 512, 111);
         pLeftHeader.add(horizontalBox);
 
-        JButton btnThem = new JButton("Thêm");
-        horizontalBox.add(btnThem);
+        JButton btnThem = new JButton("Thêm", new ImageIcon(SanPhamGUI.class.getResource("/image/add48.png")));
         btnThem.setFocusPainted(false);
         btnThem.setActionCommand("Thêm");
         btnThem.addActionListener(this);
         btnThem.setBackground(Color.WHITE);
         btnThem.setBorderPainted(false);
-        btnThem.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/add48.png")));
         btnThem.setFont(new Font("Arial", Font.PLAIN, 15));
         btnThem.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnThem.setHorizontalTextPosition(SwingConstants.CENTER);
-        btnThem.setPreferredSize(new Dimension(120, 140));
+        btnThem.setPreferredSize(new Dimension(100, 140));
+        horizontalBox.add(btnThem);
 
-        JButton btnSua = new JButton("Sửa");
-        horizontalBox.add(btnSua);
+        JButton btnSua = new JButton("Sửa", new ImageIcon(SanPhamGUI.class.getResource("/image/edit48.png")));
         btnSua.setFocusPainted(false);
         btnSua.setActionCommand("Sửa");
         btnSua.addActionListener(this);
         btnSua.setBorderPainted(false);
         btnSua.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnSua.setPreferredSize(new Dimension(120, 140));
-        btnSua.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/edit48.png")));
         btnSua.setHorizontalTextPosition(SwingConstants.CENTER);
         btnSua.setFont(new Font("Arial", Font.PLAIN, 15));
         btnSua.setBackground(Color.WHITE);
+        btnSua.setPreferredSize(new Dimension(100, 140));
+        horizontalBox.add(btnSua);
 
-        JButton btnXoa = new JButton("Xóa");
-        horizontalBox.add(btnXoa);
+        JButton btnXoa = new JButton("Xóa", new ImageIcon(SanPhamGUI.class.getResource("/image/remove48.png")));
         btnXoa.setFocusPainted(false);
         btnXoa.setActionCommand("Xóa");
         btnXoa.addActionListener(this);
         btnXoa.setBorderPainted(false);
         btnXoa.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnXoa.setPreferredSize(new Dimension(120, 140));
-        btnXoa.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/remove48.png")));
         btnXoa.setHorizontalTextPosition(SwingConstants.CENTER);
         btnXoa.setFont(new Font("Arial", Font.PLAIN, 15));
         btnXoa.setBackground(Color.WHITE);
+        btnXoa.setPreferredSize(new Dimension(100, 140));
+        horizontalBox.add(btnXoa);
 
-        JButton btnXuatExcel = new JButton("Xuất Excel");
-        horizontalBox.add(btnXuatExcel);
-        btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnXuatExcel.setPreferredSize(new Dimension(120, 140));
-        btnXuatExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/excel48.png")));
-        btnXuatExcel.setHorizontalTextPosition(SwingConstants.CENTER);
-        btnXuatExcel.setFont(new Font("Arial", Font.PLAIN, 15));
-        btnXuatExcel.setBorderPainted(false);
-        btnXuatExcel.setBackground(Color.WHITE);
-
-        JButton btnNhapExcel = new JButton("Nhập Excel");
-        horizontalBox.add(btnNhapExcel);
+        JButton btnNhapExcel = new JButton("Nhập Excel", new ImageIcon(SanPhamGUI.class.getResource("/image/excel48.png")));
+        btnNhapExcel.setFocusPainted(false);
+        btnNhapExcel.setActionCommand("Nhập Excel");
+        btnNhapExcel.addActionListener(this);
+        btnNhapExcel.setBorderPainted(false);
         btnNhapExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnNhapExcel.setPreferredSize(new Dimension(120, 140));
-        btnNhapExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/bill48.png")));
         btnNhapExcel.setHorizontalTextPosition(SwingConstants.CENTER);
         btnNhapExcel.setFont(new Font("Arial", Font.PLAIN, 15));
-        btnNhapExcel.setBorderPainted(false);
         btnNhapExcel.setBackground(Color.WHITE);
+        btnNhapExcel.setPreferredSize(new Dimension(100, 140));
+        horizontalBox.add(btnNhapExcel);
+
+        JButton btnXuatExcel = new JButton("Xuất Excel", new ImageIcon(SanPhamGUI.class.getResource("/image/xuatexcel48.png")));
+        btnXuatExcel.setFocusPainted(false);
+        btnXuatExcel.setActionCommand("Xuất Excel");
+        btnXuatExcel.addActionListener(this);
+        btnXuatExcel.setBorderPainted(false);
+        btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnXuatExcel.setHorizontalTextPosition(SwingConstants.CENTER);
+        btnXuatExcel.setFont(new Font("Arial", Font.PLAIN, 15));
+        btnXuatExcel.setBackground(Color.WHITE);
+        btnXuatExcel.setPreferredSize(new Dimension(100, 140));
+        horizontalBox.add(btnXuatExcel);
+        
+        JButton btnLamMoi = new JButton("Làm mới");
+        btnLamMoi.setBackground(Color.WHITE);
+        btnLamMoi.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/reload30.png")));
+        btnLamMoi.setFont(new Font("Arial", Font.PLAIN, 13));
+        btnLamMoi.setBounds(1045, 31, 126, 28);
+        btnLamMoi.setActionCommand("Reload");
+        btnLamMoi.addActionListener(this);
+        pHeaderMain.add(btnLamMoi);
 		
-        txtSearch = new JTextField();
-        txtSearch.setBounds(771, 31, 290, 27);
-        pHeaderMain.add(txtSearch);
-        txtSearch.setColumns(10);
-
-        JComboBox<String> cboxSearch = new JComboBox<>();
-        cboxSearch.setFont(new Font("Arial", Font.PLAIN, 14));
-        cboxSearch.setBounds(682, 30, 79, 28);
-        cboxSearch.setBackground(Color.WHITE);
+        String []listKeyWord = {"Mã NCC","Tên NCC","SĐT"};
+        cboxSearch = new JComboBox<String>(listKeyWord);
         cboxSearch.setForeground(Color.BLACK);
+        cboxSearch.setFont(new Font("Arial", Font.PLAIN, 13));
         cboxSearch.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        cboxSearch.setBackground(Color.WHITE);
+        cboxSearch.setBounds(569, 31, 79, 28);
         pHeaderMain.add(cboxSearch);
+        
+        
+        txtSearch = new JTextField();
+        txtSearch.setColumns(10);
+        txtSearch.setBounds(658, 32, 290, 27);
+        pHeaderMain.add(txtSearch);
 
-        JButton btnSearch = new JButton("");
-        btnSearch.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/search30.png")));
-        btnSearch.setBounds(1071, 22, 66, 39);
+        JButton btnSearch = new JButton("", new ImageIcon(SanPhamGUI.class.getResource("/image/search30.png")));
+        btnSearch.setBackground(Color.WHITE);
+        btnSearch.setActionCommand("Tìm kiếm");
+        btnSearch.addActionListener(this);
+        btnSearch.setBounds(958, 29, 66, 30);
         pHeaderMain.add(btnSearch);
         
         JPanel pContent = new JPanel();
-//      pContent.setBackground(Color.white);
         pContent.setBackground(SystemColor.control);;
         pContent.setBounds(0, 103, 1248, 654); // Đặt bên dưới pHeaderMain
         pContent.setLayout(null);
@@ -332,7 +351,26 @@ public class NhaCungCapGUI extends JPanel implements ActionListener{
 			editNCC();
 		else if(command.equals("Xóa"))
 			deleteNCC();
+		else if(command.equals("Tìm kiếm"))
+			timKiem();
+		else if(command.equals("Reload"))
+			nccBUS.updateTable(model);
 	}
+	
+	//search
+	public void timKiem() {
+		String tuKhoa = txtSearch.getText().trim();
+    	String tieuChi = cboxSearch.getSelectedItem().toString();
+    	ArrayList<NhaCungCapDTO> result = nccBUS.searchNCC(tuKhoa, tieuChi);
+    	
+    	model.setRowCount(0);
+		for(NhaCungCapDTO ncc : result)
+			model.addRow(new Object[] {ncc.getMaNCC(), ncc.getTenNCC(), ncc.getSDT(), ncc.getDiaChi()});
+		if(result.isEmpty())
+    		JOptionPane.showMessageDialog(this, "Không tìm thấy nhà cung cấp!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	
 	
 	public void deleteNCC() {
 		int selectedRow = table.getSelectedRow();
@@ -417,14 +455,8 @@ public class NhaCungCapGUI extends JPanel implements ActionListener{
 		}			
 			
 		String maNCC = model.getValueAt(selectedRow, 0).toString();
-//		String tenNCC =model.getValueAt(selectedRow, 1).toString();
 		String sdt =model.getValueAt(selectedRow, 2).toString();
-//		String diaChi =model.getValueAt(selectedRow, 3).toString();
-				
-        //event 
-//		for (ActionListener listener : btnEdit.getActionListeners()) {
-//		        btnEdit.removeActionListener(listener);
-//		}
+		
         	String newMaNCC = txtMaNCC.getText().trim();
 			String newTenNCC = txtTenNCC.getText().trim();
 			String newSDT = txtSDT.getText().trim();
