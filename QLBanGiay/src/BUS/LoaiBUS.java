@@ -12,9 +12,7 @@ public class LoaiBUS {
        
     }
 
-    public static ArrayList<LoaiDTO> getDsloai() {
-        return dsloai;
-    }
+   
 
     public static void setDsloai(ArrayList<LoaiDTO> dsloai) {
         LoaiBUS.dsloai = dsloai;
@@ -26,6 +24,12 @@ public class LoaiBUS {
     		dsloai = new ArrayList<LoaiDTO>();
     	LoaiDAO loaiDAO = new LoaiDAO();
     	dsloai = loaiDAO.docDSLoai();
+    }
+    
+    public ArrayList<LoaiDTO> getDsloai() {
+    	if (dsloai == null) 
+            docDSLoai(); 
+        return dsloai;
     }
     
     public int getNextID() 
