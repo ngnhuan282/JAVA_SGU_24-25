@@ -69,10 +69,10 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         // Đọc danh sách sản phẩm và loại
         spBUS.docDSSP();
         loaiBUS.docDSLoai();
-        
+        LoaiBUS loaiBUS = new LoaiBUS();
         for (SanPhamDTO sp : spBUS.getDssp()) {
             String tenLoaiSP = "";
-            for (DTO.LoaiDTO loai : LoaiBUS.getDsloai()) {
+            for (DTO.LoaiDTO loai : loaiBUS.getDsloai()) {
                 if (loai.getMaLoaiSP() == sp.getMaLoaiSP()) {
                     tenLoaiSP = loai.getTenLoaiSP();
                     break;
@@ -89,8 +89,9 @@ public class SanPhamGUI extends JPanel implements ActionListener {
     private void loadLoaiSPToComboBox() 
     {
         cbLoaiSP.removeAllItems();
-        if (LoaiBUS.getDsloai() != null) {
-            for (DTO.LoaiDTO loai : LoaiBUS.getDsloai()) {
+        LoaiBUS loaiBUS = new LoaiBUS();
+        if (loaiBUS.getDsloai() != null) {
+            for (DTO.LoaiDTO loai : loaiBUS.getDsloai()) {
                 cbLoaiSP.addItem(loai.getTenLoaiSP());
             }
         }
@@ -460,13 +461,14 @@ public class SanPhamGUI extends JPanel implements ActionListener {
     	String tuKhoa = txtSearch.getText().trim();
     	String tieuChi = cboxSearch.getSelectedItem().toString();
     	SanPhamBUS spBUS = new SanPhamBUS();
+    	LoaiBUS loaiBUS = new LoaiBUS();
     	ArrayList<SanPhamDTO> result = spBUS.searchSP(tuKhoa, tieuChi);
     
     	model.setRowCount(0);
     	for(SanPhamDTO sp : result)
     	{
     		String tenLoaiSP = "";
-    		for(DTO.LoaiDTO loai : LoaiBUS.getDsloai())
+    		for(DTO.LoaiDTO loai : loaiBUS.getDsloai())
     		{
     			if(loai.getMaLoaiSP() == sp.getMaLoaiSP())
     			{
