@@ -42,8 +42,7 @@ public class KhachHangBUS {
 	
 	public boolean checkRegexSdt(String sdt) {
 		String regex = "^(01|02|03|04|05|06|07|08|09)\\d{8,9}$";
-		String regex2 = "^\\+\\d{1,3}\\d{4,14}(?:x\\d+)?$";
-		if(sdt.matches(regex) || sdt.matches(regex2))
+		if(sdt.matches(regex))
 			return true;
 		return false;
 	}
@@ -57,7 +56,7 @@ public class KhachHangBUS {
 	}
 	
 	public boolean checkRegexTen(String ten) {
-		String regex = "^[A-ZÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ][a-zàáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]*(?: [A-ZÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ][a-zàáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]*)*$";
+		String regex = "^[a-zA-zÀ-ỹ0-9]+$";
 		if(ten.matches(regex)) {
 			return true;
 		}
@@ -74,10 +73,10 @@ public class KhachHangBUS {
 	
 	public String getMaKH() {
 		int size = listKhachHang.size() + 1;
-		String maKH = "KH0" + size;
+		String maKH = "KH00" + size;
 		while(checkCustomerExist(maKH)) {
 			size++;
-			maKH = "KH0" + size;
+			maKH = "KH00" + size;
 		}
 		return maKH;
 	}
@@ -106,5 +105,19 @@ public class KhachHangBUS {
 		KhachHangDTO khachHang = listKhachHang.get(index);
 		listKhachHang.remove(index);
 		khachHangDAO.deleteKhachHangDAO(khachHang);
+	}
+	
+	public ArrayList<KhachHangDTO> searchCustomer(String key, String keyword) {
+		ArrayList<KhachHangDTO> result = new ArrayList<KhachHangDTO>();
+		
+		for(KhachHangDTO x : listKhachHang) {
+			if(key.equals("Mã khách hàng") && keyword.equals(x.getMaKH()))
+				result.add(x);
+			if(key.equals("Họ tên") && (x.getHo() + " " + x.getTen()).contains(keyword))
+				result.add(x);
+			if(key.equals("SĐT") && keyword.equals(x.getSdt()))
+				result.add(x);
+		}
+		return result;
 	}
 }	

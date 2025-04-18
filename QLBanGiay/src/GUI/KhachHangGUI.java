@@ -7,6 +7,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -183,23 +184,52 @@ public class KhachHangGUI extends JPanel implements ActionListener {
         btnNhapExcel.setBackground(Color.WHITE);
 		
         txtSearch = new JTextField();
-        txtSearch.setBounds(643, 30, 237, 27);
+        txtSearch.setBounds(700, 30, 237, 27);
         pHeaderMain.add(txtSearch);
         txtSearch.setColumns(10);
         
-        JComboBox<String> cboxSearch = new JComboBox<>();
+        String[] keySearch = {"Mã khách hàng", "Họ tên", "SĐT"};
+        JComboBox<String> cboxSearch = new JComboBox<String>(keySearch);
         cboxSearch.setFont(new Font("Arial", Font.PLAIN, 14));
-        cboxSearch.setBounds(524, 30, 75, 28);
+        cboxSearch.setBounds(524, 30, 150, 28);
         cboxSearch.setBackground(Color.WHITE);
         cboxSearch.setForeground(Color.BLACK);
         cboxSearch.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
         pHeaderMain.add(cboxSearch);
         
+        JButton btnLamMoi = new JButton("Làm mới");
+        btnLamMoi.setBackground(Color.WHITE);
+        btnLamMoi.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/reload30.png")));
+        btnLamMoi.setFont(new Font("Arial", Font.PLAIN, 13));
+        btnLamMoi.setBounds(1045, 31, 126, 28);
+        btnLamMoi.setActionCommand("Reload");
+        btnLamMoi.addActionListener(e -> {
+        	btnLamMoi.setVisible(false);
+        	fillTableWithSampleData();
+        });
+        btnLamMoi.setVisible(false);
+        pHeaderMain.add(btnLamMoi);
+        
         JButton btnSearch = new JButton("");
         btnSearch.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/search30.png")));
-        btnSearch.setBounds(908, 22, 63, 39);
+        btnSearch.setBounds(960, 22, 63, 39);
+        btnSearch.addActionListener(e -> {
+        	String key = cboxSearch.getSelectedItem().toString();
+        	String keyword = txtSearch.getText();
+        	ArrayList<KhachHangDTO> result = khachHangBUS.searchCustomer(key, keyword);
+        	if(result.isEmpty()) {
+        		JOptionPane.showMessageDialog(this, "Không có kết quả phù hợp", "Thông báo", JOptionPane.WARNING_MESSAGE);
+    			return;
+        	}
+        	txtSearch.setText("");
+        	btnLamMoi.setVisible(true);
+        	fillTableWithSampleData(result);
+        	
+        });
         pHeaderMain.add(btnSearch);
 		
+  
+        
 		table = new JTable();
 		table.setFont(new Font("Verdana", Font.PLAIN, 12));
   		table.setGridColor(new Color(200, 200, 200));
@@ -350,6 +380,8 @@ public class KhachHangGUI extends JPanel implements ActionListener {
 		}
 		
 		
+		
+		
 
 		// Gán model vào JTable
 		table.setModel(model);
@@ -360,6 +392,40 @@ public class KhachHangGUI extends JPanel implements ActionListener {
   		table.getColumnModel().getColumn(3).setPreferredWidth(200);
   		table.getColumnModel().getColumn(4).setPreferredWidth(200);
 	}
+	
+	private void fillTableWithSampleData(ArrayList<KhachHangDTO> result) {
+		// Dữ liệu mẫu (ví dụ về sản phẩm)
+		String[] columnNames = { "Mã KH", "Họ Lót", "Tên", "Số điện thoại", "Địa chỉ" };
+		 
+
+		// Tạo DefaultTableModel với dữ liệu mẫu
+		DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+		
+		for(KhachHangDTO x : result) {
+			Object[] row = {
+					x.getMaKH(),
+					x.getHo(),
+					x.getTen(),
+					x.getSdt(),
+					x.getDiaChi(),
+			};
+			model.addRow(row);
+		}
+		
+		
+		
+		
+
+		// Gán model vào JTable
+		table.setModel(model);
+		
+		table.getColumnModel().getColumn(0).setPreferredWidth(60);
+  		table.getColumnModel().getColumn(1).setPreferredWidth(180);
+  		table.getColumnModel().getColumn(2).setPreferredWidth(90);
+  		table.getColumnModel().getColumn(3).setPreferredWidth(200);
+  		table.getColumnModel().getColumn(4).setPreferredWidth(200);
+	}
+	
 	
 	
 	

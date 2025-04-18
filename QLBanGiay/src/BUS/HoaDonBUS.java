@@ -2,6 +2,8 @@ package BUS;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import DAO.HoaDonDAO;
@@ -26,12 +28,7 @@ public class HoaDonBUS {
 	
 	public String getMaHD() {
 		int size = listHoaDon.size() + 1;
-		String maHD = "HD0" + size;
-		while(checkDuplicateMaHD(maHD)) {
-			size++;
-			maHD = "HD0" + size;
-		}
-		return maHD;
+		return size + "";
 	}
 	
 	public boolean checkDuplicateMaHD(String maHD) {
@@ -68,5 +65,31 @@ public class HoaDonBUS {
 		HoaDonDTO hoaDon = listHoaDon.get(index);
 		listHoaDon.remove(index);
 		hoaDonDAO.deleteHoaDon(hoaDon);
+	}
+	
+	public ArrayList<HoaDonDTO> search(String key, String keyword) {
+		ArrayList<HoaDonDTO> result = new ArrayList<HoaDonDTO>();
+		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+		for(HoaDonDTO x : listHoaDon) {
+			if(key.equals("Mã hóa đơn") && keyword.equals(x.getMaHD()))
+				result.add(x);
+			if(key.equals("Mã khách hàng") && keyword.equals(x.getMaKH()))
+				result.add(x);
+			if(key.equals("Ngày lập")) {
+				try {
+					java.util.Date dateUtil = format.parse(keyword);
+					Date dateSQL = new Date(dateUtil.getTime());
+					if(x.getNgayLap().equals(dateSQL))
+						result.add(x);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				
+			}
+			if(key.equals("Mã nhân viên") && keyword.equals(x.getMaNV()))
+				result.add(x);
+				
+		}
+		return result;
 	}
 }

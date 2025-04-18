@@ -354,13 +354,27 @@ public class HoaDonGUI extends JPanel implements ActionListener{
                                         btnNhapExcel.setBackground(Color.WHITE);
                                         
                                         txtSearch = new JTextField();
-                                        txtSearch.setBounds(641, 31, 243, 27);
+                                        txtSearch.setBounds(694, 31, 243, 39);
                                         pHeaderMain.add(txtSearch);
                                         txtSearch.setColumns(10);
                                         
-                                        JComboBox cboxSearch = new JComboBox();
+                                        JButton btnLamMoi = new JButton("Làm mới");
+                                        btnLamMoi.setBackground(Color.WHITE);
+                                        btnLamMoi.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/reload30.png")));
+                                        btnLamMoi.setFont(new Font("Arial", Font.PLAIN, 13));
+                                        btnLamMoi.setBounds(1023, 30, 126, 39);
+                                        btnLamMoi.setActionCommand("Reload");
+                                        btnLamMoi.addActionListener(e -> {
+                                        	btnLamMoi.setVisible(false);
+                                        	openBillTable();
+                                        });
+                                        btnLamMoi.setVisible(false);
+                                        pHeaderMain.add(btnLamMoi);
+                                        
+                                        String[] keysearch = {"Mã hóa đơn", "Mã khách hàng", "Mã nhân viên", "Ngày lập"};
+                                        JComboBox<String> cboxSearch = new JComboBox<String>(keysearch);
                                         cboxSearch.setFont(new Font("Arial", Font.PLAIN, 14));
-                                        cboxSearch.setBounds(552, 29, 79, 28);
+                                        cboxSearch.setBounds(552, 29, 132, 41);
                                         cboxSearch.setBackground(Color.WHITE); // nền trắng
                                         cboxSearch.setForeground(Color.BLACK); // chữ đen cho dễ đọc
                                         cboxSearch.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY)); // viền xám nhạt
@@ -368,7 +382,21 @@ public class HoaDonGUI extends JPanel implements ActionListener{
                                         
                                         JButton btnSearch = new JButton("");
                                         btnSearch.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/search30.png")));
-                                        btnSearch.setBounds(894, 29, 66, 39);
+                                        btnSearch.setBounds(947, 31, 66, 39);
+                                        btnSearch.addActionListener(e -> {
+                                        	String key = cboxSearch.getSelectedItem().toString();
+                                        	String keyword = txtSearch.getText();
+                                        	ArrayList<HoaDonDTO> result = hoaDonBUS.search(key, keyword);
+                                        	if(result.isEmpty()) {
+                                        		JOptionPane.showMessageDialog(this, "Không có kết quả phù hợp", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                                    			return;
+                                        	}
+                                        	
+                                        	txtSearch.setText("");
+                                        	btnLamMoi.setVisible(true);
+                                        	openBillTable(result);
+                                        	
+                                        });
                                         pHeaderMain.add(btnSearch);
 		
 		JPanel panel = new JPanel();
@@ -870,6 +898,31 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 		
 		table_1.setModel(model1);
 
+	}
+	
+	private void openBillTable(ArrayList<HoaDonDTO> result) {
+		// Dữ liệu mẫu (ví dụ về sản phẩm)
+		String[] columnNamesBill = { "Mã hóa đơn", "Mã khách hàng", "Tên khách hàng", "Mã nhân viên", "Ngày lập", "Tổng tiền" };
+
+		// Tạo DefaultTableModel với dữ liệu mẫu
+		DefaultTableModel model = new DefaultTableModel(columnNamesBill, 0);
+		for(HoaDonDTO x : result) {
+			Object[] row = {
+					x.getMaHD(),
+					x.getMaKH(),
+					x.getMaNV(),
+					x.getNgayLap(),
+					x.getTongTien()
+			};
+			model.addRow(row);
+		}
+		
+
+		// Gán model vào JTable
+
+		table.setModel(model);
+		 Font font = new Font("Verdana", Font.PLAIN, 14);
+		table.setFont(font);
 	}
 	
 	private void openBillTable() {
