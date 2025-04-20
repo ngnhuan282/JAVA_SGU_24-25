@@ -225,7 +225,7 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         lbHeaderSP.setForeground(Color.WHITE);
         lbHeaderSP.setHorizontalAlignment(SwingConstants.CENTER);
         lbHeaderSP.setFont(new Font("Arial", Font.BOLD, 15));
-        lbHeaderSP.setBackground(Color.decode("#FF5252"));
+        lbHeaderSP.setBackground(Color.decode("#006666"));
         lbHeaderSP.setOpaque(true);
         lbHeaderSP.setBounds(0, 0, 497, 45);
         pInput.add(lbHeaderSP);

@@ -22,7 +22,8 @@ public class MainGUI extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
     private int DEFAULT_WIDTH = 1450, DEFAULT_HEIGHT = 800;
-    private String color = "#FF5252";
+//    private String color = "#FF5252";
+    private String color = "#006666";
     private CardLayout cardLayout;
     private JPanel pContent;
 
@@ -202,7 +203,7 @@ public class MainGUI extends JFrame implements ActionListener {
         btnThongKe.setForeground(Color.WHITE);
         btnThongKe.setFont(new Font("Verdana", Font.BOLD, 14));
         btnThongKe.setBorderPainted(false);
-        btnThongKe.setBackground(new Color(255, 82, 82));
+        btnThongKe.setBackground(Color.decode(color));
         btnThongKe.setBounds(20, 301, 200, 35);
         btnThongKe.addActionListener(this);
         pNavItem.add(btnThongKe);
