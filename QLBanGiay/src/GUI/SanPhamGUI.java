@@ -7,9 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -19,7 +16,6 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -36,14 +32,9 @@ import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-
 import BUS.LoaiBUS;
 import BUS.SanPhamBUS;
 import DTO.SanPhamDTO;
-import GUI.ExcelExporter;
 
 public class SanPhamGUI extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
@@ -652,6 +643,10 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         JOptionPane.showMessageDialog(this, "Chức năng Nhập Excel chưa được triển khai!");
     }
 
+    public void xuatExcel() {
+        JOptionPane.showMessageDialog(this, "Chức năng Xuất Excel chưa được triển khai!");
+    }
+
     public void openLoaiSPDialog() 
     {
         LoaiSPDialog dialog = new LoaiSPDialog(SwingUtilities.getWindowAncestor(this));
@@ -672,18 +667,7 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         txtKieuDang.setText("");
         cbLoaiSP.setSelectedIndex(-1);
     }
-    
-    public void xuatExcel()
-    {
-    	try {
-            ExcelExporter.exportJTableToExcel(tblDSSP);
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi xuất file Excel: " + e.getMessage(),
-                    "Lỗi", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
-    }
-    
+
     public static void main(String[] args) {
         JFrame frame = new JFrame("Test SanPhamGUI");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

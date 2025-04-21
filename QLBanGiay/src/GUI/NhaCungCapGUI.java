@@ -12,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -354,8 +353,6 @@ public class NhaCungCapGUI extends JPanel implements ActionListener{
 			deleteNCC();
 		else if(command.equals("Tìm kiếm"))
 			timKiem();
-		else if(command.equals("Xuất Excel"))
-			xuatExcel();
 		else if(command.equals("Reload"))
 			nccBUS.updateTable(model);
 	}
@@ -512,16 +509,5 @@ public class NhaCungCapGUI extends JPanel implements ActionListener{
 		
 		return false;
 	}
-	
-	public void xuatExcel()
-	{	
-		System.out.println("Exporting Excel...");
-		try {
-            ExcelExporter.exportJTableToExcel(table);
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi xuất file Excel: " + e.getMessage(),
-                    "Lỗi", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
-	}
+
 }
