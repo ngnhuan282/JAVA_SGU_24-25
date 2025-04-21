@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -30,6 +31,7 @@ import javax.swing.table.DefaultTableModel;
 
 import BUS.NhanVienBUS;
 import DTO.NhanVienDTO;
+import GUI.ExcelExporter;
 
 public class NhanVienGUI extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
@@ -480,11 +482,18 @@ public class NhanVienGUI extends JPanel implements ActionListener {
     }
 
     public void nhapExcel() {
-        JOptionPane.showMessageDialog(this, "Chức năng Nhập Excel chưa được triển khai!");
+    	
     }
 
     public void xuatExcel() {
-        JOptionPane.showMessageDialog(this, "Chức năng Xuất Excel chưa được triển khai!");
+    	System.out.println("Exporting Excel for NhanVienGUI...");
+        try {
+            ExcelExporter.exportJTableToExcel(tblDSNV);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi xuất file Excel: " + e.getMessage(),
+                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
     }
 
     private boolean isDuplicateMaNV(String maNV) {
