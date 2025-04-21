@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -165,6 +166,8 @@ public class KhachHangGUI extends JPanel implements ActionListener {
 
         JButton btnXuatExcel = new JButton("Xuất Excel");
         horizontalBox.add(btnXuatExcel);
+        btnXuatExcel.setActionCommand("Xuất Excel");
+        btnXuatExcel.addActionListener(this);
         btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnXuatExcel.setPreferredSize(new Dimension(120, 140));
         btnXuatExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/excel48.png")));
@@ -602,6 +605,19 @@ public class KhachHangGUI extends JPanel implements ActionListener {
 			updateCustomer();
 		else if(str.equals("Xóa"))
 			deleteCustomer();
+		else if(str.equals("Xuất Excel"))
+			xuatExcel();
 		
+	}
+	
+	public void xuatExcel()
+	{
+		try {
+            ExcelExporter.exportJTableToExcel(table);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi xuất file Excel: " + e.getMessage(),
+                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
 	}
 }
