@@ -15,6 +15,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
+import BUS.TaiKhoanBUS;
 
 public class Login extends JFrame {
 
@@ -27,9 +30,8 @@ public class Login extends JFrame {
         initComponents();
         setTitle("LOGIN");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setPreferredSize(new Dimension(800, 500));
+        setSize(800, 500);
         setLocationRelativeTo(null);
-        pack();
     }
 
     private void initComponents() {
@@ -53,19 +55,21 @@ public class Login extends JFrame {
         } catch (Exception e) {
             logoLabel.setText("Logo Missing");
         }
-        logoLabel.setBounds(75, 65, 207, 187);
+        logoLabel.setBounds(91, 95, 200, 187);
         rightPanel.add(logoLabel);
 
         JLabel shopLabel = new JLabel("Loopy Shop");
+        shopLabel.setHorizontalAlignment(SwingConstants.CENTER);
         shopLabel.setFont(new Font("Showcard Gothic", Font.BOLD, 24));
         shopLabel.setForeground(Color.WHITE);
-        shopLabel.setBounds(103, 262, 200, 30);
+        shopLabel.setBounds(101, 292, 200, 30);
         rightPanel.add(shopLabel);
 
         JLabel copyrightLabel = new JLabel("copyright ©Loopy All rights reserved");
+        copyrightLabel.setHorizontalAlignment(SwingConstants.CENTER);
         copyrightLabel.setFont(new Font("Segoe UI Light", Font.PLAIN, 14));
         copyrightLabel.setForeground(new Color(204, 204, 204));
-        copyrightLabel.setBounds(40, 400, 300, 20);
+        copyrightLabel.setBounds(54, 404, 300, 20);
         rightPanel.add(copyrightLabel);
 
         // Left panel (login form)
@@ -119,19 +123,27 @@ public class Login extends JFrame {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
 
-        // Placeholder validation (replace with actual database check)
-        if (username.equals("admin") && password.equals("password123")) {
-            try {
-                MainGUI mainGUI = new MainGUI();
-                mainGUI.setVisible(true);
-                mainGUI.setLocationRelativeTo(null);
-                dispose();
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error opening MainGUI: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Invalid username or password", "Login Failed", JOptionPane.ERROR_MESSAGE);
+        TaiKhoanBUS taiKhoanBUS = new TaiKhoanBUS();
+        if(taiKhoanBUS.login(username, password))
+        {	
+        	JOptionPane.showMessageDialog(this, "Đăng nhập thành công!", 
+        			"Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        	try {
+				MainGUI mainGUI = new MainGUI();
+				mainGUI.setVisible(true);
+				mainGUI.setLocationRelativeTo(null);
+				dispose();
+			} catch (Exception e) {
+				// TODO: handle exception
+				JOptionPane.showMessageDialog(this, "Lỗi mở MainGUI: " +e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+			}
         }
+        else
+        {
+        	 JOptionPane.showMessageDialog(this, "Tên đăng nhập hoặc mật khẩu không đúng", 
+        			 						"Đăng nhập thất bại", JOptionPane.ERROR_MESSAGE);
+        }
+        
     }
 
     public static void main(String[] args) {

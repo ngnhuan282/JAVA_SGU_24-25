@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 import DTO.SanPhamDTO;
 
 public class SanPhamDAO {
-	MySQLConnect mysql = new MySQLConnect();
+	private MySQLConnect mysql = new MySQLConnect();
 	
 	public SanPhamDAO()
 	{
