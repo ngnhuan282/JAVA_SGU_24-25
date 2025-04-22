@@ -13,4 +13,5 @@ module QLBanGiay {
 	requires org.apache.logging.log4j;
 	requires org.apache.logging.log4j.core;
 	requires itextpdf;
+	requires jcalendar;
 }

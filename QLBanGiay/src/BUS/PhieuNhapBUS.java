@@ -69,8 +69,18 @@ public class PhieuNhapBUS {
 				result.add(pn);		
 		}
 		return result;
-		
-		
+	}
+	
+	
+	public ArrayList<PhieuNhapDTO> searchByDate(Date startDate, Date endDate){
+		ArrayList<PhieuNhapDTO> result = new ArrayList<PhieuNhapDTO>();
+		 for (PhieuNhapDTO pn : listPN) {
+			 Date ngayNhap = pn.getNgayNhap();
+			 if(ngayNhap != null && !ngayNhap.before(startDate) && !ngayNhap.after(endDate)) {
+			 	result.add(pn); 
+			 }
+		 }
+		 return result;
 	}
 	
 	
