@@ -425,7 +425,7 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
         tbPhieuNhap.getTableHeader().setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
   		
         tbPhieuNhap.setRowHeight(23);
-        tbPhieuNhap.getTableHeader().setPreferredSize(new Dimension(0, 23));
+        tbPhieuNhap.getTableHeader().setPreferredSize(new Dimension(0, 25));
         tbPhieuNhap.getTableHeader().setFont(new Font("Verdana", Font.BOLD, 12));
         
         //lay selected 
@@ -1145,6 +1145,24 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
         }
     }
     
+    public void xuatPDF() {
+        int selectedRow = tbPhieuNhap.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một phiếu nhập để xuất PDF!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            tbPhieuNhap.requestFocus();
+            return;
+        }
+
+        String maPN = (String) modelPhieuNhap.getValueAt(selectedRow, 0);
+        try {
+            PDFReporter pdfReporter = new PDFReporter();
+            pdfReporter.writePhieuNhap(maPN);
+            JOptionPane.showMessageDialog(this, "Xuất PDF thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi xuất PDF: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+    }
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
@@ -1162,5 +1180,7 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 			timKiem();
 		else if(command.equals("Xuất Excel"))
 			xuatExcel();
+		else if(command.equals("Xuất PDF"))
+			xuatPDF();
 	}
 }

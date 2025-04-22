@@ -1,13 +1,21 @@
 package GUI;
 
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.TableModel;
+import java.awt.FileDialog;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.TableModel;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelExporter {
 
@@ -18,18 +26,26 @@ public class ExcelExporter {
      * @throws IOException Nếu có lỗi khi ghi file
      */
     public static void exportJTableToExcel(JTable table) throws IOException {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Chọn đường dẫn lưu file Excel");
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("XLSX files", "xlsx");
-        fileChooser.setFileFilter(filter);
-        fileChooser.setAcceptAllFileFilterUsed(false);
+        JFrame jf = new JFrame();
+        FileDialog fd = new FileDialog(jf, "Chọn đường dẫn lưu file Excel", FileDialog.SAVE);
+        fd.pack();
+        fd.setSize(800, 600);
+        fd.validate();
+        Rectangle rect = jf.getContentPane().getBounds();
+        double width = fd.getBounds().getWidth();
+        double height = fd.getBounds().getHeight();
+        double x = rect.getCenterX() - (width / 2);
+        double y = rect.getCenterY() - (height / 2);
+        Point leftCorner = new Point();
+        leftCorner.setLocation(x, y);
+        fd.setLocation(leftCorner);
+        fd.setFile("export.xlsx"); // Tên tệp mặc định
+        fd.setVisible(true);
 
-        int userChoice = fileChooser.showSaveDialog(null);
-        if (userChoice != JFileChooser.APPROVE_OPTION) {
+        String filePath = fd.getDirectory() + fd.getFile();
+        if (filePath.equals("nullnull")) {
             return;
         }
-
-        String filePath = fileChooser.getSelectedFile().getAbsolutePath();
         if (!filePath.toLowerCase().endsWith(".xlsx")) {
             filePath += ".xlsx";
         }

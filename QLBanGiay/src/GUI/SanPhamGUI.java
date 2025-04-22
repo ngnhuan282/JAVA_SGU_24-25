@@ -117,7 +117,7 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         JPanel pLeftHeader = new JPanel();
         pLeftHeader.setBorder(new TitledBorder(null, "Chức năng", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         pLeftHeader.setBackground(Color.WHITE);
-        pLeftHeader.setBounds(2, 0, 502, 100);
+        pLeftHeader.setBounds(2, 0, 512, 100);
         pHeaderMain.add(pLeftHeader);
         pLeftHeader.setLayout(null);
 
