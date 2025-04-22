@@ -59,6 +59,7 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 	private SanPhamBUS sanPhamBUS = new SanPhamBUS();
 	private PhieuNhapBUS phieuNhapBUS = new PhieuNhapBUS();
 	private ChiTietPNBUS chiTietPNBUS = new ChiTietPNBUS();
+	private LoaiBUS loaiBUS = new LoaiBUS();
 	private ArrayList<ChiTietPNDTO> listTemp = new ArrayList<ChiTietPNDTO>();
 	private boolean isEditing = false;
 	private JLabel lbTongTien , lbNgayNhap;
@@ -918,7 +919,7 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 		DefaultTableModel modelSP = new DefaultTableModel(columns, 0);
 		for(SanPhamDTO sp : sanPhamBUS.getDssp()) {
 			String tenLoaiSP = "";
-			for (LoaiDTO loai : LoaiBUS.getDsloai()) {
+			for (LoaiDTO loai : loaiBUS.getDsloai()) {
                 if (loai.getMaLoaiSP() == sp.getMaLoaiSP()) {
                     tenLoaiSP = loai.getTenLoaiSP();
                 }
