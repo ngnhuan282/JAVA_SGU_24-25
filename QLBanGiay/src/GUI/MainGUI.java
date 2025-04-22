@@ -26,11 +26,12 @@ public class MainGUI extends JFrame implements ActionListener {
     private String color = "#006666";
     private CardLayout cardLayout;
     private JPanel pContent;
-
+    private String username;
+    
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
             try {
-                MainGUI frame = new MainGUI();
+                MainGUI frame = new MainGUI("Admin");
                 frame.setVisible(true);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -38,7 +39,8 @@ public class MainGUI extends JFrame implements ActionListener {
         });
     }
 
-    public MainGUI() throws SQLException {
+    public MainGUI(String username) throws SQLException {
+    	this.username = username;
         initComponents();
     }
 
@@ -76,7 +78,7 @@ public class MainGUI extends JFrame implements ActionListener {
         lbInfo1.setHorizontalAlignment(SwingConstants.CENTER);
         pAccount.add(lbInfo1);
 
-        JLabel lbInfo2 = new JLabel("Admin !");
+        JLabel lbInfo2 = new JLabel(username); // Hiển thị tên đăng nhập
         lbInfo2.setBounds(13, 49, 200, 33);
         lbInfo2.setForeground(Color.WHITE);
         lbInfo2.setFont(new Font("Verdana", Font.BOLD, 14));
@@ -98,6 +100,7 @@ public class MainGUI extends JFrame implements ActionListener {
         btnDangXuat.setBorderPainted(false);
         btnDangXuat.setBackground(Color.decode(color));
         btnDangXuat.setBounds(20, 600, 200, 35);
+        btnDangXuat.addActionListener(this);
         pNavItem.add(btnDangXuat);
 
         JButton btnTrangChuGUI = new JButton("TRANG CHỦ");
@@ -268,7 +271,10 @@ public class MainGUI extends JFrame implements ActionListener {
                 cardLayout.show(pContent, "ThongKe");
                 break;
             case "ĐĂNG XUẤT":
-                System.exit(0);
+                Login login = new Login();
+                login.setVisible(true);
+                login.setLocationRelativeTo(null);
+                dispose(); // Đóng MainGUI
                 break;
         }
     }

@@ -3,6 +3,8 @@ package GUI;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Vector;
@@ -47,7 +49,7 @@ public class LoaiSPDialog extends JDialog {
 
         JLabel lbTitle = new JLabel("QUẢN LÝ LOẠI SẢN PHẨM", SwingConstants.CENTER);
         lbTitle.setFont(new Font("Arial", Font.BOLD, 16));
-        lbTitle.setBounds(0, 0, 486, 40);
+        lbTitle.setBounds(4, 0, 486, 51);
         getContentPane().add(lbTitle);
 
         modelLoai = new DefaultTableModel(new String[]{"Mã loại", "Tên loại"}, 0);
@@ -55,7 +57,7 @@ public class LoaiSPDialog extends JDialog {
         tblLoai.setFont(new Font("Arial", Font.PLAIN, 13));
         tblLoai.getTableHeader().setFont(new Font("Arial", Font.BOLD, 13));
         JScrollPane scrollLoai = new JScrollPane(tblLoai);
-        scrollLoai.setBounds(10, 50, 480, 200);
+        scrollLoai.setBounds(4, 50, 480, 200);
         getContentPane().add(scrollLoai);
 
         JLabel lbMaLoai = new JLabel("Mã loại:");
@@ -105,14 +107,30 @@ public class LoaiSPDialog extends JDialog {
         getContentPane().add(btnXoaLoai);
 
         btnEditMode = new JButton("");
-        btnEditMode.setIcon(new ImageIcon(getClass().getResource("/image/editMode20.png")));
-        btnEditMode.setBounds(434, 10, 46, 21);
+        btnEditMode.setIcon(new ImageIcon(LoaiSPDialog.class.getResource("/image/editIcon.png")));
+        btnEditMode.setBounds(362, 8, 43, 32);
         btnEditMode.setFocusPainted(false);
         btnEditMode.setBorderPainted(false);
-        btnEditMode.setBackground(null);
+        btnEditMode.setForeground(Color.WHITE);
+        btnEditMode.setBackground(Color.decode("#B388FF"));
         btnEditMode.addActionListener(e -> toggleEditMode());
         getContentPane().add(btnEditMode);
-
+        
+        JButton btnRemove = new JButton("");
+        btnRemove.setIcon(new ImageIcon(LoaiSPDialog.class.getResource("/image/clear20.png")));
+        btnRemove.setFocusPainted(false);
+        btnRemove.setBorderPainted(false);
+        btnRemove.setBackground(Color.decode("#D4E157"));
+        btnRemove.setBounds(401, 8, 43, 32);
+        getContentPane().add(btnRemove);
+        btnRemove.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				clearForm();
+			}
+		});
         tblLoai.addMouseListener(new MouseListener() {
 			
 			@Override

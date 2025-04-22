@@ -129,7 +129,7 @@ public class Login extends JFrame {
         	JOptionPane.showMessageDialog(this, "Đăng nhập thành công!", 
         			"Thông báo", JOptionPane.INFORMATION_MESSAGE);
         	try {
-				MainGUI mainGUI = new MainGUI();
+				MainGUI mainGUI = new MainGUI(username);
 				mainGUI.setVisible(true);
 				mainGUI.setLocationRelativeTo(null);
 				dispose();
