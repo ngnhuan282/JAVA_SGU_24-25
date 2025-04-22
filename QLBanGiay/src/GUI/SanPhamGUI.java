@@ -72,7 +72,6 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         // Đọc danh sách sản phẩm và loại
         spBUS.docDSSP();
         loaiBUS.docDSLoai();
-        LoaiBUS loaiBUS = new LoaiBUS();
         for (SanPhamDTO sp : spBUS.getDssp()) {
             String tenLoaiSP = "";
             for (DTO.LoaiDTO loai : loaiBUS.getDsloai()) {
