@@ -130,4 +130,22 @@ public class SanPhamBUS {
     	}
     	return result;
     }
+    
+    
+    //Phieu nhappppppppp
+    public void updateSoLuong(String maSP , int soLuongThayDoi) {
+    	for(SanPhamDTO sp : dssp) {
+    		if(sp.getMaSP().equals(maSP)) {
+    			int soLuongMoi = sp.getSoLuong()+soLuongThayDoi;
+    			if(soLuongMoi < 0) {
+    				System.out.println("Số lượng sản phẩm không thể âm!");
+    				return;
+    			}
+    			sp.setSoLuong(soLuongMoi);
+    			SanPhamDAO spDAO = new SanPhamDAO();
+    			spDAO.capNhapSoLuong(maSP, soLuongMoi); 
+    			break;
+    		}
+    	}
+    }
 }

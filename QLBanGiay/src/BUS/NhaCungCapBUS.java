@@ -19,6 +19,11 @@ public class NhaCungCapBUS {
 	}
 	
 
+	public ArrayList<NhaCungCapDTO> getListNCC(){
+		docDSNCC();
+		return listNCC;
+	}
+	
 	public void docDSNCC() {
 		if(listNCC == null)
 			listNCC = new ArrayList<NhaCungCapDTO>();

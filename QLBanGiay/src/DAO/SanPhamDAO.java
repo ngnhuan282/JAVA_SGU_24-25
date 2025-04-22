@@ -91,4 +91,11 @@ public class SanPhamDAO {
 		mysql.disConnect();
 	}
 	
+	//Phieu nhapppppppppp
+	public void capNhapSoLuong(String maSP, int soLuong) {
+		String sql = "UPDATE sanpham SET SoLuong ="+soLuong+" WHERE MaSP = '"+maSP+"'";
+		mysql.executeUpdate(sql);
+		mysql.disConnect();
+	}
+	
 }

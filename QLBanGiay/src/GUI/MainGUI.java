@@ -296,12 +296,12 @@ public class MainGUI extends JFrame implements ActionListener {
 //    }
 
     
-    class PhieuNhapGUI extends JPanel {
-        public PhieuNhapGUI() {
-            setBackground(Color.WHITE);
-            add(new JLabel("Đây là Phiếu Nhập", SwingConstants.CENTER));
-        }
-    }
+//    class PhieuNhapGUI extends JPanel {
+//        public PhieuNhapGUI() {
+//            setBackground(Color.WHITE);
+//            add(new JLabel("Đây là Phiếu Nhập", SwingConstants.CENTER));
+//        }
+//    }
 
     class PhieuXuatGUI extends JPanel {
         public PhieuXuatGUI() {
