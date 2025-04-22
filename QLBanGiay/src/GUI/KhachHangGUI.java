@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import javax.swing.table.DefaultTableModel;
 
 import BUS.KhachHangBUS;
 import BUS.SanPhamBUS;
+import DAO.SanPhamDAO;
 import DTO.KhachHangDTO;
 import DTO.SanPhamDTO;
 
@@ -40,10 +42,12 @@ import javax.swing.JTree;
 import java.awt.List;
 import javax.swing.JDesktopPane;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.border.EtchedBorder;
 
 public class KhachHangGUI extends JPanel implements ActionListener {
@@ -178,6 +182,8 @@ public class KhachHangGUI extends JPanel implements ActionListener {
 
         JButton btnNhapExcel = new JButton("Nhập Excel");
         horizontalBox.add(btnNhapExcel);
+        btnNhapExcel.setActionCommand("Nhập Excel");
+        btnNhapExcel.addActionListener(this);
         btnNhapExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnNhapExcel.setPreferredSize(new Dimension(120, 140));
         btnNhapExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/bill48.png")));
@@ -607,6 +613,8 @@ public class KhachHangGUI extends JPanel implements ActionListener {
 			deleteCustomer();
 		else if(str.equals("Xuất Excel"))
 			xuatExcel();
+		else if(str.equals("Nhập Excel"))
+			nhapExcel();
 		
 	}
 	
@@ -619,5 +627,26 @@ public class KhachHangGUI extends JPanel implements ActionListener {
                     "Lỗi", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
+	}
+	
+	public void nhapExcel()
+	{
+	    	JFileChooser fileChooser = new JFileChooser();
+	        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xlsx", "xls");
+	        fileChooser.setFileFilter(filter);
+	        int result = fileChooser.showOpenDialog(this);
+	        if (result == JFileChooser.APPROVE_OPTION) {
+	            File selectedFile = fileChooser.getSelectedFile();
+	            try {
+	                KhachHangBUS khBUS = new KhachHangBUS();
+	                khBUS.ImportExcel(selectedFile);
+	                JOptionPane.showMessageDialog(this, "Nhập dữ liệu từ Excel thành công!", 
+	                        "Thành công", JOptionPane.INFORMATION_MESSAGE);
+	            } catch (Exception e) {
+	                JOptionPane.showMessageDialog(this, "Lỗi khi nhập Excel: " + e.getMessage(), 
+	                        "Lỗi", JOptionPane.ERROR_MESSAGE);
+	                e.printStackTrace();
+	            }
+	        }
 	}
 }

@@ -1,9 +1,11 @@
 package BUS;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 import DAO.NhanVienDAO;
+import DAO.SanPhamDAO;
 import DTO.KhachHangDTO;
 import DTO.NhanVienDTO;
 
@@ -58,5 +60,9 @@ public class NhanVienBUS {
 		nhanVienDAO.deleteNhanVienDAO(nv);
 	}
 
-	
+	 public void ImportExcel(File file)
+	 {
+	    	NhanVienDAO nvDAO = new NhanVienDAO();
+	    	nvDAO.ImportExcel(file);
+	 }
 }

@@ -1,17 +1,23 @@
 package DAO;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import DTO.NhaCungCapDTO;
 
 public class NhaCungCapDAO {
-
+	private MySQLConnect mysql = new MySQLConnect();
+	
 	public ArrayList<NhaCungCapDTO> xuatDSNCC(){
 		ArrayList<NhaCungCapDTO> listNCC = new ArrayList<>();
 		try {
-			MySQLConnect mysql = new MySQLConnect();
 			String sql = "SELECT * FROM nhacc";
 			ResultSet rs = mysql.executeQuery(sql);
 			while(rs.next()) {
@@ -32,7 +38,6 @@ public class NhaCungCapDAO {
 	
 	public void them(NhaCungCapDTO ncc) {
 		try {
-			MySQLConnect mysql = new MySQLConnect();
 			String sql = "INSERT INTO nhacc VALUES(";
 			sql += "'" +ncc.getMaNCC()+"',";
 			sql += "'" +ncc.getTenNCC()+"',";
@@ -48,7 +53,6 @@ public class NhaCungCapDAO {
 	
 	public void sua(NhaCungCapDTO ncc,String maNCC) {
 		try {
-			MySQLConnect mysql = new MySQLConnect();
 			String sql = "UPDATE nhacc SET ";
 			sql += "MaNCC= '"+ncc.getMaNCC()+"', ";
 			sql += "TenNCC= '"+ncc.getTenNCC()+"', ";
@@ -65,7 +69,6 @@ public class NhaCungCapDAO {
 	
 	public void xoa(String maNCC) {
 		try {
-			MySQLConnect mysql = new MySQLConnect();
 			String sql = "DELETE FROM nhacc WHERE MaNCC='"+maNCC+"'";
 			mysql.executeUpdate(sql);
 		} catch (Exception e) {
@@ -74,6 +77,55 @@ public class NhaCungCapDAO {
 		}		
 	}
 	
+	
+	public void ImportExcel(File file)
+	{
+		try {
+			FileInputStream in = new FileInputStream(file);
+			XSSFWorkbook workbook = new XSSFWorkbook(in);
+			XSSFSheet sheet = workbook.getSheetAt(0);
+			Row row;
+			for(int i=1; i <= sheet.getLastRowNum(); i++)
+			{
+				row = sheet.getRow(i);
+				String maNCC = row.getCell(0).getStringCellValue();
+				String tenNCC = row.getCell(1).getStringCellValue();
+				String diaChi = row.getCell(2).getStringCellValue();
+				String sdt = null;
+				if (row.getCell(3).getCellType() == org.apache.poi.ss.usermodel.CellType.NUMERIC) 
+	                sdt = String.format("%.0f", row.getCell(3).getNumericCellValue());
+	            else 
+	                sdt = row.getCell(3).getStringCellValue();
+				
+				String sqlCheck = "SELECT * FROM NhaCC WHERE MaNCC= '" + maNCC + "'";
+				ResultSet rs = mysql.executeQuery(sqlCheck);
+				if(!rs.next())
+				{
+					String sql = "INSERT INTO NhaCC VALUES (";
+					sql += "'" + maNCC + "', ";
+					sql += "'" + tenNCC + "', ";
+					sql += "'" + diaChi + "', ";
+					sql += "'" + sdt + "')";
+					System.out.println(sql);
+					mysql.executeUpdate(sql);
+				}
+				else
+				{
+					String sql = "UPDATE NhaCC SET ";
+	                sql += "TenNCC='" + tenNCC + "', ";
+	                sql += "DiaChi='" + diaChi + "', ";
+	                sql += "SDT='" + sdt + "' ";
+	                sql += "WHERE MaNCC='" + maNCC + "'";
+	                System.out.println(sql);
+					mysql.executeUpdate(sql);
+				}
+			}
+			in.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
 }
 
 

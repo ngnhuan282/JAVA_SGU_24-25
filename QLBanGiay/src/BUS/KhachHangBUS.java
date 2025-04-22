@@ -1,9 +1,11 @@
 package BUS;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 import DAO.KhachHangDAO;
+import DAO.NhanVienDAO;
 import DTO.KhachHangDTO;
 
 public class KhachHangBUS {
@@ -120,4 +122,10 @@ public class KhachHangBUS {
 		}
 		return result;
 	}
+	
+	public void ImportExcel(File file)
+	 {
+	    	KhachHangDAO khDAO = new KhachHangDAO();
+	    	khDAO.ImportExcel(file);
+	 }
 }	

@@ -1,11 +1,13 @@
 package BUS;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 import DAO.NhaCungCapDAO;
+import DAO.SanPhamDAO;
 import DTO.NhaCungCapDTO;
 
 
@@ -127,5 +129,9 @@ public class NhaCungCapBUS {
 		return false;
 	}
 	
-	
+	 public void ImportExcel(File file)
+	    {
+	    	NhaCungCapDAO nccDAO = new NhaCungCapDAO();
+	    	nccDAO.ImportExcel(file);
+	    }
 }

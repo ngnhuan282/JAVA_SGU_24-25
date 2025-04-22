@@ -699,8 +699,8 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             try {
-                SanPhamDAO spDAO = new SanPhamDAO();
-                spDAO.ImportExcel(selectedFile);
+                SanPhamBUS spBUS = new SanPhamBUS();
+                spBUS.ImportExcel(selectedFile);
                 loadDataToTable();
                 JOptionPane.showMessageDialog(this, "Nhập dữ liệu từ Excel thành công!", 
                         "Thành công", JOptionPane.INFORMATION_MESSAGE);

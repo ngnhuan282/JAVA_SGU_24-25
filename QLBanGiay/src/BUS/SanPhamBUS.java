@@ -1,5 +1,6 @@
 package BUS;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import DAO.SanPhamDAO;
@@ -147,5 +148,11 @@ public class SanPhamBUS {
     			break;
     		}
     	}
+    }
+    
+    public void ImportExcel(File file)
+    {
+    	SanPhamDAO spDAO = new SanPhamDAO();
+    	spDAO.ImportExcel(file);
     }
 }

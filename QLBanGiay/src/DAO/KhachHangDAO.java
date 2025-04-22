@@ -1,8 +1,14 @@
 package DAO;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import DTO.KhachHangDTO;
 
@@ -62,5 +68,57 @@ public class KhachHangDAO {
 		String sql  = "DELETE FROM khachhang WHERE MaKH ='" + x.getMaKH() + "'";
 		connection.executeUpdate(sql);
 		connection.disConnect();
+	}
+	
+	public void ImportExcel(File file)
+	{
+		try {
+			FileInputStream in = new FileInputStream(file);
+			XSSFWorkbook workbook = new XSSFWorkbook(in);
+			XSSFSheet sheet = workbook.getSheetAt(0);
+			Row row;
+			for(int i=1; i <= sheet.getLastRowNum(); i++)
+			{
+				row = sheet.getRow(i);
+				String maKH = row.getCell(0).getStringCellValue();
+				String ho = row.getCell(1).getStringCellValue();
+				String ten = row.getCell(2).getStringCellValue();
+				String sdt = null;
+				if (row.getCell(3).getCellType() == org.apache.poi.ss.usermodel.CellType.NUMERIC) 
+	                sdt = String.format("%.0f", row.getCell(3).getNumericCellValue());
+	            else 
+	                sdt = row.getCell(3).getStringCellValue();
+				String diaChi = row.getCell(4).getStringCellValue();
+				
+				String sqlCheck = "SELECT * FROM KhachHang WHERE MaKH= '" + maKH + "'";
+				ResultSet rs = connection.executeQuery(sqlCheck);
+				if(!rs.next())
+				{
+					String sql = "INSERT INTO KhachHang VALUES (";
+					sql += "'" + maKH + "', ";
+					sql += "'" + ho + "', ";
+					sql += "'" + ten + "', ";
+					sql += "'" + sdt + "', ";
+					sql += "'" + diaChi + "')";
+					System.out.println(sql);
+					connection.executeUpdate(sql);
+				}
+				else
+				{
+					String sql = "UPDATE KhachHang SET ";
+					sql += "Ho='" + ho + "', ";
+					sql += "Ten='" + ten + "', ";
+					sql += "SDT='" + sdt + "', ";
+					sql += "DiaChi='" + diaChi + "' ";
+					sql += "WHERE MaKH='" + maKH + "'";
+					System.out.println(sql);
+					connection.executeUpdate(sql);
+				}
+			}
+			in.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
 	}
 }

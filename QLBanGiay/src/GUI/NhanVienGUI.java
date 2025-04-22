@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -26,10 +28,12 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import BUS.NhanVienBUS;
+import DAO.SanPhamDAO;
 import DTO.NhanVienDTO;
 import GUI.ExcelExporter;
 
@@ -318,6 +322,8 @@ public class NhanVienGUI extends JPanel implements ActionListener {
             nhapExcel();
         } else if (str.equals("Xuất Excel")) {
             xuatExcel();
+        } else if (str.equals("Nhập Excel")) {
+            nhapExcel();
         }
     }
 
@@ -481,8 +487,25 @@ public class NhanVienGUI extends JPanel implements ActionListener {
         }
     }
 
-    public void nhapExcel() {
-    	
+    public void nhapExcel()
+    {
+    	JFileChooser fileChooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xlsx", "xls");
+        fileChooser.setFileFilter(filter);
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            try {
+                NhanVienBUS nvBUS = new NhanVienBUS();
+                nvBUS.ImportExcel(selectedFile);
+                JOptionPane.showMessageDialog(this, "Nhập dữ liệu từ Excel thành công!", 
+                        "Thành công", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi nhập Excel: " + e.getMessage(), 
+                        "Lỗi", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
+        }
     }
 
     public void xuatExcel() {
