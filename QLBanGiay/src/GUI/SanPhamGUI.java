@@ -117,13 +117,13 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         JPanel pLeftHeader = new JPanel();
         pLeftHeader.setBorder(new TitledBorder(null, "Chức năng", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         pLeftHeader.setBackground(Color.WHITE);
-        pLeftHeader.setBounds(2, 0, 579, 100);
+        pLeftHeader.setBounds(2, 0, 502, 100);
         pHeaderMain.add(pLeftHeader);
         pLeftHeader.setLayout(null);
 
         Box horizontalBox = Box.createHorizontalBox();
         horizontalBox.setBorder(UIManager.getBorder("Button.border"));
-        horizontalBox.setBounds(0, 0, 567, 111);
+        horizontalBox.setBounds(0, 0, 532, 111);
         pLeftHeader.add(horizontalBox);
 
         JButton btnThem = new JButton("Thêm", new ImageIcon(SanPhamGUI.class.getResource("/image/add48.png")));
@@ -186,24 +186,24 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         btnXuatExcel.setPreferredSize(new Dimension(100, 140));
         horizontalBox.add(btnXuatExcel);
         
-        JButton btnXuatPDF = new JButton("Xuất PDF");
-        btnXuatPDF.setFocusPainted(false);
-        btnXuatPDF.setActionCommand("Xuất PDF");
-        btnXuatPDF.addActionListener(this);
-        btnXuatPDF.setBorderPainted(false);
-        btnXuatPDF.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnXuatPDF.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/pdf48.png"))); // Thay bằng icon PDF
-        btnXuatPDF.setHorizontalTextPosition(SwingConstants.CENTER);
-        btnXuatPDF.setFont(new Font("Arial", Font.PLAIN, 15));
-        btnXuatPDF.setBackground(Color.WHITE);
-        btnXuatPDF.setPreferredSize(new Dimension(120, 140));
-        horizontalBox.add(btnXuatPDF);
+//        JButton btnXuatPDF = new JButton("Xuất PDF");
+//        btnXuatPDF.setFocusPainted(false);
+//        btnXuatPDF.setActionCommand("Xuất PDF");
+//        btnXuatPDF.addActionListener(this);
+//        btnXuatPDF.setBorderPainted(false);
+//        btnXuatPDF.setVerticalTextPosition(SwingConstants.BOTTOM);
+//        btnXuatPDF.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/pdf48.png"))); // Thay bằng icon PDF
+//        btnXuatPDF.setHorizontalTextPosition(SwingConstants.CENTER);
+//        btnXuatPDF.setFont(new Font("Arial", Font.PLAIN, 15));
+//        btnXuatPDF.setBackground(Color.WHITE);
+//        btnXuatPDF.setPreferredSize(new Dimension(120, 140));
+//        horizontalBox.add(btnXuatPDF);
         
         JButton btnLamMoi = new JButton("Làm mới");
         btnLamMoi.setBackground(Color.WHITE);
         btnLamMoi.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/reload30.png")));
         btnLamMoi.setFont(new Font("Arial", Font.PLAIN, 13));
-        btnLamMoi.setBounds(1070, 31, 126, 28);
+        btnLamMoi.setBounds(1045, 31, 126, 28);
         btnLamMoi.setActionCommand("Reload");
         btnLamMoi.addActionListener(this);
         pHeaderMain.add(btnLamMoi);
@@ -214,20 +214,20 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         cboxSearch.setFont(new Font("Arial", Font.PLAIN, 13));
         cboxSearch.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
         cboxSearch.setBackground(Color.WHITE);
-        cboxSearch.setBounds(614, 31, 79, 28);
+        cboxSearch.setBounds(569, 31, 79, 28);
         pHeaderMain.add(cboxSearch);
        
         
         txtSearch = new JTextField();
         txtSearch.setColumns(10);
-        txtSearch.setBounds(714, 32, 270, 27);
+        txtSearch.setBounds(658, 32, 290, 27);
         pHeaderMain.add(txtSearch);
         
         JButton btnSearch = new JButton("", new ImageIcon(SanPhamGUI.class.getResource("/image/search30.png")));
         btnSearch.setBackground(Color.WHITE);
         btnSearch.setActionCommand("Tìm kiếm");
         btnSearch.addActionListener(this);
-        btnSearch.setBounds(994, 29, 66, 30);
+        btnSearch.setBounds(958, 29, 66, 30);
         pHeaderMain.add(btnSearch);
 
         // Form

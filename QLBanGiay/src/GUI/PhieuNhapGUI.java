@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -97,13 +98,13 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
         JPanel pLeftHeader = new JPanel();
         pLeftHeader.setBorder(new TitledBorder(null, "Chức năng", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         pLeftHeader.setBackground(Color.WHITE);
-        pLeftHeader.setBounds(2, 0, 512, 100);
+        pLeftHeader.setBounds(2, 0, 489, 100);
         pHeaderMain.add(pLeftHeader);
         pLeftHeader.setLayout(null);
-        
+
         Box horizontalBox = Box.createHorizontalBox();
         horizontalBox.setBorder(UIManager.getBorder("Button.border"));
-        horizontalBox.setBounds(0, 0, 512, 111);
+        horizontalBox.setBounds(0, 0, 567, 111);
         pLeftHeader.add(horizontalBox);
 
         JButton btnThem = new JButton("Thêm", new ImageIcon(SanPhamGUI.class.getResource("/image/add48.png")));
@@ -142,18 +143,6 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
         btnXoa.setPreferredSize(new Dimension(100, 140));
         horizontalBox.add(btnXoa);
 
-        JButton btnNhapExcel = new JButton("Nhập Excel", new ImageIcon(SanPhamGUI.class.getResource("/image/excel48.png")));
-        btnNhapExcel.setFocusPainted(false);
-        btnNhapExcel.setActionCommand("Nhập Excel");
-        btnNhapExcel.addActionListener(this);
-        btnNhapExcel.setBorderPainted(false);
-        btnNhapExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnNhapExcel.setHorizontalTextPosition(SwingConstants.CENTER);
-        btnNhapExcel.setFont(new Font("Arial", Font.PLAIN, 15));
-        btnNhapExcel.setBackground(Color.WHITE);
-        btnNhapExcel.setPreferredSize(new Dimension(100, 140));
-        horizontalBox.add(btnNhapExcel);
-
         JButton btnXuatExcel = new JButton("Xuất Excel", new ImageIcon(SanPhamGUI.class.getResource("/image/xuatexcel48.png")));
         btnXuatExcel.setFocusPainted(false);
         btnXuatExcel.setActionCommand("Xuất Excel");
@@ -165,6 +154,19 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
         btnXuatExcel.setBackground(Color.WHITE);
         btnXuatExcel.setPreferredSize(new Dimension(100, 140));
         horizontalBox.add(btnXuatExcel);
+        
+        JButton btnXuatPDF = new JButton("Xuất PDF");
+        btnXuatPDF.setFocusPainted(false);
+        btnXuatPDF.setActionCommand("Xuất PDF");
+        btnXuatPDF.addActionListener(this);
+        btnXuatPDF.setBorderPainted(false);
+        btnXuatPDF.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnXuatPDF.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/pdf48.png"))); // Thay bằng icon PDF
+        btnXuatPDF.setHorizontalTextPosition(SwingConstants.CENTER);
+        btnXuatPDF.setFont(new Font("Arial", Font.PLAIN, 15));
+        btnXuatPDF.setBackground(Color.WHITE);
+        btnXuatPDF.setPreferredSize(new Dimension(120, 140));
+        horizontalBox.add(btnXuatPDF);
         
         JButton btnLamMoi = new JButton("Làm mới");
         btnLamMoi.setBackground(Color.WHITE);
@@ -195,25 +197,25 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
         btnSearch.addActionListener(this);
         btnSearch.setBounds(958, 29, 66, 30);
         pHeaderMain.add(btnSearch);
-        //Search ngay
-        lblDateStart = new JLabel("Từ ngày:");
+        
+        JLabel lblDateStart = new JLabel("Từ ngày:");
         lblDateStart.setFont(new Font("Arial", Font.PLAIN, 13));
-        lblDateStart.setBounds(588, 70, 60, 20);    
+        lblDateStart.setBounds(624, 70, 60, 20);
         pHeaderMain.add(lblDateStart);
         
-        dateStart = new JDateChooser();
+        JDateChooser dateStart = new JDateChooser();
         dateStart.setDateFormatString("yyyy-MM-dd");
-        dateStart.setBounds(658, 69, 126, 20);
+        dateStart.setBounds(694, 69, 126, 20);
         pHeaderMain.add(dateStart);
         
-        lblDateEnd = new JLabel("Đến ngày:");
+        JLabel lblDateEnd = new JLabel("Đến ngày:");
         lblDateEnd.setFont(new Font("Arial", Font.PLAIN, 13));
-        lblDateEnd.setBounds(828, 70, 60, 20);
+        lblDateEnd.setBounds(864, 70, 60, 20);
         pHeaderMain.add(lblDateEnd);
-            
-        dateEnd = new JDateChooser();
+        
+        JDateChooser dateEnd = new JDateChooser();
         dateEnd.setDateFormatString("yyyy-MM-dd");
-        dateEnd.setBounds(898, 70, 126, 20);
+        dateEnd.setBounds(934, 70, 126, 20);
         pHeaderMain.add(dateEnd);
         
         
@@ -971,8 +973,6 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 	
 	public DefaultTableModel updateTablePN() {
 		txtSearch.setText("");
-        dateStart.setDate(null);
-        dateEnd.setDate(null);
 		
 		modelPhieuNhap.setRowCount(0);
 		
@@ -1134,6 +1134,17 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 		listTemp.clear();
 	}
 	
+    public void xuatExcel()
+    {
+    	try {
+            ExcelExporter.exportJTableToExcel(tbPhieuNhap);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi xuất file Excel: " + e.getMessage(),
+                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
+    
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
@@ -1149,5 +1160,7 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 			updateTablePN();
 		else if(command.equals("Tìm kiếm"))
 			timKiem();
+		else if(command.equals("Xuất Excel"))
+			xuatExcel();
 	}
 }

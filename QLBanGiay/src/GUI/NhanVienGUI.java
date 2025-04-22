@@ -111,7 +111,7 @@ public class NhanVienGUI extends JPanel implements ActionListener {
         btnThem.setFont(new Font("Arial", Font.PLAIN, 15));
         btnThem.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnThem.setHorizontalTextPosition(SwingConstants.CENTER);
-        btnThem.setPreferredSize(new Dimension(120, 140));
+        btnThem.setPreferredSize(new Dimension(100, 140));
         horizontalBox.add(btnThem);
 
         JButton btnSua = new JButton("Sửa");
@@ -124,7 +124,7 @@ public class NhanVienGUI extends JPanel implements ActionListener {
         btnSua.setHorizontalTextPosition(SwingConstants.CENTER);
         btnSua.setFont(new Font("Arial", Font.PLAIN, 15));
         btnSua.setBackground(Color.WHITE);
-        btnSua.setPreferredSize(new Dimension(120, 140));
+        btnSua.setPreferredSize(new Dimension(100, 140));
         horizontalBox.add(btnSua);
 
         JButton btnXoa = new JButton("Xóa");
@@ -137,7 +137,7 @@ public class NhanVienGUI extends JPanel implements ActionListener {
         btnXoa.setHorizontalTextPosition(SwingConstants.CENTER);
         btnXoa.setFont(new Font("Arial", Font.PLAIN, 15));
         btnXoa.setBackground(Color.WHITE);
-        btnXoa.setPreferredSize(new Dimension(120, 140));
+        btnXoa.setPreferredSize(new Dimension(100, 140));
         horizontalBox.add(btnXoa);
 
         btnNhapExcel = new JButton("Nhập Excel");
@@ -150,7 +150,7 @@ public class NhanVienGUI extends JPanel implements ActionListener {
         btnNhapExcel.setHorizontalTextPosition(SwingConstants.CENTER);
         btnNhapExcel.setFont(new Font("Arial", Font.PLAIN, 15));
         btnNhapExcel.setBackground(Color.WHITE);
-        btnNhapExcel.setPreferredSize(new Dimension(120, 140));
+        btnNhapExcel.setPreferredSize(new Dimension(100, 140));
         horizontalBox.add(btnNhapExcel);
 
         btnXuatExcel = new JButton("Xuất Excel");
@@ -163,13 +163,13 @@ public class NhanVienGUI extends JPanel implements ActionListener {
         btnXuatExcel.setHorizontalTextPosition(SwingConstants.CENTER);
         btnXuatExcel.setFont(new Font("Arial", Font.PLAIN, 15));
         btnXuatExcel.setBackground(Color.WHITE);
-        btnXuatExcel.setPreferredSize(new Dimension(120, 140));
+        btnXuatExcel.setPreferredSize(new Dimension(100, 140));
         horizontalBox.add(btnXuatExcel);
 
         String[] listKeyWord = {"Mã NV", "Tên NV"};
         cboxSearch = new JComboBox<String>(listKeyWord);
         cboxSearch.setFont(new Font("Arial", Font.PLAIN, 14));
-        cboxSearch.setBounds(524, 30, 75, 28);
+        cboxSearch.setBounds(569, 31, 79, 28);
         cboxSearch.setBackground(Color.WHITE);
         cboxSearch.setForeground(Color.BLACK);
         cboxSearch.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
@@ -177,12 +177,12 @@ public class NhanVienGUI extends JPanel implements ActionListener {
 
         txtSearch = new JTextField();
         txtSearch.setColumns(10);
-        txtSearch.setBounds(643, 30, 237, 27);
+        txtSearch.setBounds(658, 32, 290, 27);
         pHeaderMain.add(txtSearch);
 
         JButton btnSearch = new JButton("");
         btnSearch.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/search30.png")));
-        btnSearch.setBounds(908, 22, 63, 39);
+        btnSearch.setBounds(958, 29, 66, 30);
         btnSearch.setActionCommand("Tìm kiếm");
         btnSearch.addActionListener(this);
         pHeaderMain.add(btnSearch);

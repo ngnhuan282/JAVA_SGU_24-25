@@ -104,7 +104,7 @@ public class NhaCungCapGUI extends JPanel implements ActionListener{
         
         Box horizontalBox = Box.createHorizontalBox();
         horizontalBox.setBorder(UIManager.getBorder("Button.border"));
-        horizontalBox.setBounds(0, 0, 512, 111);
+        horizontalBox.setBounds(0, 0, 532, 111);
         pLeftHeader.add(horizontalBox);
 
         JButton btnThem = new JButton("Thêm", new ImageIcon(SanPhamGUI.class.getResource("/image/add48.png")));
