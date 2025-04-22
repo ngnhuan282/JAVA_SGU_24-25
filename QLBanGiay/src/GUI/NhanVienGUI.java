@@ -142,7 +142,7 @@ public class NhanVienGUI extends JPanel implements ActionListener {
         btnNhapExcel.addActionListener(this);
         btnNhapExcel.setBorderPainted(false);
         btnNhapExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnNhapExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/bill48.png")));
+        btnNhapExcel.setIcon(new ImageIcon(NhanVienGUI.class.getResource("/image/excel48.png")));
         btnNhapExcel.setHorizontalTextPosition(SwingConstants.CENTER);
         btnNhapExcel.setFont(new Font("Arial", Font.PLAIN, 15));
         btnNhapExcel.setBackground(Color.WHITE);
@@ -155,7 +155,7 @@ public class NhanVienGUI extends JPanel implements ActionListener {
         btnXuatExcel.addActionListener(this);
         btnXuatExcel.setBorderPainted(false);
         btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnXuatExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/excel48.png")));
+        btnXuatExcel.setIcon(new ImageIcon(NhanVienGUI.class.getResource("/image/xuatexcel48.png")));
         btnXuatExcel.setHorizontalTextPosition(SwingConstants.CENTER);
         btnXuatExcel.setFont(new Font("Arial", Font.PLAIN, 15));
         btnXuatExcel.setBackground(Color.WHITE);
