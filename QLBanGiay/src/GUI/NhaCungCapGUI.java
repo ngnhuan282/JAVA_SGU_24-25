@@ -77,6 +77,7 @@ public class NhaCungCapGUI extends JPanel implements ActionListener{
 		String[] columnNames = { "Mã NCC", "Tên Nhà Cung Cấp", "Số Điện Thoại", "Địa Chỉ" };
 		model = new DefaultTableModel(columnNames, 0);
 		initComponents();
+		//aaaaa
 	}
 
 	public void initComponents() {
