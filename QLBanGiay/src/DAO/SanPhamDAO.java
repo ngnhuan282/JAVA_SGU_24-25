@@ -1,9 +1,13 @@
 package DAO;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Logger;
+
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import DTO.SanPhamDTO;
 
@@ -27,16 +31,16 @@ public class SanPhamDAO {
 			{
 				String maSP = rs.getString("MaSP");
 				String tenSP = rs.getString("TenSP");
+				int maLoaiSP = rs.getInt("MaLoaiSP");
 				int soLuong = rs.getInt("SoLuong");
 				double donGia = rs.getDouble("DonGia");
 				String donViTinh = rs.getString("DonViTinh");
-				int maLoaiSP = rs.getInt("MaLoaiSP");
 				String chatLieu = rs.getString("ChatLieu");
 				String kieuDang = rs.getString("KieuDang");
 				String mauSac = rs.getString("MauSac");
 				int kichThuoc = rs.getInt("KichThuoc");
 				
-				SanPhamDTO sp = new SanPhamDTO(maSP, tenSP, soLuong, donGia, donViTinh, maLoaiSP,
+				SanPhamDTO sp = new SanPhamDTO(maSP, tenSP, maLoaiSP, soLuong, donGia, donViTinh,
 											mauSac, kichThuoc, chatLieu, kieuDang);
 				dssp.add(sp);
 			}
@@ -53,10 +57,10 @@ public class SanPhamDAO {
 		String sql = "INSERT INTO SanPham VALUES(";
 		sql += "'" + sp.getMaSP() + "', ";
         sql += "'" + sp.getTenSP() + "', ";
+        sql += "'" + sp.getMaLoaiSP() + "', ";
         sql += "'" + sp.getSoLuong() + "', ";
         sql += "'" + sp.getDonGia() + "', ";  
         sql += "'" + sp.getDonViTinh() + "', ";
-        sql += "'" + sp.getMaLoaiSP() + "', ";
         sql += "'" + sp.getMauSac() + "', ";
         sql += "'" + sp.getKichThuoc() + "', "; 
         sql += "'" + sp.getChatLieu() + "', ";
@@ -71,10 +75,10 @@ public class SanPhamDAO {
 		String sql = "UPDATE SanPham SET ";
 		sql += "MaSP='" + sp.getMaSP() + "', ";
 		sql += "TenSP='" + sp.getTenSP() + "', ";
+		sql += "MaLoaiSP='" + sp.getMaLoaiSP() + "', ";
 		sql += "SoLuong='" + sp.getSoLuong() + "', ";
 		sql += "DonGia='" + sp.getDonGia() + "', ";
 		sql += "DonViTinh='" + sp.getDonViTinh() + "', ";
-		sql += "MaLoaiSP='" + sp.getMaLoaiSP() + "', ";
 		sql += "ChatLieu='" + sp.getChatLieu() + "', ";
 		sql += "MauSac='" + sp.getMauSac() + "', ";
 		sql += "KieuDang='" + sp.getKieuDang() + "', ";
@@ -98,4 +102,84 @@ public class SanPhamDAO {
 		mysql.disConnect();
 	}
 	
+	
+	public void ImportExcel(File file)
+	{
+		try {
+			FileInputStream in = new FileInputStream(file);
+			XSSFWorkbook workbook = new XSSFWorkbook(in);
+			XSSFSheet sheet = workbook.getSheetAt(0);
+			Row row;
+			for(int i=1; i <= sheet.getLastRowNum(); i++)
+			{
+				row = sheet.getRow(i);
+				String maSP = row.getCell(0).getStringCellValue();
+				String tenSP = row.getCell(1).getStringCellValue();
+				String loai = row.getCell(2).getStringCellValue();
+				int soLuong = (int) row.getCell(4).getNumericCellValue();
+				int gia = (int) row.getCell(3).getNumericCellValue();
+				String DVT = row.getCell(5).getStringCellValue();
+				String mauSac = row.getCell(6).getStringCellValue();
+				int kichThuoc = (int) row.getCell(7).getNumericCellValue();
+				String chatLieu = row.getCell(8).getStringCellValue();
+				String kieuDang = row.getCell(9).getStringCellValue();
+				
+				String sqlCheckLoai = "SELECT MaLoaiSP FROM PhanLoai WHERE TenLoaiSP= '" + loai + "'";
+				ResultSet rsLoai = mysql.executeQuery(sqlCheckLoai);
+				int maLoaiSP;
+				if(rsLoai.next())
+				{
+					maLoaiSP = rsLoai.getInt("MaLoaiSP");
+				}
+				else
+				{
+					String sql = "INSERT INTO PhanLoai (TenLoaiSP) VALUES ('" + loai + "')";
+					mysql.executeUpdate(sql);
+					rsLoai = mysql.executeQuery("SELECT LAST_INSERT_ID() as MaLoaiSP");
+					rsLoai.next();
+					maLoaiSP = rsLoai.getInt("MaLoaiSP");
+				}
+				
+				String sqlCheckSP = "SELECT * FROM SANPHAM WHERE MaSP = '" + maSP + "'";
+	            ResultSet rsSP = mysql.executeQuery(sqlCheckSP);
+				
+				if(!rsSP.next()) //Sản phẩm chưa tồn tại
+				{
+					String sql = "INSERT INTO sanpham VALUES (";
+					sql += "'" + maSP + "', ";
+					sql += "'" + tenSP + "', ";
+					sql += "'" + soLuong + "', ";
+					sql += "'" + gia + "', ";
+					sql += "'" + DVT + "', ";
+					sql += "'" + maLoaiSP + "', ";
+					sql += "'" + mauSac + "', ";
+					sql += "'" + kichThuoc + "', ";
+					sql += "'" + chatLieu + "', ";
+					sql += "'" + kieuDang + "', ";
+					System.out.print(sql);
+					mysql.executeUpdate(sql);
+				}
+				else
+				{
+					String sql = "UPDATE sanpham SET ";
+					sql += "TenSP= '" + tenSP + "', ";
+					sql += "MaLoaiSP= '" + maLoaiSP + "', ";
+					sql += "SoLuong= '" + soLuong + "', ";
+					sql += "DonGia= '" + gia + "', ";
+					sql += "DonViTinh= '" + DVT + "', ";
+					sql += "MauSac= '" + mauSac + "', ";
+					sql += "KichThuoc= '" + kichThuoc + "', ";
+					sql += "ChatLieu= '" + chatLieu + "', ";
+					sql += "KieuDang= '" + kieuDang + "' ";
+					sql += "WHERE MaSP= '" +maSP + "'";
+					System.out.println(sql);
+					mysql.executeUpdate(sql);
+				}
+			}
+			in.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
 }

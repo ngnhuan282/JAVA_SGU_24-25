@@ -17,7 +17,7 @@ public class SanPhamDTO {
 	
 	
 
-	public SanPhamDTO(String maSP, String tenSP, int soLuong, double donGia, String donViTinh, int maLoaiSP,
+	public SanPhamDTO(String maSP, String tenSP, int maLoaiSP, int soLuong, double donGia, String donViTinh,
 			String mauSac, int kichThuoc,  String chatLieu, String kieuDang) {
 		this.maSP = maSP;
 		this.tenSP = tenSP;

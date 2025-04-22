@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -17,6 +18,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -31,12 +33,12 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
-
-import com.itextpdf.text.DocumentException;
 
 import BUS.LoaiBUS;
 import BUS.SanPhamBUS;
+import DAO.SanPhamDAO;
 import DTO.SanPhamDTO;
 
 public class SanPhamGUI extends JPanel implements ActionListener {
@@ -56,7 +58,7 @@ public class SanPhamGUI extends JPanel implements ActionListener {
 
     public SanPhamGUI() 
     {
-        Object[] header = {"Mã SP", "Tên SP", "Loại", "Giá", "Số lượng", "ĐVT", "Màu sắc", "Kích thước", "Chất liệu", "Kiểu dáng"};
+        Object[] header = {"Mã SP", "Tên SP", "Loại", "Số lượng", "Giá", "ĐVT", "Màu sắc", "Kích thước", "Chất liệu", "Kiểu dáng"};
         model = new DefaultTableModel(header, 0);
         tblDSSP = new JTable(model);
 
@@ -81,7 +83,7 @@ public class SanPhamGUI extends JPanel implements ActionListener {
                 }
             }
             model.addRow(new Object[]{
-                sp.getMaSP(), sp.getTenSP(), tenLoaiSP, sp.getDonGia(), sp.getSoLuong(), 
+                sp.getMaSP(), sp.getTenSP(), tenLoaiSP, sp.getSoLuong(), sp.getDonGia(),
                 sp.getDonViTinh(), sp.getMauSac(), sp.getKichThuoc(), sp.getChatLieu(), 
                 sp.getKieuDang()
             });
@@ -546,7 +548,7 @@ public class SanPhamGUI extends JPanel implements ActionListener {
             double donGia = Double.parseDouble(donGiaStr);
             int soLuong = Integer.parseInt(soLuongStr);
 
-            SanPhamDTO sp = new SanPhamDTO(maSP, tenSP, soLuong, donGia, donViTinh, maLoaiSP, mauSac, kichThuoc, chatLieu, kieuDang);
+            SanPhamDTO sp = new SanPhamDTO(maSP, tenSP, maLoaiSP, soLuong, donGia, donViTinh,  mauSac, kichThuoc, chatLieu, kieuDang);
             if (spBUS.addSP(sp)) 
             {
                 String tenLoaiSP = cbLoaiSP.getSelectedItem().toString();
@@ -608,7 +610,7 @@ public class SanPhamGUI extends JPanel implements ActionListener {
             double donGia = Double.parseDouble(donGiaStr);
             int soLuong = Integer.parseInt(soLuongStr);
 
-            SanPhamDTO sp = new SanPhamDTO(maSP, tenSP, soLuong, donGia, donViTinh, maLoaiSP, mauSac, kichThuoc, chatLieu, kieuDang);
+            SanPhamDTO sp = new SanPhamDTO(maSP, tenSP, maLoaiSP, soLuong, donGia, donViTinh,  mauSac, kichThuoc, chatLieu, kieuDang);
             if (spBUS.updateSP(sp)) {
                 String tenLoaiSP = cbLoaiSP.getSelectedItem().toString();
                 model.setValueAt(maSP, row, 0);
@@ -655,9 +657,6 @@ public class SanPhamGUI extends JPanel implements ActionListener {
                     "Lỗi", JOptionPane.ERROR_MESSAGE);
     }
 
-    public void nhapExcel() {
-        JOptionPane.showMessageDialog(this, "Chức năng Nhập Excel chưa được triển khai!");
-    }
 
     public void openLoaiSPDialog() 
     {
@@ -691,6 +690,27 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         }
     }
     
+    public void nhapExcel()
+    {
+    	JFileChooser fileChooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xlsx", "xls");
+        fileChooser.setFileFilter(filter);
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            try {
+                SanPhamDAO spDAO = new SanPhamDAO();
+                spDAO.ImportExcel(selectedFile);
+                loadDataToTable();
+                JOptionPane.showMessageDialog(this, "Nhập dữ liệu từ Excel thành công!", 
+                        "Thành công", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi nhập Excel: " + e.getMessage(), 
+                        "Lỗi", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
+        }
+    }
     
     public static void main(String[] args) {
         JFrame frame = new JFrame("Test SanPhamGUI");
