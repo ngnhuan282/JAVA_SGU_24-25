@@ -48,21 +48,31 @@ public class ChiTietHoaDonBUS {
 	}
 	
 	public void deleteCTHD(String maHD) {
+		for(ChiTietHDDTO x : listCTHD) {
+			if(x.getMaHD().equals(maHD)) {
+				chiTietHoaDonDAO.tangSoLuongSP(x.getMaSP(), x.getSoLuong());
+			}
+		}
 		listCTHD.removeIf(x -> x.getMaHD().equals(maHD));
 		chiTietHoaDonDAO.deleteCTHD(maHD);
 	}
 	
 	public void deleteCTHDByIndex(int index) {
 		ChiTietHDDTO chiTietHDDTO = listCTHD.get(index);
-		System.out.println(listCTHD.size());
 		listCTHD.remove(index);
-		System.out.println(listCTHD.size());
 		chiTietHoaDonDAO.deleteCTHD(chiTietHDDTO.getMaHD(), chiTietHDDTO.getMaSP());
 	}
 	
-	public boolean checkDulicateMaSP(String maSP) {
+	public void deleteCTHDByIndex(int index, String maSP) {
+		ChiTietHDDTO chiTietHDDTO = listCTHD.get(index);
+		listCTHD.remove(index);
+		chiTietHoaDonDAO.tangSoLuongSP(maSP, chiTietHDDTO.getSoLuong());
+		chiTietHoaDonDAO.deleteCTHD(chiTietHDDTO.getMaHD(), chiTietHDDTO.getMaSP());
+	}
+	
+	public boolean checkDulicateMaSP(String maSP, String maHD) {
 		for(ChiTietHDDTO x : listCTHD) {
-			if(x.getMaSP().equals(maSP))
+			if(x.getMaSP().equals(maSP) && x.getMaHD().equals(maHD))
 				return true;
 		}
 		return false;
@@ -74,5 +84,9 @@ public class ChiTietHoaDonBUS {
 				return true;
 		}
 		return false;
+	}
+	
+	public void updateSoLuongSP(String maSP, int soLuong) {
+		chiTietHoaDonDAO.updateSoLuongSP(maSP, soLuong);
 	}
 }

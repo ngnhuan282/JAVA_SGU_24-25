@@ -62,4 +62,16 @@ public class ChiTietHoaDonDAO {
 		connection.executeUpdate(sql);
 		connection.disConnect();
 	}
+	
+	public void updateSoLuongSP(String maSP, int soLuong) {
+		String sql = "UPDATE sanpham SET SoLuong = SoLuong - "+ soLuong + " WHERE MaSP = '" + maSP + "'";
+		connection.executeUpdate(sql);
+		connection.disConnect();
+	}
+	
+	public void tangSoLuongSP(String maSP, int soLuong) {
+		String sql = "UPDATE sanpham SET SoLuong = SoLuong + "+ soLuong + " WHERE MaSP = '" + maSP + "'";
+		connection.executeUpdate(sql);
+		connection.disConnect();
+	}
 }

@@ -84,6 +84,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 	private double donGia;
 	private double thanhTien;
 	private double tongTien = 0;
+	private ArrayList<Integer> soLuongTruocKhiUpdate;
 
 	/**
 	 * Launch the application.
@@ -109,174 +110,18 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 		nhanVienBUS = new NhanVienBUS();
 		khachHangBUS = new KhachHangBUS();
 		listTemp = new ArrayList<ChiTietHDDTO>();
+		soLuongTruocKhiUpdate = new ArrayList<Integer>();
 		initComponents();
 	}
 	
+	/**
+	 * 
+	 */
 	public void initComponents() {
-//		setPreferredSize(new Dimension(1248, 757));
-//		setLayout(null);
-//		setBackground(Color.white);
-//		setTitle("Hệ thống quản lý bán giày");
-//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-//		setLocationRelativeTo(null);
-//		contentPane = new JPanel();
-//		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-//		setContentPane(contentPane);
-//		contentPane.setLayout(null);
-//		
-//		JPanel pMain = new JPanel();
-//		pMain.setBounds(205, 6, 1300, 800);
-//		contentPane.add(pMain);
-//		pMain.setLayout(new BoxLayout(pMain, BoxLayout.X_AXIS));
-		
 		JPanel pHeaderMain = new JPanel();
 		pHeaderMain.setBounds(0, 0, 1206, 100);
 		pHeaderMain.setBackground(Color.WHITE);
 		add(pHeaderMain);
-		
-//		JPanel pNavbar = new JPanel();
-//		pNavbar.setBounds(5, 6, 200, 800);
-//		contentPane.add(pNavbar);
-//		pNavbar.setLayout(null);
-//		pNavbar.setPreferredSize(new Dimension(200, 800));
-//		pNavbar.setBackground(Color.decode(color));
-		
-//		JPanel pAccount = new JPanel();
-//		pAccount.setBounds(0, 0, 200, 88);
-////		pNavbar.add(pAccount);
-//		pAccount.setBackground(Color.decode(color));
-//		pAccount.setLayout(null);
-		
-        /************* PHẦN HIỂN THỊ THÔNG TIN TÀI KHOẢN ************/
-//		JLabel lbInfo1 = new JLabel("Xin chào");
-//		lbInfo1.setIcon(new ImageIcon(KhachHangGUI.class.getResource("/image/userIcon.png")));
-//		lbInfo1.setVerticalTextPosition(SwingConstants.BOTTOM);
-//		lbInfo1.setHorizontalTextPosition(SwingConstants.CENTER);
-//		lbInfo1.setForeground(Color.WHITE);
-//		lbInfo1.setBounds(0, 0, 200, 54);
-//		lbInfo1.setFont(new Font("Verdana", Font.BOLD, 14));
-//		lbInfo1.setHorizontalAlignment(SwingConstants.CENTER);
-//		pAccount.add(lbInfo1);
-//		
-//		JLabel lbInfo2 = new JLabel("Admin !");
-//		lbInfo2.setBounds(0, 55, 200, 33);
-//		pAccount.add(lbInfo2);
-//		lbInfo2.setForeground(Color.WHITE);
-//		lbInfo2.setFont(new Font("Verdana", Font.BOLD, 14));
-//		lbInfo2.setHorizontalAlignment(SwingConstants.CENTER);
-//		
-//		JPanel pNavItem = new JPanel();
-//		pNavItem.setBounds(0, 87, 200, 713);
-//		pNavItem.setBackground(Color.decode(color));
-//		pNavbar.add(pNavItem);
-//		pNavItem.setLayout(null);
-//		
-//		/************* NAVBAR ************/
-//		JButton btnDangXuat = new JButton("ĐĂNG XUẤT");
-//		btnDangXuat.setIcon(new ImageIcon(KhachHangGUI.class.getResource("/image/logoutIcon.png")));
-//		btnDangXuat.setOpaque(true);
-//		btnDangXuat.setHorizontalAlignment(SwingConstants.LEFT);
-//		btnDangXuat.setForeground(Color.WHITE);
-//		btnDangXuat.setFont(new Font("Verdana", Font.BOLD, 14));
-//		btnDangXuat.setBorderPainted(false);
-//		btnDangXuat.setBackground(Color.decode(color));
-//		btnDangXuat.setBounds(0, 587, 200, 35);
-//		pNavItem.add(btnDangXuat);
-//		
-//		JPanel panel_2 = new JPanel();
-//		panel_2.setBounds(0, 0, 10, 10);
-//		pNavItem.add(panel_2);
-//		
-//		JButton btnTrangChuGUI = new JButton("TRANG CHỦ");
-//		btnTrangChuGUI.setIcon(new ImageIcon(KhachHangGUI.class.getResource("/image/homeIcon.png")));
-//		btnTrangChuGUI.setOpaque(true);
-//		btnTrangChuGUI.setHorizontalAlignment(SwingConstants.LEFT);
-//		btnTrangChuGUI.setForeground(Color.WHITE);
-//		btnTrangChuGUI.setFont(new Font("Verdana", Font.BOLD, 14));
-//		btnTrangChuGUI.setBorderPainted(false);
-//		btnTrangChuGUI.setBackground(Color.decode(color));
-//		btnTrangChuGUI.setBounds(0, 0, 200, 35);
-//		pNavItem.add(btnTrangChuGUI);
-//		
-//		JButton btnSanPhamGUI = new JButton("SẢN PHẨM");
-//		btnSanPhamGUI.addActionListener(this);
-//		btnSanPhamGUI.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/productIcon.png")));
-//		btnSanPhamGUI.setOpaque(true);
-//		btnSanPhamGUI.setHorizontalAlignment(SwingConstants.LEFT);
-//		btnSanPhamGUI.setForeground(Color.WHITE);
-//		btnSanPhamGUI.setFont(new Font("Verdana", Font.BOLD, 14));
-//		btnSanPhamGUI.setBorderPainted(false);
-//		btnSanPhamGUI.setBackground(Color.decode(color));
-//		btnSanPhamGUI.setBounds(0, 38, 200, 35);
-//		pNavItem.add(btnSanPhamGUI);
-//		
-//		JButton btnNhaCungCapGUI = new JButton("NHÀ CUNG CẤP");
-//		btnNhaCungCapGUI.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/providerIcon.png")));
-//		btnNhaCungCapGUI.setOpaque(true);
-//		btnNhaCungCapGUI.setHorizontalAlignment(SwingConstants.LEFT);
-//		btnNhaCungCapGUI.setForeground(Color.WHITE);
-//		btnNhaCungCapGUI.setFont(new Font("Verdana", Font.BOLD, 14));
-//		btnNhaCungCapGUI.setBorderPainted(false);
-//		btnNhaCungCapGUI.setBackground(Color.decode(color));
-//		btnNhaCungCapGUI.setBounds(0, 72, 200, 35);
-//		pNavItem.add(btnNhaCungCapGUI);
-//		
-//		JButton btnNhanVienGUI = new JButton("NHÂN VIÊN");
-//		btnNhanVienGUI.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/employeeIcon.png")));
-//		btnNhanVienGUI.setOpaque(true);
-//		btnNhanVienGUI.setHorizontalAlignment(SwingConstants.LEFT);
-//		btnNhanVienGUI.setForeground(Color.WHITE);
-//		btnNhanVienGUI.setFont(new Font("Verdana", Font.BOLD, 14));
-//		btnNhanVienGUI.setBorderPainted(false);
-//		btnNhanVienGUI.setBackground(Color.decode(color));
-//		btnNhanVienGUI.setBounds(0, 104, 200, 35);
-//		pNavItem.add(btnNhanVienGUI);
-//		
-//		JButton btnKhachHangGUI = new JButton("KHÁCH HÀNG");
-//		btnKhachHangGUI.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/clientIcon.png")));
-//		btnKhachHangGUI.setOpaque(true);
-//		btnKhachHangGUI.setHorizontalAlignment(SwingConstants.LEFT);
-//		btnKhachHangGUI.setForeground(Color.WHITE);
-//		btnKhachHangGUI.setFont(new Font("Verdana", Font.BOLD, 14));
-//		btnKhachHangGUI.setBorderPainted(false);
-//		btnKhachHangGUI.setBackground(Color.decode(color));
-//		btnKhachHangGUI.setBounds(0, 141, 200, 35);
-//		pNavItem.add(btnKhachHangGUI);
-//		
-//		JButton btnPhieuNhapGUI = new JButton("PHIẾU NHẬP");
-//		btnPhieuNhapGUI.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/phieuNhap.png")));
-//		btnPhieuNhapGUI.setOpaque(true);
-//		btnPhieuNhapGUI.setHorizontalAlignment(SwingConstants.LEFT);
-//		btnPhieuNhapGUI.setForeground(Color.WHITE);
-//		btnPhieuNhapGUI.setFont(new Font("Verdana", Font.BOLD, 14));
-//		btnPhieuNhapGUI.setBorderPainted(false);
-//		btnPhieuNhapGUI.setBackground(Color.decode(color));
-//		btnPhieuNhapGUI.setBounds(0, 173, 200, 35);
-//		pNavItem.add(btnPhieuNhapGUI);
-//		
-//		JButton btnPhieuXuat = new JButton("PHIẾU XUẤT");
-//		btnPhieuXuat.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/phieuXuat.png")));
-//		btnPhieuXuat.setOpaque(true);
-//		btnPhieuXuat.setHorizontalAlignment(SwingConstants.LEFT);
-//		btnPhieuXuat.setForeground(Color.WHITE);
-//		btnPhieuXuat.setFont(new Font("Verdana", Font.BOLD, 14));
-//		btnPhieuXuat.setBorderPainted(false);
-//		btnPhieuXuat.setBackground(Color.decode(color));
-//		btnPhieuXuat.setBounds(0, 207, 200, 35);
-//		pNavItem.add(btnPhieuXuat);
-//		
-//		JButton btnKhuyenMaiGUI = new JButton("KHUYẾN MÃI");
-//		btnKhuyenMaiGUI.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/saleIcon.png")));
-//		btnKhuyenMaiGUI.setOpaque(true);
-//		btnKhuyenMaiGUI.setHorizontalAlignment(SwingConstants.LEFT);
-//		btnKhuyenMaiGUI.setForeground(Color.WHITE);
-//		btnKhuyenMaiGUI.setFont(new Font("Verdana", Font.BOLD, 14));
-//		btnKhuyenMaiGUI.setBorderPainted(false);
-//		btnKhuyenMaiGUI.setBackground(Color.decode(color));
-//		btnKhuyenMaiGUI.setBounds(0, 242, 200, 35);
-//		pNavItem.add(btnKhuyenMaiGUI);
 		
 		
 		/************* PHẦN HEADER ************/
@@ -599,7 +444,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 		btnOpenMaSPList.addActionListener(e -> {
 			JDialog dialog = new JDialog();
 			dialog.setTitle("Sản phẩm");
-			String[] colunms = {"Mã sản phẩm", "Tên sản phẩm", "Đơn giá", "Mã loại SP"};
+			String[] colunms = {"Mã sản phẩm", "Tên sản phẩm", "Đơn giá", "Mã loại SP", "Số lượng"};
 			
 			JTable tableMaSP = new JTable();
 			JScrollPane jScrollPaneMaSP = new JScrollPane(tableMaSP);
@@ -610,7 +455,8 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 						x.getMaSP(),
 						x.getTenSP(),
 						x.getDonGia(),
-						x.getMaLoaiSP()
+						x.getMaLoaiSP(),
+						(x.getSoLuong() == 0) ? "Hết hàng" : x.getSoLuong()
 				};
 				modelMaSpList.addRow(row);
 			}
@@ -623,7 +469,11 @@ public class HoaDonGUI extends JPanel implements ActionListener{
              tableMaSP.addMouseListener(new java.awt.event.MouseAdapter() {
             	 public void mouseClicked(MouseEvent e) {
             		 int selectedRow = tableMaSP.getSelectedRow();
-            		 
+            		 String tonHang = tableMaSP.getValueAt(selectedRow, 4).toString();
+            		 if(tonHang.equals("Hết hàng")) {
+            			 JOptionPane.showMessageDialog(null, "Sản phẩm hiện tại đang hết hàng", "Thông báo", JOptionPane.WARNING_MESSAGE);
+             			return;
+            		 }
             		 String maSP = (String) tableMaSP.getValueAt(selectedRow, 0);
             		 donGia = Double.valueOf(tableMaSP.getValueAt(selectedRow, 2).toString());
             		 txtMaSP.setText(maSP);
@@ -680,12 +530,14 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 				int soLuong = Integer.valueOf(txtSoLuong.getText());
 				
 				ChiTietHDDTO chiTietHDDTO = listTemp.get(h);
+			
 				chiTietHDDTO.setMaHD(maHD);
 				chiTietHDDTO.setMaSP(maSP);
 				chiTietHDDTO.setSoLuong(soLuong);
 				thanhTien = soLuong * donGia;
 				chiTietHDDTO.setDonGia(donGia);
 				chiTietHDDTO.setThanhTien(thanhTien);
+				System.out.println("k" + k);
 				chiTietHoaDonBUS.deleteCTHDByIndex(k);
 //				chiTietHoaDonBUS.addCTHD(maHD, maSP, soLuong, donGia, thanhTien);
 				selectedRowCTHD = table_1.getSelectedRow();
@@ -725,6 +577,8 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 			String maNV = txtMaNV.getText();
 			String maSP = txtMaSP.getText();
 			int soLuong = Integer.valueOf(txtSoLuong.getText());
+			
+			soLuongTruocKhiUpdate.add(0);
 			thanhTien = donGia * soLuong;
 			
 //			chiTietHoaDonBUS.addCTHD(maHD, maSP, soLuong, donGia, thanhTien);
@@ -759,38 +613,25 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 				hoaDonBUS.addHoaDon(txtMaHD.getText(), txtMaKH.getText(), txtMaNV.getText(), ngayLap, tongTien);
 				for(ChiTietHDDTO x : listTemp) {
 					chiTietHoaDonBUS.addCTHD(x.getMaHD(), x.getMaSP(), x.getSoLuong(), x.getDonGia(), x.getThanhTien());
+					chiTietHoaDonBUS.updateSoLuongSP(x.getMaSP(), x.getSoLuong());
 				}
 			}
 			else {
 				int selectedRow = table.getSelectedRow();
-				System.out.println(selectedRowCTHD);
-//				if(selectedRowCTHD == -1) {
-//					// có nghĩa là đang thêm 1 sản phẩm vào hóa đơn nữa
-//					System.out.println("Theem");
-//					for(ChiTietHDDTO x : listTemp) {
-//						tongTien += x.getThanhTien();
-//					}
-//					ChiTietHDDTO x = listTemp.get(listTemp.size() - 1);
-//					chiTietHoaDonBUS.addCTHD(x.getMaHD(), x.getMaSP(), x.getSoLuong(), x.getDonGia(), x.getThanhTien());
-//					hoaDonBUS.updateHoaDon(txtMaHD.getText(), txtMaKH.getText(), txtMaNV.getText(), ngayLap, tongTien, selectedRow);
-//					
-//				}
-//				if (selectedRowCTHD != -1){//Có nghĩa là đang sửa 1 chi tiết hóa đơn
-//					System.out.println("Suawr");
-//					for(ChiTietHDDTO x : listTemp) {
-//						tongTien += x.getThanhTien();
-//					}
-//					hoaDonBUS.updateHoaDon(txtMaHD.getText(), txtMaKH.getText(), txtMaNV.getText(), ngayLap, tongTien, selectedRow);
-//				}
-				
+				int i = 0;
 				for(ChiTietHDDTO x : listTemp) {
 					tongTien += x.getThanhTien();
-					if(chiTietHoaDonBUS.checkDulicateMaSP(x.getMaSP()))
+					if(chiTietHoaDonBUS.checkDulicateMaSP(x.getMaSP(), x.getMaHD())) {
+						i++;
 						continue;
+					}
 					chiTietHoaDonBUS.addCTHD(x.getMaHD(), x.getMaSP(), x.getSoLuong(), x.getDonGia(), x.getThanhTien());
+					chiTietHoaDonBUS.updateSoLuongSP(x.getMaSP(), x.getSoLuong() - soLuongTruocKhiUpdate.get(i));
+					i++;
 				}
 				hoaDonBUS.updateHoaDon(txtMaHD.getText(), txtMaKH.getText(), txtMaNV.getText(), ngayLap, tongTien, selectedRow);
 				update = false;
+				soLuongTruocKhiUpdate.clear();
 				txtMaHD.setEditable(true);
 				txtMaKH.setEditable(true);
 				txtMaNV.setEditable(true);
@@ -984,6 +825,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 		for(ChiTietHDDTO x : chiTietHoaDonBUS.getListCTHD()) {
 			if(x.getMaHD().equals(maHD)) {
 				listTemp.add(new ChiTietHDDTO(x.getMaHD(), x.getMaSP(), x.getSoLuong(), x.getDonGia(), x.getThanhTien()));
+				soLuongTruocKhiUpdate.add(x.getSoLuong());
 			}
 		}
 		txtMaHD.setText(maHD);
@@ -1004,42 +846,46 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 			JOptionPane.showMessageDialog(this, "Vui lòng chọn hóa đơn để sửa", "Thông báo", JOptionPane.WARNING_MESSAGE);
 			return;
 		}
-		selectedRowHoaDon = table.getSelectedRow();
-		selectedRowCTHD = table_1.getSelectedRow();
-		if(selectedRowHoaDon != -1 && selectedRowCTHD == -1) {
-			System.out.println("Hết");
-			String maHD = (String) table.getValueAt(selectedRowHoaDon, 0);
-			chiTietHoaDonBUS.deleteCTHD(maHD);
-			hoaDonBUS.deleteHoaDon(selectedRowHoaDon);
-			listTemp.clear();
-			openBillDetailTable();
-			openBillTable();
-			JOptionPane.showMessageDialog(this, "Xóa hóa đơn thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-		}
-		else if(selectedRowCTHD != -1) {
-			System.out.println("chưa");
-			chiTietHoaDonBUS.deleteCTHDByIndex(k);
-			listTemp.remove(h);
-			tongTien = 0;
-			for(ChiTietHDDTO x : listTemp) {
-				tongTien += x.getThanhTien();
+		int result = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa hóa đơn này?", "Thông báo", JOptionPane.YES_NO_OPTION);
+		if(result == JOptionPane.YES_OPTION) {
+			selectedRowHoaDon = table.getSelectedRow();
+			selectedRowCTHD = table_1.getSelectedRow();
+			if(selectedRowHoaDon != -1 && selectedRowCTHD == -1) {
+				System.out.println("Hết");
+				String maHD = (String) table.getValueAt(selectedRowHoaDon, 0);
+				chiTietHoaDonBUS.deleteCTHD(maHD);
+				hoaDonBUS.deleteHoaDon(selectedRowHoaDon);
+				listTemp.clear();
+				openBillDetailTable();
+				openBillTable();
+				JOptionPane.showMessageDialog(this, "Xóa hóa đơn thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
 			}
-			listTemp.clear();
-			update = false;
-			hoaDonBUS.updateTongTien((String) table_1.getValueAt(selectedRowCTHD, 0), tongTien, selectedRowHoaDon);
-			openBillDetailTable();
-			openBillTable();
-			JOptionPane.showMessageDialog(this, "Xóa hóa đơn thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+			else if(selectedRowCTHD != -1) {
+				System.out.println("chưa");
+				ChiTietHDDTO chiTietHDDTO = listTemp.get(h);
+				chiTietHoaDonBUS.deleteCTHDByIndex(k, chiTietHDDTO.getMaSP());
+				listTemp.remove(h);
+				tongTien = 0;
+				for(ChiTietHDDTO x : listTemp) {
+					tongTien += x.getThanhTien();
+				}
+				listTemp.clear();
+				update = false;
+				hoaDonBUS.updateTongTien((String) table_1.getValueAt(selectedRowCTHD, 0), tongTien, selectedRowHoaDon);
+				openBillDetailTable();
+				openBillTable();
+				JOptionPane.showMessageDialog(this, "Xóa hóa đơn thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+			}
+			txtMaHD.setEditable(true);
+			txtMaKH.setEditable(true);
+			txtMaNV.setEditable(true);
+			txtMaHD.setText("");
+			txtMaSP.setText("");
+			txtMaNV.setText("");
+			txtMaKH.setText("");
+			txtSoLuong.setText("");
+			txtMaSP.setText("");
 		}
-		txtMaHD.setEditable(true);
-		txtMaKH.setEditable(true);
-		txtMaNV.setEditable(true);
-		txtMaHD.setText("");
-		txtMaSP.setText("");
-		txtMaNV.setText("");
-		txtMaKH.setText("");
-		txtSoLuong.setText("");
-		txtMaSP.setText("");
 		
 	}
 
