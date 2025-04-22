@@ -18,7 +18,7 @@ public class LoaiBUS {
         LoaiBUS.dsloai = dsloai;
     }
 
-    public static void docDSLoai()
+    public void docDSLoai()
     {
     	if(dsloai == null)
     		dsloai = new ArrayList<LoaiDTO>();
@@ -26,7 +26,7 @@ public class LoaiBUS {
     	dsloai = loaiDAO.docDSLoai();
     }
     
-    public static ArrayList<LoaiDTO> getDsloai() 
+    public ArrayList<LoaiDTO> getDsloai() 
     {
     	if (dsloai == null) 
             docDSLoai(); 
