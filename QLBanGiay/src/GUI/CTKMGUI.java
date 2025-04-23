@@ -55,7 +55,7 @@ public class CTKMGUI extends JPanel {
 
         tableModel = new DefaultTableModel(
             new Object[][]{},
-            new String[]{"Mã CTKM", "Ngày Bắt Đầu", "Ngày Kết Thúc", "Loại KM"}
+            new String[]{"Mã CTKM", "Ngày Bắt Đầu", "Ngày Kết Thúc", "Loại KM", "Phần Trăm Giảm Giá"}
         );
         tblCTKM = new JTable(tableModel);
 
