@@ -280,12 +280,6 @@ public class MainGUI extends JFrame implements ActionListener {
     }
     
  // Placeholder panels
-    class TrangChuGUI extends JPanel {
-        public TrangChuGUI() {
-            setBackground(Color.WHITE);
-            add(new JLabel("Đây là Trang Chủ", SwingConstants.CENTER));
-        }
-    }
 
 //    class NhanVienGUI extends JPanel {
 //        public NhanVienGUI() {

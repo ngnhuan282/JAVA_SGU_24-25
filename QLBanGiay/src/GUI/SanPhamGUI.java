@@ -272,7 +272,7 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         cbLoaiSP.setEnabled(false);
         pInput.add(cbLoaiSP);
 
-        JButton btnLoaiSP = new JButton("", new ImageIcon(SanPhamGUI.class.getResource("/image/more30.png")));
+        JButton btnLoaiSP = new JButton("", new ImageIcon(SanPhamGUI.class.getResource("/image/icons8-information-20.png")));
         btnLoaiSP.setBorder(null);
         btnLoaiSP.setBackground(null);
         btnLoaiSP.setFocusPainted(false);
