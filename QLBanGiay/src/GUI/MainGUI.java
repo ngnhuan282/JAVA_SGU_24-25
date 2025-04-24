@@ -233,7 +233,7 @@ public class MainGUI extends JFrame implements ActionListener {
         pContent.add(new KhachHangGUI(), "KhachHang");
         pContent.add(new PhieuNhapGUI(), "PhieuNhap");
         pContent.add(new HoaDonGUI(), "HoaDon");
-        pContent.add(new KhuyenMaiGUI(), "KhuyenMai");
+        pContent.add(new CTKMGUI(), "KhuyenMai");
         pContent.add(new ThongKeGUI(), "ThongKe");
         // Default panel
         cardLayout.show(pContent, "TrangChu");
@@ -310,12 +310,6 @@ public class MainGUI extends JFrame implements ActionListener {
         }
     }
 
-    class KhuyenMaiGUI extends JPanel {
-        public KhuyenMaiGUI() {
-            setBackground(Color.WHITE);
-            add(new JLabel("Đây là Khuyến Mãi", SwingConstants.CENTER));
-        }
-    }
 }
     
  

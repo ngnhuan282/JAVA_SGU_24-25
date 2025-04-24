@@ -203,7 +203,7 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
         lblDateStart.setBounds(624, 70, 60, 20);
         pHeaderMain.add(lblDateStart);
         
-        JDateChooser dateStart = new JDateChooser();
+        dateStart = new JDateChooser();
         dateStart.setDateFormatString("yyyy-MM-dd");
         dateStart.setBounds(694, 69, 126, 20);
         pHeaderMain.add(dateStart);
@@ -213,7 +213,7 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
         lblDateEnd.setBounds(864, 70, 60, 20);
         pHeaderMain.add(lblDateEnd);
         
-        JDateChooser dateEnd = new JDateChooser();
+        dateEnd = new JDateChooser();
         dateEnd.setDateFormatString("yyyy-MM-dd");
         dateEnd.setBounds(934, 70, 126, 20);
         pHeaderMain.add(dateEnd);
