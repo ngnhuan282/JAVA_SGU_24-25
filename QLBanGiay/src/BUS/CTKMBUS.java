@@ -36,19 +36,21 @@ public class CTKMBUS {
 	
 	
 	
-	public void addKhuyenMai(String maCTKM, Date ngayBD, Date ngayKT) {
+	public void addKhuyenMai(String maCTKM, Date ngayBD, Date ngayKT, String tenCTKM) {
 		CTKMDTO khuyenMai = new CTKMDTO();
 		khuyenMai.setMaCTKM(maCTKM);
 		khuyenMai.setNgayBD(ngayBD);
 		khuyenMai.setNgayKT(ngayKT);
+		khuyenMai.setTenCTKM(tenCTKM);
 		listKhuyenMai.add(khuyenMai);
 		khuyenMaiDAO.addkhuyenMaiDAO(khuyenMai);
 	}
 	
-	public void updateKhuyenMai(Date ngayBD, Date ngayKT, int index) {
+	public void updateKhuyenMai(Date ngayBD, Date ngayKT,String tenCTKM, int index) {
 		CTKMDTO khuyenMai = listKhuyenMai.get(index);
 		khuyenMai.setNgayBD(ngayBD);
 		khuyenMai.setNgayKT(ngayKT);
+		khuyenMai.setTenCTKM(tenCTKM);
 		khuyenMaiDAO.updatekhuyenMaiDAO(khuyenMai);
 	}
 	

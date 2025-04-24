@@ -31,8 +31,9 @@ public class CTKMDAO {
 			String maCTKM = rs.getString("MaCTKM");
 			Date ngayBD = rs.getDate("NgayBD");
 			Date ngayKT = rs.getDate("NgayKT");
+			String tenCTKM =rs.getString("TenCTKM");
 			
-			CTKMDTO khuyenMai = new CTKMDTO(maCTKM, ngayBD, ngayKT);
+			CTKMDTO khuyenMai = new CTKMDTO(maCTKM, ngayBD, ngayKT,tenCTKM);
 			listkhuyenMaiDTO.add(khuyenMai);
 		}
 		
@@ -41,9 +42,14 @@ public class CTKMDAO {
 	}
 	
 	public void addkhuyenMaiDAO(CTKMDTO x) {
-		String sql = "INSERT INTO khuyenMai(MaCTKM, NgayBD, NgayKT, HinhThuc)"
-				+ "VALUES('"+ x.getMaCTKM()+"', '"+ x.getNgayBD() +"', '"+ x.getNgayKT()+"')";
+		String sql = "INSERT INTO ctkm(MaCTKM, NgayBD, NgayKT, TenCTKM)"
+				+ "VALUES('"+ x.getMaCTKM()+"', '"+ x.getNgayBD() +"', '"+ x.getNgayKT()+ "', '"+ x.getTenCTKM()+"')";
+		
 		connection.executeUpdate(sql);
+//		if(rs.next) {
+//			String sql2 = "SELECT LAST_INSERT_ID()";
+//
+//		}
 	}
 	
 	public void updatekhuyenMaiDAO(CTKMDTO x) {
@@ -51,6 +57,7 @@ public class CTKMDAO {
 				+ " SET"
 				+ " NgayBT = '" + x.getNgayBD() + "'"
 				+ ", NgayKT = '" + x.getNgayKT() + "'"
+				+ ", TenCTKM = '" + x.getTenCTKM() + "'"
 				+ " WHERE MaCTKM = '" + x.getMaCTKM() + "'";
 		connection.executeUpdate(sql);
 		connection.disConnect();
