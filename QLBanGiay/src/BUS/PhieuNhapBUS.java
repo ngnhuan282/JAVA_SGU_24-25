@@ -24,6 +24,11 @@ public class PhieuNhapBUS {
 		listPN = pnDAO.xuatDSPN();
 	}
 	
+	
+	public String generateMaPN() {
+		int size = listPN.size()+ 1;
+		return size +"";
+	}
 
 	public void addPN(String maPN , String NV , String NCC,double tongTien, Date ngayNhap) {
 		PhieuNhapDTO pn = new PhieuNhapDTO(maPN,NV,NCC,tongTien,ngayNhap);
@@ -82,6 +87,7 @@ public class PhieuNhapBUS {
 		 }
 		 return result;
 	}
+	
 	
 	
 	
