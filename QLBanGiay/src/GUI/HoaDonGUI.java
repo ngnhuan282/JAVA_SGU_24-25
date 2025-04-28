@@ -537,9 +537,12 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 				thanhTien = soLuong * donGia;
 				chiTietHDDTO.setDonGia(donGia);
 				chiTietHDDTO.setThanhTien(thanhTien);
-				System.out.println("k" + k);
+				
 				chiTietHoaDonBUS.deleteCTHDByIndex(k);
-//				chiTietHoaDonBUS.addCTHD(maHD, maSP, soLuong, donGia, thanhTien);
+				chiTietHoaDonBUS.addCTHD(chiTietHDDTO.getMaHD(), chiTietHDDTO.getMaSP(), chiTietHDDTO.getSoLuong(), chiTietHDDTO.getDonGia(), chiTietHDDTO.getThanhTien());
+				chiTietHoaDonBUS.updateSoLuongSP(chiTietHDDTO.getMaSP(), chiTietHDDTO.getSoLuong() - soLuongTruocKhiUpdate.get(h));
+				soLuongTruocKhiUpdate.set(h, chiTietHDDTO.getSoLuong());
+				
 				selectedRowCTHD = table_1.getSelectedRow();
 				k = 0;
 				donGia = 0;
@@ -699,7 +702,6 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 							 break;
 						 }
 						 h++;
-						 System.out.println(h);
 					 }
 					 
 					 for(ChiTietHDDTO x : chiTietHoaDonBUS.getListCTHD()) {
