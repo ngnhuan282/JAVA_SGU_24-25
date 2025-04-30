@@ -67,6 +67,14 @@ public class ChiTietHDDTO {
 	    return this.maHD.equals(other.maHD) && this.maSP.equals(other.maSP) && this.soLuong == other.soLuong && this.donGia == other.donGia && this.thanhTien == other.thanhTien;
 	}
 
+	@Override
+	public String toString() {
+		return "ChiTietHDDTO [maHD=" + maHD + ", maSP=" + maSP + ", soLuong=" + soLuong + ", donGia=" + donGia
+				+ ", thanhTien=" + thanhTien + "]";
+	}
+	
+	
+
 	
 	
 	

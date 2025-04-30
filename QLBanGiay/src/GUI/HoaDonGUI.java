@@ -85,6 +85,11 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 	private double thanhTien;
 	private double tongTien = 0;
 	private ArrayList<Integer> soLuongTruocKhiUpdate;
+	private ArrayList<Integer> soLuongCanTang;
+	private ArrayList<String> maSPCanTang;
+	private ArrayList<Integer> updateRow;
+	private String  maSPTruocKhiSua;
+	private int soLuongKhiSua;
 
 	/**
 	 * Launch the application.
@@ -111,6 +116,9 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 		khachHangBUS = new KhachHangBUS();
 		listTemp = new ArrayList<ChiTietHDDTO>();
 		soLuongTruocKhiUpdate = new ArrayList<Integer>();
+		soLuongCanTang = new ArrayList<Integer>();
+		maSPCanTang = new ArrayList<String>();
+		updateRow = new ArrayList<Integer>();
 		initComponents();
 	}
 	
@@ -522,6 +530,12 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 					JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin hóa đơn", "Thông báo", JOptionPane.WARNING_MESSAGE);
 					return;
 				}
+			 	if(chiTietHoaDonBUS.checkDulicate(txtMaHD.getText(), txtMaSP.getText())) {
+					JOptionPane.showMessageDialog(this, "Vui lòng không thêm sản phẩm giống nhau vào một hóa đơn", "Thông báo", JOptionPane.WARNING_MESSAGE);
+					txtSoLuong.setText("");
+					txtMaSP.setText("");
+					return;
+				}
 			 	
 			 	String maHD = txtMaHD.getText();
 				String maKH = txtMaKH.getText();
@@ -530,7 +544,8 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 				int soLuong = Integer.valueOf(txtSoLuong.getText());
 				
 				ChiTietHDDTO chiTietHDDTO = listTemp.get(h);
-			
+				
+				
 				chiTietHDDTO.setMaHD(maHD);
 				chiTietHDDTO.setMaSP(maSP);
 				chiTietHDDTO.setSoLuong(soLuong);
@@ -540,8 +555,8 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 				
 				chiTietHoaDonBUS.deleteCTHDByIndex(k);
 				chiTietHoaDonBUS.addCTHD(chiTietHDDTO.getMaHD(), chiTietHDDTO.getMaSP(), chiTietHDDTO.getSoLuong(), chiTietHDDTO.getDonGia(), chiTietHDDTO.getThanhTien());
-				chiTietHoaDonBUS.updateSoLuongSP(chiTietHDDTO.getMaSP(), chiTietHDDTO.getSoLuong() - soLuongTruocKhiUpdate.get(h));
-				soLuongTruocKhiUpdate.set(h, chiTietHDDTO.getSoLuong());
+//				chiTietHoaDonBUS.updateSoLuongSP(chiTietHDDTO.getMaSP(), chiTietHDDTO.getSoLuong() - soLuongTruocKhiUpdate.get(h));
+//				soLuongTruocKhiUpdate.set(h, chiTietHDDTO.getSoLuong());
 				
 				selectedRowCTHD = table_1.getSelectedRow();
 				k = 0;
@@ -554,6 +569,24 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 				 txtSoLuong.setText("");
 				 JOptionPane.showMessageDialog(this, "Sửa hóa đơn thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
 				 openBillDetailTable();
+				 if(!maSP.equals(maSPTruocKhiSua)) {
+						int index = maSPCanTang.indexOf(maSPTruocKhiSua);
+						int index2 = updateRow.indexOf(h);
+						soLuongTruocKhiUpdate.set(h, 0);
+						
+						if (index != -1) {
+							maSPCanTang.remove(index);
+							soLuongCanTang.remove(index);
+						}
+						if (index2 != -1) {
+							return;
+						}
+						maSPCanTang.add(maSPTruocKhiSua);
+						soLuongCanTang.add(soLuongKhiSua);
+						updateRow.add(h);
+					}
+					maSPTruocKhiSua = "";
+					soLuongKhiSua = 0;
 			 
 		 });
 		 btnUpdateBillDetail.setVisible(false);
@@ -586,6 +619,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 			
 //			chiTietHoaDonBUS.addCTHD(maHD, maSP, soLuong, donGia, thanhTien);
 			listTemp.add(new ChiTietHDDTO(maHD, maSP, soLuong, donGia, thanhTien));
+			chiTietHoaDonBUS.addCTHD(maHD, maSP, soLuong, donGia, thanhTien);
 			donGia = 0;
 			thanhTien = 0;
 			JOptionPane.showMessageDialog(this, "Thêm sản phẩm vào hóa đơn thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
@@ -610,31 +644,54 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 			LocalDate now = LocalDate.now();
 			Date ngayLap = Date.valueOf(now);
 			if(!update) {
+				int i = 0;
 				for(ChiTietHDDTO x : listTemp) {
 					tongTien += x.getThanhTien();
 				}
 				hoaDonBUS.addHoaDon(txtMaHD.getText(), txtMaKH.getText(), txtMaNV.getText(), ngayLap, tongTien);
 				for(ChiTietHDDTO x : listTemp) {
-					chiTietHoaDonBUS.addCTHD(x.getMaHD(), x.getMaSP(), x.getSoLuong(), x.getDonGia(), x.getThanhTien());
-					chiTietHoaDonBUS.updateSoLuongSP(x.getMaSP(), x.getSoLuong());
-				}
-			}
-			else {
-				int selectedRow = table.getSelectedRow();
-				int i = 0;
-				for(ChiTietHDDTO x : listTemp) {
-					tongTien += x.getThanhTien();
+					chiTietHoaDonBUS.updateSoLuongSP(x.getMaSP(), x.getSoLuong() - soLuongTruocKhiUpdate.get(i));
 					if(chiTietHoaDonBUS.checkDulicateMaSP(x.getMaSP(), x.getMaHD())) {
 						i++;
 						continue;
 					}
 					chiTietHoaDonBUS.addCTHD(x.getMaHD(), x.getMaSP(), x.getSoLuong(), x.getDonGia(), x.getThanhTien());
-					chiTietHoaDonBUS.updateSoLuongSP(x.getMaSP(), x.getSoLuong() - soLuongTruocKhiUpdate.get(i));
+					chiTietHoaDonBUS.updateSoLuongSP(x.getMaSP(), x.getSoLuong());
 					i++;
 				}
+			}
+			else {
+				int selectedRow = table.getSelectedRow();
+				int i = 0;
+				
+				for(int index = 0; index < soLuongCanTang.size(); index++) {
+					System.out.println(maSPCanTang.get(index));
+					String maSP = maSPCanTang.get(index);
+					chiTietHoaDonBUS.updateSoLuongSP(maSP, -soLuongCanTang.get(index));
+				}
+				
+				for(ChiTietHDDTO x : listTemp) {
+					
+					tongTien += x.getThanhTien();
+					chiTietHoaDonBUS.updateSoLuongSP(x.getMaSP(), x.getSoLuong() - soLuongTruocKhiUpdate.get(i));
+					System.out.println("x.getSoLuong " + x.getSoLuong());
+					System.out.println("soLuongTruockhiupdate "+ soLuongTruocKhiUpdate.get(i));
+					System.out.println(x.getSoLuong() - soLuongTruocKhiUpdate.get(i));
+					soLuongTruocKhiUpdate.set(i, x.getSoLuong());
+					if(chiTietHoaDonBUS.checkDulicateMaSP(x.getMaSP(), x.getMaHD())) {
+						i++;
+						continue;
+					}
+					chiTietHoaDonBUS.addCTHD(x.getMaHD(), x.getMaSP(), x.getSoLuong(), x.getDonGia(), x.getThanhTien());
+					i++;
+				}
+				
 				hoaDonBUS.updateHoaDon(txtMaHD.getText(), txtMaKH.getText(), txtMaNV.getText(), ngayLap, tongTien, selectedRow);
 				update = false;
 				soLuongTruocKhiUpdate.clear();
+				soLuongCanTang.clear();
+				maSPCanTang.clear();
+				updateRow.clear();
 				txtMaHD.setEditable(true);
 				txtMaKH.setEditable(true);
 				txtMaNV.setEditable(true);
@@ -697,6 +754,8 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 					 txtMaSP.setText(table_1.getValueAt(selectedRowCTHD, 1).toString());
 					 txtSoLuong.setText(table_1.getValueAt(selectedRowCTHD, 2).toString());
 					 chiTietHDDTO = new ChiTietHDDTO(txtMaHD.getText(), txtMaSP.getText(), Integer.valueOf(txtSoLuong.getText()), Double.valueOf(table_1.getValueAt(selectedRowCTHD, 3).toString()), Double.valueOf(table_1.getValueAt(selectedRowCTHD, 4).toString()));
+					 maSPTruocKhiSua = txtMaSP.getText();
+					 soLuongKhiSua = Integer.valueOf(txtSoLuong.getText());
 					 for(ChiTietHDDTO x : listTemp) {
 						 if(x.equals(chiTietHDDTO)) {
 							 break;
@@ -813,6 +872,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 	
 	public void openUpdateBill() {
 		listTemp.clear();
+		soLuongTruocKhiUpdate.clear();
 		selectedRowHoaDon = table.getSelectedRow();
 		if(hoaDonBUS.getListHoaDon().size() == 0) {
 			JOptionPane.showMessageDialog(this, "Không có hóa đơn để sửa", "Thông báo", JOptionPane.WARNING_MESSAGE);
@@ -828,6 +888,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 			if(x.getMaHD().equals(maHD)) {
 				listTemp.add(new ChiTietHDDTO(x.getMaHD(), x.getMaSP(), x.getSoLuong(), x.getDonGia(), x.getThanhTien()));
 				soLuongTruocKhiUpdate.add(x.getSoLuong());
+				System.out.println(x.getSoLuong());
 			}
 		}
 		txtMaHD.setText(maHD);
@@ -873,7 +934,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 				}
 				listTemp.clear();
 				update = false;
-				hoaDonBUS.updateTongTien((String) table_1.getValueAt(selectedRowCTHD, 0), tongTien, selectedRowHoaDon);
+				hoaDonBUS.updateTongTien((String) table_1.getValueAt(selectedRowCTHD, 0), tongTien);
 				openBillDetailTable();
 				openBillTable();
 				JOptionPane.showMessageDialog(this, "Xóa hóa đơn thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);

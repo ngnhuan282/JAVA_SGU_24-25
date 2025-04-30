@@ -55,8 +55,19 @@ public class HoaDonBUS {
 		hoaDonDAO.updateHoaDon(hoaDon);
 	}
 	
-	public void updateTongTien(String maHD, double tongTien, int index) {
-		HoaDonDTO hoaDon = listHoaDon.get(index);
+	
+	public int getIndex(String maHD) {
+		int i = 0;
+		for(HoaDonDTO x : listHoaDon) {
+			if(x.getMaHD().equals(maHD))
+				return i;
+			i++;
+		}
+		return -1;
+	}
+	
+	public void updateTongTien(String maHD, double tongTien) {
+		HoaDonDTO hoaDon = listHoaDon.get(getIndex(maHD));
 		hoaDon.setTongTien(tongTien);
 		hoaDonDAO.updateTongTien(hoaDon);
 	}
