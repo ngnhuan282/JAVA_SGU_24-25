@@ -67,7 +67,7 @@ public class MainGUI extends JFrame implements ActionListener {
         pAccount.setBackground(Color.decode(color));
         pNavbar.add(pAccount);
         pAccount.setLayout(null);
-
+ 
         JLabel lbInfo1 = new JLabel("Xin chào");
         lbInfo1.setIcon(new ImageIcon(MainGUI.class.getResource("/image/userIcon.png")));
         lbInfo1.setVerticalTextPosition(SwingConstants.BOTTOM);
