@@ -112,10 +112,44 @@ public class CTKMDAO {
 	
 
 
-
+	
 	
 	public void deletekhuyenMaiDAO(CTKMDTO x) {
 		String sql  = "DELETE FROM ctkm WHERE MaCTKM ='" + x.getMaCTKM() + "'";
 		connection.executeUpdate(sql);
 	}
+	
+	// Thêm phương thức để lấy danh sách MaSP
+		public ArrayList<String> getListMaSP() throws SQLException {
+			ArrayList<String> listMaSP = new ArrayList<>();
+			connection.getConnection();
+			
+			String sql = "SELECT MaSP FROM sanpham";
+			ResultSet rs = connection.executeQuery(sql);
+			
+			while (rs.next()) {
+				listMaSP.add(rs.getString("MaSP"));
+			}
+			
+			rs.close();
+			connection.disConnect();
+			return listMaSP;
+		}
+		
+		// Thêm phương thức để lấy danh sách MaHD
+		public ArrayList<String> getListMaHD() throws SQLException {
+			ArrayList<String> listMaHD = new ArrayList<>();
+			connection.getConnection();
+			
+			String sql = "SELECT MaHD FROM hoadon";
+			ResultSet rs = connection.executeQuery(sql);
+			
+			while (rs.next()) {
+				listMaHD.add(rs.getString("MaHD"));
+			}
+			
+			rs.close();
+			connection.disConnect();
+			return listMaHD;
+		}
 }

@@ -671,11 +671,14 @@ public class CTKMGUI extends JPanel {
             cboxLoaiKM.setSelectedItem(loaiKM);
 
             if (loaiKM.equals("Hóa đơn")) {
+            	loadMaHD();
                 cboxMaHD.setSelectedItem(maSPOrHD); 
             } else if (loaiKM.equals("Sản phẩm")) {
+            	loadMaSP();
                 cboxMaSP.setSelectedItem(maSPOrHD); 
             }
-
+            cboxMaSP.setVisible(loaiKM.equals("Sản phẩm"));
+            cboxMaHD.setVisible(loaiKM.equals("Hóa đơn"));
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 Date ngayBD = sdf.parse(ngayBDStr);
@@ -695,39 +698,34 @@ public class CTKMGUI extends JPanel {
     public void loadMaSP() {
         try {
             cboxMaSP.removeAllItems();
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/quanlybangiay", "root", "");
-            String sql = "SELECT MaSP FROM sanpham";
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-
-            while (rs.next()) {
-                cboxMaSP.addItem(rs.getString("MaSP"));
+            ArrayList<String> listMaSP = ctkmBUS.getListMaSP();
+            for (String maSP : listMaSP) {
+                cboxMaSP.addItem(maSP);
+                System.out.println("Đã thêm MaSP: " + maSP);
             }
-
-            rs.close();
-            stmt.close();
-            con.close();
-        } catch (Exception e) {
+            if (cboxMaSP.getItemCount() > 0) {
+                cboxMaSP.setSelectedIndex(0);
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi khi nạp danh sách mã sản phẩm: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
     public void loadMaHD() {
         try {
             cboxMaHD.removeAllItems();
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/quanlybangiay", "root", "");
-            String sql = "SELECT MaHD FROM hoadon";
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-
-            while (rs.next()) {
-                cboxMaHD.addItem(rs.getString("MaHD"));
+            ArrayList<String> listMaHD = ctkmBUS.getListMaHD();
+            for (String maHD : listMaHD) {
+                cboxMaHD.addItem(maHD);
+                System.out.println("Đã thêm MaHD: " + maHD);
             }
-
-            rs.close();
-            stmt.close();
-            con.close();
-        } catch (Exception e) {
+            if (cboxMaHD.getItemCount() > 0) {
+                cboxMaHD.setSelectedIndex(0);
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi khi nạp danh sách mã hóa đơn: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
 

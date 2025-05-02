@@ -95,4 +95,21 @@ public class CTKMBUS {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	
+	 // Thêm phương thức để lấy danh sách MaSP
+    public ArrayList<String> getListMaSP() throws SQLException {
+        if (khuyenMaiDAO == null) {
+            throw new IllegalStateException("CTKMDAO chưa được khởi tạo!");
+        }
+        return khuyenMaiDAO.getListMaSP();
+    }
+    
+    // Thêm phương thức để lấy danh sách MaHD
+    public ArrayList<String> getListMaHD() throws SQLException {
+        if (khuyenMaiDAO == null) {
+            throw new IllegalStateException("CTKMDAO chưa được khởi tạo!");
+        }
+        return khuyenMaiDAO.getListMaHD();
+    }
 }	
