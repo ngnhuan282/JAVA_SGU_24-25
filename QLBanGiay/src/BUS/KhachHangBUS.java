@@ -123,9 +123,15 @@ public class KhachHangBUS {
 		return result;
 	}
 	
-	public void ImportExcel(File file)
-	 {
-	    	KhachHangDAO khDAO = new KhachHangDAO();
-	    	khDAO.ImportExcel(file);
-	 }
+	public int[] ImportExcel(File file) {
+	    KhachHangDAO khDAO = new KhachHangDAO();
+	    int[] result = khDAO.ImportExcel(file);
+	    try {
+	        listKhachHang = khDAO.getListKhachHang();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        throw new RuntimeException("Lỗi khi lấy danh sách khách hàng: " + e.getMessage());
+	    }
+	    return result;
+	}
 }	

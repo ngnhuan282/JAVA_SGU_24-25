@@ -78,53 +78,63 @@ public class NhaCungCapDAO {
 	}
 	
 	
-	public void ImportExcel(File file)
-	{
+	public int[] ImportExcel(File file) {
+		int addedRows = 0;
+		int updatedRows = 0;
 		try {
 			FileInputStream in = new FileInputStream(file);
 			XSSFWorkbook workbook = new XSSFWorkbook(in);
 			XSSFSheet sheet = workbook.getSheetAt(0);
 			Row row;
-			for(int i=1; i <= sheet.getLastRowNum(); i++)
-			{
+			for(int i=1; i <= sheet.getLastRowNum(); i++) {
 				row = sheet.getRow(i);
-				String maNCC = row.getCell(0).getStringCellValue();
-				String tenNCC = row.getCell(1).getStringCellValue();
-				String diaChi = row.getCell(2).getStringCellValue();
+				if (row == null) continue; // Bỏ qua hàng rỗng
+				String maNCC = row.getCell(0) != null ? row.getCell(0).getStringCellValue() : "";
+				String tenNCC = row.getCell(1) != null ? row.getCell(1).getStringCellValue() : "";
+				String diaChi = row.getCell(2) != null ? row.getCell(2).getStringCellValue() : "";
 				String sdt = null;
-				if (row.getCell(3).getCellType() == org.apache.poi.ss.usermodel.CellType.NUMERIC) 
-	                sdt = String.format("%.0f", row.getCell(3).getNumericCellValue());
-	            else 
-	                sdt = row.getCell(3).getStringCellValue();
+				if (row.getCell(3) != null) {
+					if (row.getCell(3).getCellType() == org.apache.poi.ss.usermodel.CellType.NUMERIC) 
+						sdt = String.format("%.0f", row.getCell(3).getNumericCellValue());
+					else 
+						sdt = row.getCell(3).getStringCellValue();
+				} else {
+					sdt = "";
+				}
 				
-				String sqlCheck = "SELECT * FROM NhaCC WHERE MaNCC= '" + maNCC + "'";
+				// Kiểm tra dữ liệu đầu vào
+				if (maNCC.isEmpty() || tenNCC.isEmpty() || diaChi.isEmpty() || sdt.isEmpty()) {
+					continue; // Bỏ qua dòng thiếu dữ liệu
+				}
+				
+				String sqlCheck = "SELECT * FROM nhacc WHERE MaNCC = '" + maNCC + "'";
 				ResultSet rs = mysql.executeQuery(sqlCheck);
-				if(!rs.next())
-				{
-					String sql = "INSERT INTO NhaCC VALUES (";
+				if(!rs.next()) {
+					String sql = "INSERT INTO nhacc (MaNCC, TenNCC, DiaChi, SDT) VALUES (";
 					sql += "'" + maNCC + "', ";
 					sql += "'" + tenNCC + "', ";
 					sql += "'" + diaChi + "', ";
 					sql += "'" + sdt + "')";
 					System.out.println(sql);
 					mysql.executeUpdate(sql);
-				}
-				else
-				{
-					String sql = "UPDATE NhaCC SET ";
-	                sql += "TenNCC='" + tenNCC + "', ";
-	                sql += "DiaChi='" + diaChi + "', ";
-	                sql += "SDT='" + sdt + "' ";
-	                sql += "WHERE MaNCC='" + maNCC + "'";
-	                System.out.println(sql);
+					addedRows++;
+				} else {
+					String sql = "UPDATE nhacc SET ";
+					sql += "TenNCC = '" + tenNCC + "', ";
+					sql += "DiaChi = '" + diaChi + "', ";
+					sql += "SDT = '" + sdt + "' ";
+					sql += "WHERE MaNCC = '" + maNCC + "'";
+					System.out.println(sql);
 					mysql.executeUpdate(sql);
+					updatedRows++;
 				}
 			}
 			in.close();
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
+			throw new RuntimeException("Lỗi khi nhập Excel: " + e.getMessage());
 		}
+		return new int[]{addedRows, updatedRows};
 	}
 }
 

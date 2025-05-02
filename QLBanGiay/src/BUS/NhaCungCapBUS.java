@@ -129,9 +129,10 @@ public class NhaCungCapBUS {
 		return false;
 	}
 	
-	 public void ImportExcel(File file)
-	    {
-	    	NhaCungCapDAO nccDAO = new NhaCungCapDAO();
-	    	nccDAO.ImportExcel(file);
-	    }
+	public int[] ImportExcel(File file) {
+		NhaCungCapDAO nccDAO = new NhaCungCapDAO();
+		int[] result = nccDAO.ImportExcel(file);
+		listNCC = nccDAO.xuatDSNCC();
+		return result;
+	}
 }

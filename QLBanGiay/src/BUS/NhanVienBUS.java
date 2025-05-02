@@ -60,9 +60,16 @@ public class NhanVienBUS {
 		nhanVienDAO.deleteNhanVienDAO(nv);
 	}
 
-	 public void ImportExcel(File file)
-	 {
-	    	NhanVienDAO nvDAO = new NhanVienDAO();
-	    	nvDAO.ImportExcel(file);
-	 }
+	public int[] ImportExcel(File file) {
+	    NhanVienDAO nvDAO = new NhanVienDAO();
+	    int[] result = nvDAO.ImportExcel(file);
+	    // Cập nhật danh sách nhân viên sau khi nhập
+	    try {
+			listNhanVien = nvDAO.getListNhanVien();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    return result;
+	}
 }

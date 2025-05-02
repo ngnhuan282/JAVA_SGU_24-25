@@ -103,83 +103,79 @@ public class SanPhamDAO {
 	}
 	
 	
-	public void ImportExcel(File file)
-	{
-		try {
-			FileInputStream in = new FileInputStream(file);
-			XSSFWorkbook workbook = new XSSFWorkbook(in);
-			XSSFSheet sheet = workbook.getSheetAt(0);
-			Row row;
-			for(int i=1; i <= sheet.getLastRowNum(); i++)
-			{
-				row = sheet.getRow(i);
-				String maSP = row.getCell(0).getStringCellValue();
-				String tenSP = row.getCell(1).getStringCellValue();
-				String loai = row.getCell(2).getStringCellValue();
-				int soLuong = (int) row.getCell(4).getNumericCellValue();
-				int gia = (int) row.getCell(3).getNumericCellValue();
-				String DVT = row.getCell(5).getStringCellValue();
-				String mauSac = row.getCell(6).getStringCellValue();
-				int kichThuoc = (int) row.getCell(7).getNumericCellValue();
-				String chatLieu = row.getCell(8).getStringCellValue();
-				String kieuDang = row.getCell(9).getStringCellValue();
-				
-				String sqlCheckLoai = "SELECT MaLoaiSP FROM PhanLoai WHERE TenLoaiSP= '" + loai + "'";
-				ResultSet rsLoai = mysql.executeQuery(sqlCheckLoai);
-				int maLoaiSP;
-				if(rsLoai.next())
-				{
-					maLoaiSP = rsLoai.getInt("MaLoaiSP");
-				}
-				else
-				{
-					String sql = "INSERT INTO PhanLoai (TenLoaiSP) VALUES ('" + loai + "')";
-					mysql.executeUpdate(sql);
-					rsLoai = mysql.executeQuery("SELECT LAST_INSERT_ID() as MaLoaiSP");
-					rsLoai.next();
-					maLoaiSP = rsLoai.getInt("MaLoaiSP");
-				}
-				
-				String sqlCheckSP = "SELECT * FROM SANPHAM WHERE MaSP = '" + maSP + "'";
+	public int[] ImportExcel(File file) {
+	    int addedRows = 0;
+	    int updatedRows = 0;
+	    try {
+	        FileInputStream in = new FileInputStream(file);
+	        XSSFWorkbook workbook = new XSSFWorkbook(in);
+	        XSSFSheet sheet = workbook.getSheetAt(0);
+	        Row row;
+	        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+	            row = sheet.getRow(i);
+	            String maSP = row.getCell(0).getStringCellValue();
+	            String tenSP = row.getCell(1).getStringCellValue();
+	            String loai = row.getCell(2).getStringCellValue();
+	            int soLuong = (int) row.getCell(4).getNumericCellValue();
+	            int gia = (int) row.getCell(3).getNumericCellValue();
+	            String DVT = row.getCell(5).getStringCellValue();
+	            String mauSac = row.getCell(6).getStringCellValue();
+	            int kichThuoc = (int) row.getCell(7).getNumericCellValue();
+	            String chatLieu = row.getCell(8).getStringCellValue();
+	            String kieuDang = row.getCell(9).getStringCellValue();
+
+	            String sqlCheckLoai = "SELECT MaLoaiSP FROM PhanLoai WHERE TenLoaiSP= '" + loai + "'";
+	            ResultSet rsLoai = mysql.executeQuery(sqlCheckLoai);
+	            int maLoaiSP;
+	            if (rsLoai.next()) {
+	                maLoaiSP = rsLoai.getInt("MaLoaiSP");
+	            } else {
+	                String sql = "INSERT INTO PhanLoai (TenLoaiSP) VALUES ('" + loai + "')";
+	                mysql.executeUpdate(sql);
+	                rsLoai = mysql.executeQuery("SELECT LAST_INSERT_ID() as MaLoaiSP");
+	                rsLoai.next();
+	                maLoaiSP = rsLoai.getInt("MaLoaiSP");
+	            }
+
+	            String sqlCheckSP = "SELECT * FROM SANPHAM WHERE MaSP = '" + maSP + "'";
 	            ResultSet rsSP = mysql.executeQuery(sqlCheckSP);
-				
-				if(!rsSP.next()) //Sản phẩm chưa tồn tại
-				{
-					String sql = "INSERT INTO sanpham VALUES (";
-					sql += "'" + maSP + "', ";
-					sql += "'" + tenSP + "', ";
-					sql += "'" + soLuong + "', ";
-					sql += "'" + gia + "', ";
-					sql += "'" + DVT + "', ";
-					sql += "'" + maLoaiSP + "', ";
-					sql += "'" + mauSac + "', ";
-					sql += "'" + kichThuoc + "', ";
-					sql += "'" + chatLieu + "', ";
-					sql += "'" + kieuDang + "', ";
-					System.out.print(sql);
-					mysql.executeUpdate(sql);
-				}
-				else
-				{
-					String sql = "UPDATE sanpham SET ";
-					sql += "TenSP= '" + tenSP + "', ";
-					sql += "MaLoaiSP= '" + maLoaiSP + "', ";
-					sql += "SoLuong= '" + soLuong + "', ";
-					sql += "DonGia= '" + gia + "', ";
-					sql += "DonViTinh= '" + DVT + "', ";
-					sql += "MauSac= '" + mauSac + "', ";
-					sql += "KichThuoc= '" + kichThuoc + "', ";
-					sql += "ChatLieu= '" + chatLieu + "', ";
-					sql += "KieuDang= '" + kieuDang + "' ";
-					sql += "WHERE MaSP= '" +maSP + "'";
-					System.out.println(sql);
-					mysql.executeUpdate(sql);
-				}
-			}
-			in.close();
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
+
+	            if (!rsSP.next()) { // Sản phẩm chưa tồn tại
+	                String sql = "INSERT INTO sanpham (MaSP, TenSP, SoLuong, DonGia, DonViTinh, MaLoaiSP, MauSac, KichThuoc, ChatLieu, KieuDang) VALUES (";
+	                sql += "'" + maSP + "', ";
+	                sql += "'" + tenSP + "', ";
+	                sql += "'" + soLuong + "', ";
+	                sql += "'" + gia + "', ";
+	                sql += "'" + DVT + "', ";
+	                sql += "'" + maLoaiSP + "', ";
+	                sql += "'" + mauSac + "', ";
+	                sql += "'" + kichThuoc + "', ";
+	                sql += "'" + chatLieu + "', ";
+	                sql += "'" + kieuDang + "')";
+	                mysql.executeUpdate(sql);
+	                addedRows++;
+	            } else { // Sản phẩm đã tồn tại
+	                String sql = "UPDATE sanpham SET ";
+	                sql += "TenSP= '" + tenSP + "', ";
+	                sql += "MaLoaiSP= '" + maLoaiSP + "', ";
+	                sql += "SoLuong= '" + soLuong + "', ";
+	                sql += "DonGia= '" + gia + "', ";
+	                sql += "DonViTinh= '" + DVT + "', ";
+	                sql += "MauSac= '" + mauSac + "', ";
+	                sql += "KichThuoc= '" + kichThuoc + "', ";
+	                sql += "ChatLieu= '" + chatLieu + "', ";
+	                sql += "KieuDang= '" + kieuDang + "' ";
+	                sql += "WHERE MaSP= '" + maSP + "'";
+	                mysql.executeUpdate(sql);
+	                updatedRows++;
+	            }
+	        }
+	        in.close();
+	        workbook.close();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        throw new RuntimeException("Lỗi khi nhập Excel: " + e.getMessage());
+	    }
+	    return new int[]{addedRows, updatedRows};
 	}
 }

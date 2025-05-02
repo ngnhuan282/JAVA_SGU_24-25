@@ -165,7 +165,16 @@ public class NhanVienGUI extends JPanel implements ActionListener {
         btnXuatExcel.setBackground(Color.WHITE);
         btnXuatExcel.setPreferredSize(new Dimension(100, 140));
         horizontalBox.add(btnXuatExcel);
-
+        
+        JButton btnLamMoi = new JButton("Làm mới");
+        btnLamMoi.setBackground(Color.WHITE);
+        btnLamMoi.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/reload30.png")));
+        btnLamMoi.setFont(new Font("Arial", Font.PLAIN, 13));
+        btnLamMoi.setBounds(1045, 31, 126, 28);
+        btnLamMoi.setActionCommand("Reload");
+        btnLamMoi.addActionListener(this);
+        pHeaderMain.add(btnLamMoi);
+        
         String[] listKeyWord = {"Mã NV", "Tên NV"};
         cboxSearch = new JComboBox<String>(listKeyWord);
         cboxSearch.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -180,11 +189,11 @@ public class NhanVienGUI extends JPanel implements ActionListener {
         txtSearch.setBounds(658, 32, 290, 27);
         pHeaderMain.add(txtSearch);
 
-        JButton btnSearch = new JButton("");
-        btnSearch.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/search30.png")));
-        btnSearch.setBounds(958, 29, 66, 30);
+        JButton btnSearch = new JButton("", new ImageIcon(SanPhamGUI.class.getResource("/image/search30.png")));
+        btnSearch.setBackground(Color.WHITE);
         btnSearch.setActionCommand("Tìm kiếm");
         btnSearch.addActionListener(this);
+        btnSearch.setBounds(958, 29, 66, 30);
         pHeaderMain.add(btnSearch);
 
         // Input Form
@@ -487,23 +496,55 @@ public class NhanVienGUI extends JPanel implements ActionListener {
         }
     }
 
-    public void nhapExcel()
-    {
-    	JFileChooser fileChooser = new JFileChooser();
+    public void nhapExcel() {
+        JFileChooser fileChooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xlsx", "xls");
         fileChooser.setFileFilter(filter);
         int result = fileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            try {
-                NhanVienBUS nvBUS = new NhanVienBUS();
-                nvBUS.ImportExcel(selectedFile);
-                JOptionPane.showMessageDialog(this, "Nhập dữ liệu từ Excel thành công!", 
-                        "Thành công", JOptionPane.INFORMATION_MESSAGE);
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Lỗi khi nhập Excel: " + e.getMessage(), 
-                        "Lỗi", JOptionPane.ERROR_MESSAGE);
-                e.printStackTrace();
+            
+            // Hiển thị hộp thoại xác nhận
+            int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Bạn có muốn nạp dữ liệu mới từ file Excel này không?\nDữ liệu hiện có sẽ được kiểm tra và cập nhật nếu cần.",
+                "Xác nhận nhập Excel",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+            );
+            
+            if (confirm == JOptionPane.YES_OPTION) {
+                try {
+                    NhanVienBUS nvBUS = new NhanVienBUS();
+                    int[] importResult = nvBUS.ImportExcel(selectedFile);
+                    int addedRows = importResult[0];
+                    int updatedRows = importResult[1];
+                    JOptionPane.showMessageDialog(
+                        this,
+                        "Nhập dữ liệu từ Excel thành công!\n" +
+                        " - Số dòng được thêm mới: " + addedRows + "\n" +
+                        " - Số dòng được cập nhật: " + updatedRows,
+                        "Thành công",
+                        JOptionPane.INFORMATION_MESSAGE
+                    );
+                    // Cập nhật lại bảng sau khi nhập
+                    fillTableWithSampleData();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(
+                        this,
+                        "Lỗi khi nhập Excel: " + e.getMessage(),
+                        "Lỗi",
+                        JOptionPane.ERROR_MESSAGE
+                    );
+                    e.printStackTrace();
+                }
+            } else {
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Đã hủy nhập dữ liệu từ Excel.",
+                    "Thông báo",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
             }
         }
     }

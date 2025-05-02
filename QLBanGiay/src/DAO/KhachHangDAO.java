@@ -70,31 +70,40 @@ public class KhachHangDAO {
 		connection.disConnect();
 	}
 	
-	public void ImportExcel(File file)
-	{
+	public int[] ImportExcel(File file) {
+		int addedRows = 0;
+		int updatedRows = 0;
 		try {
 			FileInputStream in = new FileInputStream(file);
 			XSSFWorkbook workbook = new XSSFWorkbook(in);
 			XSSFSheet sheet = workbook.getSheetAt(0);
 			Row row;
-			for(int i=1; i <= sheet.getLastRowNum(); i++)
-			{
+			for(int i=1; i <= sheet.getLastRowNum(); i++) {
 				row = sheet.getRow(i);
-				String maKH = row.getCell(0).getStringCellValue();
-				String ho = row.getCell(1).getStringCellValue();
-				String ten = row.getCell(2).getStringCellValue();
+				if (row == null) continue; // Bỏ qua hàng rỗng
+				String maKH = row.getCell(0) != null ? row.getCell(0).getStringCellValue() : "";
+				String ho = row.getCell(1) != null ? row.getCell(1).getStringCellValue() : "";
+				String ten = row.getCell(2) != null ? row.getCell(2).getStringCellValue() : "";
 				String sdt = null;
-				if (row.getCell(3).getCellType() == org.apache.poi.ss.usermodel.CellType.NUMERIC) 
-	                sdt = String.format("%.0f", row.getCell(3).getNumericCellValue());
-	            else 
-	                sdt = row.getCell(3).getStringCellValue();
-				String diaChi = row.getCell(4).getStringCellValue();
+				if (row.getCell(3) != null) {
+					if (row.getCell(3).getCellType() == org.apache.poi.ss.usermodel.CellType.NUMERIC) 
+						sdt = String.format("%.0f", row.getCell(3).getNumericCellValue());
+					else 
+						sdt = row.getCell(3).getStringCellValue();
+				} else {
+					sdt = "";
+				}
+				String diaChi = row.getCell(4) != null ? row.getCell(4).getStringCellValue() : "";
 				
-				String sqlCheck = "SELECT * FROM KhachHang WHERE MaKH= '" + maKH + "'";
+				// Kiểm tra dữ liệu đầu vào
+				if (maKH.isEmpty() || ho.isEmpty() || ten.isEmpty() || sdt.isEmpty() || diaChi.isEmpty()) {
+					continue; // Bỏ qua dòng thiếu dữ liệu
+				}
+				
+				String sqlCheck = "SELECT * FROM khachhang WHERE MaKH = '" + maKH + "'";
 				ResultSet rs = connection.executeQuery(sqlCheck);
-				if(!rs.next())
-				{
-					String sql = "INSERT INTO KhachHang VALUES (";
+				if(!rs.next()) {
+					String sql = "INSERT INTO khachhang (MaKH, Ho, Ten, SDT, DiaChi) VALUES (";
 					sql += "'" + maKH + "', ";
 					sql += "'" + ho + "', ";
 					sql += "'" + ten + "', ";
@@ -102,23 +111,24 @@ public class KhachHangDAO {
 					sql += "'" + diaChi + "')";
 					System.out.println(sql);
 					connection.executeUpdate(sql);
-				}
-				else
-				{
-					String sql = "UPDATE KhachHang SET ";
-					sql += "Ho='" + ho + "', ";
-					sql += "Ten='" + ten + "', ";
-					sql += "SDT='" + sdt + "', ";
-					sql += "DiaChi='" + diaChi + "' ";
-					sql += "WHERE MaKH='" + maKH + "'";
+					addedRows++;
+				} else {
+					String sql = "UPDATE khachhang SET ";
+					sql += "Ho = '" + ho + "', ";
+					sql += "Ten = '" + ten + "', ";
+					sql += "SDT = '" + sdt + "', ";
+					sql += "DiaChi = '" + diaChi + "' ";
+					sql += "WHERE MaKH = '" + maKH + "'";
 					System.out.println(sql);
 					connection.executeUpdate(sql);
+					updatedRows++;
 				}
 			}
 			in.close();
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
+			throw new RuntimeException("Lỗi khi nhập Excel: " + e.getMessage());
 		}
+		return new int[]{addedRows, updatedRows};
 	}
 }

@@ -65,55 +65,63 @@ public class NhanVienDAO {
 		connection.executeUpdate(sql);
 	}
 	
-	public void ImportExcel(File file)
-	{
-		try {
-			FileInputStream in = new FileInputStream(file);
-			XSSFWorkbook workbook = new XSSFWorkbook(in);
-			XSSFSheet sheet = workbook.getSheetAt(0);
-			Row row;
-			for(int i=1; i <= sheet.getLastRowNum(); i++)
-			{
-				row = sheet.getRow(i);
-				String maNV = row.getCell(0).getStringCellValue();
-				String ho = row.getCell(1).getStringCellValue();
-				String ten = row.getCell(2).getStringCellValue();
-				String sdt = null;
-				if (row.getCell(3).getCellType() == org.apache.poi.ss.usermodel.CellType.NUMERIC) 
-	                sdt = String.format("%.0f", row.getCell(3).getNumericCellValue());
-	            else 
-	                sdt = row.getCell(3).getStringCellValue();
-				double luong = (double) row.getCell(4).getNumericCellValue();
-				
-				String sqlCheck = "SELECT * FROM NhanVien WHERE MaNV= '" + maNV + "'";
-				ResultSet rs = connection.executeQuery(sqlCheck);
-				if(!rs.next())
-				{
-					String sql = "INSERT INTO NhanVien VALUES (";
-					sql += "'" + maNV + "', ";
-					sql += "'" + ho + "', ";
-					sql += "'" + ten + "', ";
-					sql += "'" + sdt + "', ";
-					sql += "'" + luong + "')";
-					System.out.println(sql);
-					connection.executeUpdate(sql);
-				}
-				else
-				{
-					String sql = "UPDATE NhanVien SET ";
-					sql += "Ho='" + ho + "', ";
-					sql += "Ten='" + ten + "', ";
-					sql += "SDT='" + sdt + "', ";
-					sql += "Luong='" + luong + "' ";
-					sql += "WHERE MaNV='" + maNV + "'";
-					System.out.println(sql);
-					connection.executeUpdate(sql);
-				}
-			}
-			in.close();
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
+	public int[] ImportExcel(File file) {
+	    int addedRows = 0;
+	    int updatedRows = 0;
+	    try {
+	        FileInputStream in = new FileInputStream(file);
+	        XSSFWorkbook workbook = new XSSFWorkbook(in);
+	        XSSFSheet sheet = workbook.getSheetAt(0);
+	        Row row;
+	        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+	            row = sheet.getRow(i);
+	            if (row == null) continue; // Bỏ qua hàng rỗng
+	            String maNV = row.getCell(0) != null ? row.getCell(0).getStringCellValue() : "";
+	            String ho = row.getCell(1) != null ? row.getCell(1).getStringCellValue() : "";
+	            String ten = row.getCell(2) != null ? row.getCell(2).getStringCellValue() : "";
+	            String sdt = null;
+	            if (row.getCell(3) != null) {
+	                if (row.getCell(3).getCellType() == org.apache.poi.ss.usermodel.CellType.NUMERIC) 
+	                    sdt = String.format("%.0f", row.getCell(3).getNumericCellValue());
+	                else 
+	                    sdt = row.getCell(3).getStringCellValue();
+	            } else {
+	                sdt = "";
+	            }
+	            double luong = row.getCell(4) != null ? row.getCell(4).getNumericCellValue() : 0.0;
+	            
+	            // Kiểm tra dữ liệu đầu vào
+	            if (maNV.isEmpty() || ho.isEmpty() || ten.isEmpty() || sdt.isEmpty()) {
+	                continue; // Bỏ qua dòng thiếu dữ liệu
+	            }
+	            
+	            String sqlCheck = "SELECT * FROM nhanvien WHERE MaNV = '" + maNV + "'";
+	            ResultSet rs = connection.executeQuery(sqlCheck);
+	            if (!rs.next()) {
+	                String sql = "INSERT INTO nhanvien (MaNV, Ho, Ten, SDT, LuongThang) VALUES (";
+	                sql += "'" + maNV + "', ";
+	                sql += "'" + ho + "', ";
+	                sql += "'" + ten + "', ";
+	                sql += "'" + sdt + "', ";
+	                sql += luong + ")";
+	                connection.executeUpdate(sql);
+	                addedRows++;
+	            } else {
+	                String sql = "UPDATE nhanvien SET ";
+	                sql += "Ho = '" + ho + "', ";
+	                sql += "Ten = '" + ten + "', ";
+	                sql += "SDT = '" + sdt + "', ";
+	                sql += "LuongThang = " + luong + " ";
+	                sql += "WHERE MaNV = '" + maNV + "'";
+	                connection.executeUpdate(sql);
+	                updatedRows++;
+	            }
+	        }
+	        in.close();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        throw new RuntimeException("Lỗi khi nhập Excel: " + e.getMessage());
+	    }
+	    return new int[]{addedRows, updatedRows};
 	}
 }

@@ -150,9 +150,11 @@ public class SanPhamBUS {
     	}
     }
     
-    public void ImportExcel(File file)
+    public int[] ImportExcel(File file) 
     {
-    	SanPhamDAO spDAO = new SanPhamDAO();
-    	spDAO.ImportExcel(file);
+        SanPhamDAO spDAO = new SanPhamDAO();
+        int[] result = spDAO.ImportExcel(file);
+        docDSSP(); // Cập nhật DSSP
+        return result;
     }
 }

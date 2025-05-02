@@ -629,24 +629,54 @@ public class KhachHangGUI extends JPanel implements ActionListener {
         }
 	}
 	
-	public void nhapExcel()
-	{
-	    	JFileChooser fileChooser = new JFileChooser();
-	        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xlsx", "xls");
-	        fileChooser.setFileFilter(filter);
-	        int result = fileChooser.showOpenDialog(this);
-	        if (result == JFileChooser.APPROVE_OPTION) {
-	            File selectedFile = fileChooser.getSelectedFile();
+	public void nhapExcel() {
+	    JFileChooser fileChooser = new JFileChooser();
+	    FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xlsx", "xls");
+	    fileChooser.setFileFilter(filter);
+	    int result = fileChooser.showOpenDialog(this);
+	    if (result == JFileChooser.APPROVE_OPTION) {
+	        File selectedFile = fileChooser.getSelectedFile();
+	        
+	        int confirm = JOptionPane.showConfirmDialog(
+	            this,
+	            "Bạn có muốn nạp dữ liệu mới từ file Excel này không?\nDữ liệu hiện có sẽ được kiểm tra và cập nhật nếu cần.",
+	            "Xác nhận nhập Excel",
+	            JOptionPane.YES_NO_OPTION,
+	            JOptionPane.QUESTION_MESSAGE
+	        );
+	        
+	        if (confirm == JOptionPane.YES_OPTION) {
 	            try {
 	                KhachHangBUS khBUS = new KhachHangBUS();
-	                khBUS.ImportExcel(selectedFile);
-	                JOptionPane.showMessageDialog(this, "Nhập dữ liệu từ Excel thành công!", 
-	                        "Thành công", JOptionPane.INFORMATION_MESSAGE);
+	                int[] importResult = khBUS.ImportExcel(selectedFile);
+	                int addedRows = importResult[0];
+	                int updatedRows = importResult[1];
+	                JOptionPane.showMessageDialog(
+	                    this,
+	                    "Nhập dữ liệu từ Excel thành công!\n" +
+	                    " - Số dòng được thêm mới: " + addedRows + "\n" +
+	                    " - Số dòng được cập nhật: " + updatedRows,
+	                    "Thành công",
+	                    JOptionPane.INFORMATION_MESSAGE
+	                );
+	                fillTableWithSampleData();
 	            } catch (Exception e) {
-	                JOptionPane.showMessageDialog(this, "Lỗi khi nhập Excel: " + e.getMessage(), 
-	                        "Lỗi", JOptionPane.ERROR_MESSAGE);
+	                JOptionPane.showMessageDialog(
+	                    this,
+	                    "Lỗi khi nhập Excel: " + e.getMessage(),
+	                    "Lỗi",
+	                    JOptionPane.ERROR_MESSAGE
+	                );
 	                e.printStackTrace();
 	            }
+	        } else {
+	            JOptionPane.showMessageDialog(
+	                this,
+	                "Đã hủy nhập dữ liệu từ Excel.",
+	                "Thông báo",
+	                JOptionPane.INFORMATION_MESSAGE
+	            );
 	        }
+	    }
 	}
 }
