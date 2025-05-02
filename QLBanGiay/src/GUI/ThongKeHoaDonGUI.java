@@ -37,11 +37,9 @@ public class ThongKeHoaDonGUI extends JPanel {
     private DefaultTableModel tableModel;
     private JTable table;
 
-    public ThongKeHoaDonGUI() {
-        thongKeDAO = new ThongKeDAO();
+    public ThongKeHoaDonGUI() 
+    {
         initComponents();
-        loadSummaryData();
-        loadTableData();
     }
 
     private void initComponents() {
@@ -158,115 +156,7 @@ public class ThongKeHoaDonGUI extends JPanel {
         scrollPane.setBounds(20, 460, 1188, 200);
         add(scrollPane);
 
-        // Sự kiện nút Lọc
-        btnFilter.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                loadTableData();
-                loadSummaryData();
-            }
-        });
+     
 
-        // Sự kiện nút Xuất Excel
-        btnXuatExcel.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                exportToExcel();
-            }
-        });
-    }
-
-    private void loadSummaryData() {
-        String startDate = txtTuNgay.getText().trim().isEmpty() ? null : txtTuNgay.getText();
-        String endDate = txtDenNgay.getText().trim().isEmpty() ? null : txtDenNgay.getText();
-
-        String summary = thongKeDAO.statisticSummary(startDate, endDate);
-        if (!summary.isEmpty()) {
-            String[] parts = summary.split("_");
-            DecimalFormat df = new DecimalFormat("#,###");
-            lblTongSoHoaDon.setText("Tổng số hóa đơn: " + parts[0]);
-            lblTongGiaTri.setText("Tổng giá trị: " + df.format(Long.parseLong(parts[1])) + "đ");
-            lblSoLuongSanPham.setText("Số lượng sản phẩm: " + parts[2]);
-        }
-    }
-
-    private void loadTableData() {
-        String startDate = txtTuNgay.getText().trim().isEmpty() ? null : txtTuNgay.getText();
-        String endDate = txtDenNgay.getText().trim().isEmpty() ? null : txtDenNgay.getText();
-        String year = (String) cboxNam.getSelectedItem();
-        String loaiThongKe = (String) cboxLoaiThongKe.getSelectedItem();
-
-        // Xóa dữ liệu cũ
-        tableModel.setRowCount(0);
-
-        DecimalFormat df = new DecimalFormat("#,###");
-        if (loaiThongKe.equals("Theo tháng")) {
-            // Cập nhật tiêu đề cột
-            tableModel.setColumnIdentifiers(new String[]{"Tháng", "Số lượng hóa đơn", "Tổng giá trị", "Số lượng sản phẩm"});
-            ArrayList<String> data = thongKeDAO.statisticByMonth(Integer.parseInt(year));
-            for (String row : data) {
-                String[] parts = row.split("_");
-                tableModel.addRow(new Object[]{
-                    "Tháng " + parts[0],
-                    parts[1],
-                    df.format(Long.parseLong(parts[2])) + "đ",
-                    parts[3]
-                });
-            }
-        } else {
-            // Cập nhật tiêu đề cột
-            tableModel.setColumnIdentifiers(new String[]{"Mã", "Tên", "Tổng giá trị", "Số lượng sản phẩm"});
-            ArrayList<String> data = new ArrayList<>();
-            switch (loaiThongKe) {
-                case "Theo khách hàng":
-                    data = thongKeDAO.statisticByCustomerByDateRange(startDate, endDate);
-                    break;
-                case "Theo nhân viên":
-                    data = thongKeDAO.statisticByEmployeeByDateRange(startDate, endDate);
-                    break;
-                case "Theo sản phẩm":
-                    data = thongKeDAO.statisticByProductByDateRange(startDate, endDate);
-                    break;
-            }
-            for (String row : data) {
-                String[] parts = row.split("_");
-                tableModel.addRow(new Object[]{
-                    parts[0],
-                    parts[1],
-                    df.format(Long.parseLong(parts[2])) + "đ",
-                    "-"
-                });
-            }
-        }
-    }
-
-    private void exportToExcel() {
-        Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("Thống Kê Hóa Đơn");
-
-        // Tạo hàng tiêu đề
-        Row headerRow = sheet.createRow(0);
-        for (int i = 0; i < tableModel.getColumnCount(); i++) {
-            Cell cell = headerRow.createCell(i);
-            cell.setCellValue(tableModel.getColumnName(i));
-        }
-
-        // Thêm dữ liệu
-        for (int i = 0; i < tableModel.getRowCount(); i++) {
-            Row row = sheet.createRow(i + 1);
-            for (int j = 0; j < tableModel.getColumnCount(); j++) {
-                Cell cell = row.createCell(j);
-                cell.setCellValue(tableModel.getValueAt(i, j).toString());
-            }
-        }
-
-        // Ghi file
-        try (FileOutputStream fileOut = new FileOutputStream("ThongKeHoaDon.xlsx")) {
-            workbook.write(fileOut);
-            JOptionPane.showMessageDialog(this, "Xuất Excel thành công!");
-            workbook.close();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi xuất Excel: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
     }
 }
