@@ -1,11 +1,14 @@
 package GUI;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.sql.Date;
@@ -85,6 +88,11 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 	private double thanhTien;
 	private double tongTien = 0;
 	private ArrayList<Integer> soLuongTruocKhiUpdate;
+	private ArrayList<Integer> soLuongCanTang;
+	private ArrayList<String> maSPCanTang;
+	private ArrayList<Integer> updateRow;
+	private String  maSPTruocKhiSua;
+	private int soLuongKhiSua;
 
 	/**
 	 * Launch the application.
@@ -111,6 +119,9 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 		khachHangBUS = new KhachHangBUS();
 		listTemp = new ArrayList<ChiTietHDDTO>();
 		soLuongTruocKhiUpdate = new ArrayList<Integer>();
+		soLuongCanTang = new ArrayList<Integer>();
+		maSPCanTang = new ArrayList<String>();
+		updateRow = new ArrayList<Integer>();
 		initComponents();
 	}
 	
@@ -338,6 +349,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 		lbMaKH.setLabelFor(txtMaKH);
 		txtMaKH.setColumns(10);
 		txtMaKH.setBounds(148, 143, 148, 31);
+		txtMaKH.setEditable(false);
 		panel_3.add(txtMaKH);
 		
 		JButton btnOpenMaKHList = new JButton("...");
@@ -347,6 +359,14 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 		btnOpenMaKHList.addActionListener(e -> {
 			JDialog dialog = new JDialog();
 			dialog.setTitle("Khách hàng");
+			
+			JPanel searchPanel = new JPanel(new BorderLayout(5, 5));
+	        searchPanel.setBackground(Color.WHITE);
+	        JTextField txtSearchMa = new JTextField();
+	        txtSearchMa.setFont(new Font("Arial", Font.PLAIN, 13));
+	        searchPanel.add(txtSearchMa, BorderLayout.CENTER);
+	        dialog.add(searchPanel, BorderLayout.NORTH);
+	        
 			String[] colunms = {"Mã khách hàng", "Họ", "Tên", "SĐT"};
 			
 			JTable tableMaKH = new JTable();
@@ -377,6 +397,19 @@ public class HoaDonGUI extends JPanel implements ActionListener{
             		 dialog.dispose();
             	 }
              });
+             
+             txtSearchMa.addKeyListener(new KeyAdapter() {
+     			@Override
+     			public void keyReleased(KeyEvent e) {
+     				// TODO Auto-generated method stub
+     				String keyword = txtSearchMa.getText().trim().toLowerCase();
+     				modelMaKHList.setRowCount(0);
+     				for(KhachHangDTO nv : khachHangBUS.getListKhachHang()) {
+     					if(nv.getMaKH().toLowerCase().contains(keyword))
+     						modelMaKHList.addRow(new Object[]{nv.getMaKH(), nv.getHo(), nv.getTen(), nv.getSdt()});
+     				}
+     			}
+     		}); 
 		});
 		
 		JLabel lblMaNV = new JLabel("Mã nhân viên");
@@ -388,6 +421,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 		lblMaNV.setLabelFor(txtMaNV);
 		txtMaNV.setColumns(10);
 		txtMaNV.setBounds(148, 102, 148, 31);
+		txtMaNV.setEditable(false);
 		panel_3.add(txtMaNV);
 		
 		JButton btnOpenMaNVList = new JButton("...");
@@ -396,6 +430,14 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 		btnOpenMaNVList.addActionListener(e -> {
 			JDialog dialog = new JDialog();
 			dialog.setTitle("Nhân Viên");
+			
+			JPanel searchPanel = new JPanel(new BorderLayout(5, 5));
+	        searchPanel.setBackground(Color.WHITE);
+	        JTextField txtSearchMa = new JTextField();
+	        txtSearchMa.setFont(new Font("Arial", Font.PLAIN, 13));
+	        searchPanel.add(txtSearchMa, BorderLayout.CENTER);
+	        dialog.add(searchPanel, BorderLayout.NORTH);
+			
 			String[] colunms = {"Mã nhân viên", "Họ", "Tên", "SĐT"};
 			
 			JTable tableMaNV = new JTable();
@@ -426,6 +468,19 @@ public class HoaDonGUI extends JPanel implements ActionListener{
             		 dialog.dispose();
             	 }
              });
+             
+             txtSearchMa.addKeyListener(new KeyAdapter() {
+      			@Override
+      			public void keyReleased(KeyEvent e) {
+      				// TODO Auto-generated method stub
+      				String keyword = txtSearchMa.getText().trim().toLowerCase();
+      				modelMaNVList.setRowCount(0);
+      				for(NhanVienDTO nv : nhanVienBUS.getListNhanVien()) {
+      					if(nv.getMaNV().toLowerCase().contains(keyword))
+      						modelMaNVList.addRow(new Object[]{nv.getMaNV(), nv.getHo(), nv.getTen(), nv.getSdt()});
+      				}
+      			}
+      		}); 
 		});
 
 		
@@ -438,6 +493,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 		lblMSnPhm.setLabelFor(txtMaSP);
 		txtMaSP.setColumns(10);
 		txtMaSP.setBounds(148, 184, 148, 31);
+		txtMaSP.setEditable(false);
 		panel_3.add(txtMaSP);
 		
 		JButton btnOpenMaSPList = new JButton("...");
@@ -445,6 +501,13 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 			JDialog dialog = new JDialog();
 			dialog.setTitle("Sản phẩm");
 			String[] colunms = {"Mã sản phẩm", "Tên sản phẩm", "Đơn giá", "Mã loại SP", "Số lượng"};
+			
+			JPanel searchPanel = new JPanel(new BorderLayout(5, 5));
+	        searchPanel.setBackground(Color.WHITE);
+	        JTextField txtSearchMa = new JTextField();
+	        txtSearchMa.setFont(new Font("Arial", Font.PLAIN, 13));
+	        searchPanel.add(txtSearchMa, BorderLayout.CENTER);
+	        dialog.add(searchPanel, BorderLayout.NORTH);
 			
 			JTable tableMaSP = new JTable();
 			JScrollPane jScrollPaneMaSP = new JScrollPane(tableMaSP);
@@ -480,6 +543,20 @@ public class HoaDonGUI extends JPanel implements ActionListener{
             		 dialog.dispose();
             	 }
              });
+             
+             txtSearchMa.addKeyListener(new KeyAdapter() {
+       			@Override
+       			public void keyReleased(KeyEvent e) {
+       				// TODO Auto-generated method stub
+       				String keyword = txtSearchMa.getText().trim().toLowerCase();
+       				modelMaSpList.setRowCount(0);
+       				for(SanPhamDTO x : sanPhamBUS.getDssp()) {
+       					if(x.getMaSP().toLowerCase().contains(keyword))
+       						modelMaSpList.addRow(new Object[]{x.getMaSP(), x.getTenSP(), x.getDonGia(), x.getMaLoaiSP(), (x.getSoLuong() == 0) ? "Hết hàng" : x.getSoLuong()});
+       				}
+       			}
+       		}); 
+             
 		});
 		btnOpenMaSPList.setBounds(308, 189, 21, 21);
 		panel_3.add(btnOpenMaSPList);
@@ -522,6 +599,12 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 					JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin hóa đơn", "Thông báo", JOptionPane.WARNING_MESSAGE);
 					return;
 				}
+			 	if(chiTietHoaDonBUS.checkDulicate(txtMaHD.getText(), txtMaSP.getText()) && !txtMaSP.getText().equals(listTemp.get(h).getMaSP())) {
+					JOptionPane.showMessageDialog(this, "Vui lòng không thêm sản phẩm giống nhau vào một hóa đơn", "Thông báo", JOptionPane.WARNING_MESSAGE);
+					txtSoLuong.setText("");
+					txtMaSP.setText("");
+					return;
+				}
 			 	
 			 	String maHD = txtMaHD.getText();
 				String maKH = txtMaKH.getText();
@@ -530,16 +613,20 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 				int soLuong = Integer.valueOf(txtSoLuong.getText());
 				
 				ChiTietHDDTO chiTietHDDTO = listTemp.get(h);
-			
+				
+				
 				chiTietHDDTO.setMaHD(maHD);
 				chiTietHDDTO.setMaSP(maSP);
 				chiTietHDDTO.setSoLuong(soLuong);
 				thanhTien = soLuong * donGia;
 				chiTietHDDTO.setDonGia(donGia);
 				chiTietHDDTO.setThanhTien(thanhTien);
-				System.out.println("k" + k);
+				
 				chiTietHoaDonBUS.deleteCTHDByIndex(k);
-//				chiTietHoaDonBUS.addCTHD(maHD, maSP, soLuong, donGia, thanhTien);
+				chiTietHoaDonBUS.addCTHD(chiTietHDDTO.getMaHD(), chiTietHDDTO.getMaSP(), chiTietHDDTO.getSoLuong(), chiTietHDDTO.getDonGia(), chiTietHDDTO.getThanhTien());
+//				chiTietHoaDonBUS.updateSoLuongSP(chiTietHDDTO.getMaSP(), chiTietHDDTO.getSoLuong() - soLuongTruocKhiUpdate.get(h));
+//				soLuongTruocKhiUpdate.set(h, chiTietHDDTO.getSoLuong());
+				
 				selectedRowCTHD = table_1.getSelectedRow();
 				k = 0;
 				donGia = 0;
@@ -551,6 +638,24 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 				 txtSoLuong.setText("");
 				 JOptionPane.showMessageDialog(this, "Sửa hóa đơn thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
 				 openBillDetailTable();
+				 if(!maSP.equals(maSPTruocKhiSua)) {
+						int index = maSPCanTang.indexOf(maSPTruocKhiSua);
+						int index2 = updateRow.indexOf(h);
+						soLuongTruocKhiUpdate.set(h, 0);
+						
+						if (index != -1) {
+							maSPCanTang.remove(index);
+							soLuongCanTang.remove(index);
+						}
+						if (index2 != -1) {
+							return;
+						}
+						maSPCanTang.add(maSPTruocKhiSua);
+						soLuongCanTang.add(soLuongKhiSua);
+						updateRow.add(h);
+					}
+					maSPTruocKhiSua = "";
+					soLuongKhiSua = 0;
 			 
 		 });
 		 btnUpdateBillDetail.setVisible(false);
@@ -583,23 +688,17 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 			
 //			chiTietHoaDonBUS.addCTHD(maHD, maSP, soLuong, donGia, thanhTien);
 			listTemp.add(new ChiTietHDDTO(maHD, maSP, soLuong, donGia, thanhTien));
+			chiTietHoaDonBUS.addCTHD(maHD, maSP, soLuong, donGia, thanhTien);
 			donGia = 0;
 			thanhTien = 0;
 			JOptionPane.showMessageDialog(this, "Thêm sản phẩm vào hóa đơn thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
 			txtSoLuong.setText("");
 			txtMaSP.setText("");
-			txtMaHD.setEditable(false);
-			txtMaKH.setEditable(false);
-			txtMaNV.setEditable(false);
 			openBillDetailTable();
 		});
 		
 		
 		btnComplete.addActionListener(e -> {
-			if(txtMaHD.getText().equals("") || txtMaKH.getText().equals("") || txtMaNV.getText().equals("")) {
-				JOptionPane.showMessageDialog(this, "Bạn chưa thêm sản phẩm vào hóa đơn", "Thông báo", JOptionPane.WARNING_MESSAGE);
-				return;
-			}
 			if(listTemp.size() == 0) {
 				JOptionPane.showMessageDialog(this, "Bạn cần thêm sản phẩm vào hóa đơn trước khi hoàn tất", "Thông báo", JOptionPane.WARNING_MESSAGE);
 				return;
@@ -607,39 +706,55 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 			LocalDate now = LocalDate.now();
 			Date ngayLap = Date.valueOf(now);
 			if(!update) {
+				int i = 0;
 				for(ChiTietHDDTO x : listTemp) {
 					tongTien += x.getThanhTien();
 				}
 				hoaDonBUS.addHoaDon(txtMaHD.getText(), txtMaKH.getText(), txtMaNV.getText(), ngayLap, tongTien);
 				for(ChiTietHDDTO x : listTemp) {
-					chiTietHoaDonBUS.addCTHD(x.getMaHD(), x.getMaSP(), x.getSoLuong(), x.getDonGia(), x.getThanhTien());
-					chiTietHoaDonBUS.updateSoLuongSP(x.getMaSP(), x.getSoLuong());
-				}
-			}
-			else {
-				int selectedRow = table.getSelectedRow();
-				int i = 0;
-				for(ChiTietHDDTO x : listTemp) {
-					tongTien += x.getThanhTien();
+					chiTietHoaDonBUS.updateSoLuongSP(x.getMaSP(), x.getSoLuong() - soLuongTruocKhiUpdate.get(i));
 					if(chiTietHoaDonBUS.checkDulicateMaSP(x.getMaSP(), x.getMaHD())) {
 						i++;
 						continue;
 					}
 					chiTietHoaDonBUS.addCTHD(x.getMaHD(), x.getMaSP(), x.getSoLuong(), x.getDonGia(), x.getThanhTien());
-					chiTietHoaDonBUS.updateSoLuongSP(x.getMaSP(), x.getSoLuong() - soLuongTruocKhiUpdate.get(i));
+					chiTietHoaDonBUS.updateSoLuongSP(x.getMaSP(), x.getSoLuong());
 					i++;
 				}
+			}
+			else {
+				int selectedRow = table.getSelectedRow();
+				int i = 0;
+				
+				for(int index = 0; index < soLuongCanTang.size(); index++) {
+					String maSP = maSPCanTang.get(index);
+					chiTietHoaDonBUS.updateSoLuongSP(maSP, -soLuongCanTang.get(index));
+				}
+				
+				for(ChiTietHDDTO x : listTemp) {
+					
+					tongTien += x.getThanhTien();
+					chiTietHoaDonBUS.updateSoLuongSP(x.getMaSP(), x.getSoLuong() - soLuongTruocKhiUpdate.get(i));
+//					System.out.println("x.getSoLuong " + x.getSoLuong());
+//					System.out.println("soLuongTruockhiupdate "+ soLuongTruocKhiUpdate.get(i));
+//					System.out.println(x.getSoLuong() - soLuongTruocKhiUpdate.get(i));
+					soLuongTruocKhiUpdate.set(i, x.getSoLuong());
+					if(chiTietHoaDonBUS.checkDulicateMaSP(x.getMaSP(), x.getMaHD())) {
+						i++;
+						continue;
+					}
+					chiTietHoaDonBUS.addCTHD(x.getMaHD(), x.getMaSP(), x.getSoLuong(), x.getDonGia(), x.getThanhTien());
+					i++;
+				}
+				
 				hoaDonBUS.updateHoaDon(txtMaHD.getText(), txtMaKH.getText(), txtMaNV.getText(), ngayLap, tongTien, selectedRow);
 				update = false;
 				soLuongTruocKhiUpdate.clear();
-				txtMaHD.setEditable(true);
-				txtMaKH.setEditable(true);
-				txtMaNV.setEditable(true);
+				soLuongCanTang.clear();
+				maSPCanTang.clear();
+				updateRow.clear();
 			}
 			tongTien = 0;
-			txtMaHD.setEditable(true);
-			txtMaKH.setEditable(true);
-			txtMaNV.setEditable(true);
 			txtMaHD.setText("");
 			txtMaSP.setText("");
 			txtMaNV.setText("");
@@ -694,12 +809,13 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 					 txtMaSP.setText(table_1.getValueAt(selectedRowCTHD, 1).toString());
 					 txtSoLuong.setText(table_1.getValueAt(selectedRowCTHD, 2).toString());
 					 chiTietHDDTO = new ChiTietHDDTO(txtMaHD.getText(), txtMaSP.getText(), Integer.valueOf(txtSoLuong.getText()), Double.valueOf(table_1.getValueAt(selectedRowCTHD, 3).toString()), Double.valueOf(table_1.getValueAt(selectedRowCTHD, 4).toString()));
+					 maSPTruocKhiSua = txtMaSP.getText();
+					 soLuongKhiSua = Integer.valueOf(txtSoLuong.getText());
 					 for(ChiTietHDDTO x : listTemp) {
 						 if(x.equals(chiTietHDDTO)) {
 							 break;
 						 }
 						 h++;
-						 System.out.println(h);
 					 }
 					 
 					 for(ChiTietHDDTO x : chiTietHoaDonBUS.getListCTHD()) {
@@ -718,6 +834,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 		table.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				update = false;
+				openUpdateBill();
 //				txtMaKH.setEditable(true);
 //				txtMaNV.setEditable(true);
 //				txtMaHD.setEditable(true);
@@ -803,14 +920,12 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 		txtMaNV.setText("");
 		txtMaSP.setText("");
 		txtSoLuong.setText("");
-		txtMaKH.setEditable(true);
-		txtMaNV.setEditable(true);
-		txtMaSP.setEditable(true);
 		txtMaHD.setText(hoaDonBUS.getMaHD());
 	}
 	
 	public void openUpdateBill() {
 		listTemp.clear();
+		soLuongTruocKhiUpdate.clear();
 		selectedRowHoaDon = table.getSelectedRow();
 		if(hoaDonBUS.getListHoaDon().size() == 0) {
 			JOptionPane.showMessageDialog(this, "Không có hóa đơn để sửa", "Thông báo", JOptionPane.WARNING_MESSAGE);
@@ -830,8 +945,6 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 		}
 		txtMaHD.setText(maHD);
 		txtMaKH.setText(maKH);
-		txtMaHD.setEditable(false);
-		txtMaKH.setEditable(false);
 		update = true;
 		openBillDetailTable();
 		
@@ -846,22 +959,24 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 			JOptionPane.showMessageDialog(this, "Vui lòng chọn hóa đơn để sửa", "Thông báo", JOptionPane.WARNING_MESSAGE);
 			return;
 		}
+		btnAddProduct.setVisible(true);
+		btnUpdateBillDetail.setVisible(false);
 		int result = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa hóa đơn này?", "Thông báo", JOptionPane.YES_NO_OPTION);
 		if(result == JOptionPane.YES_OPTION) {
 			selectedRowHoaDon = table.getSelectedRow();
 			selectedRowCTHD = table_1.getSelectedRow();
 			if(selectedRowHoaDon != -1 && selectedRowCTHD == -1) {
-				System.out.println("Hết");
 				String maHD = (String) table.getValueAt(selectedRowHoaDon, 0);
 				chiTietHoaDonBUS.deleteCTHD(maHD);
 				hoaDonBUS.deleteHoaDon(selectedRowHoaDon);
 				listTemp.clear();
 				openBillDetailTable();
 				openBillTable();
+				update = false;
+				txtMaHD.setText("");
 				JOptionPane.showMessageDialog(this, "Xóa hóa đơn thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
 			}
 			else if(selectedRowCTHD != -1) {
-				System.out.println("chưa");
 				ChiTietHDDTO chiTietHDDTO = listTemp.get(h);
 				chiTietHoaDonBUS.deleteCTHDByIndex(k, chiTietHDDTO.getMaSP());
 				listTemp.remove(h);
@@ -869,17 +984,11 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 				for(ChiTietHDDTO x : listTemp) {
 					tongTien += x.getThanhTien();
 				}
-				listTemp.clear();
-				update = false;
-				hoaDonBUS.updateTongTien((String) table_1.getValueAt(selectedRowCTHD, 0), tongTien, selectedRowHoaDon);
+				hoaDonBUS.updateTongTien((String) table_1.getValueAt(selectedRowCTHD, 0), tongTien);
 				openBillDetailTable();
 				openBillTable();
 				JOptionPane.showMessageDialog(this, "Xóa hóa đơn thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
 			}
-			txtMaHD.setEditable(true);
-			txtMaKH.setEditable(true);
-			txtMaNV.setEditable(true);
-			txtMaHD.setText("");
 			txtMaSP.setText("");
 			txtMaNV.setText("");
 			txtMaKH.setText("");
@@ -900,7 +1009,6 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 			if(!update) {
 				openUpdateBill();
 			}else {
-				System.out.println("Ok");
 				return;
 			}
 		}

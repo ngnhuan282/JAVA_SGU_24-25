@@ -1,11 +1,14 @@
 package GUI;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -55,9 +58,9 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 	private JTextField txtSearch;
 	private JPanel inforPanel;
 	private JTextField txtMaPN,txtNCC,txtNV,txtSP,txtSoLuong,txtDonGia;
-	private JButton btnDetails,btnOpenNVList,btnOpenNCCList,btnOpenSPList,btnDeleteDoing,btnEditDoing,btnComplete,btnEditingAdd;
+	private JButton btnOpenNVList,btnOpenNCCList,btnOpenSPList,btnDeleteProduct,btnEditProduct,btnComplete,btnAddProduct;
 	private NhaCungCapBUS nhaCungCapBUS = new NhaCungCapBUS();	
-	private NhanVienBUS nhanVienBUS ;
+	private NhanVienBUS nhanVienBUS;
 	private SanPhamBUS sanPhamBUS = new SanPhamBUS();
 	private PhieuNhapBUS phieuNhapBUS = new PhieuNhapBUS();
 	private ChiTietPNBUS chiTietPNBUS = new ChiTietPNBUS();
@@ -67,6 +70,7 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 	private JLabel lbTongTien , lbNgayNhap;
 	private JTextField txtTongTien,txtNgayNhap;
 	private boolean update = false;
+	private boolean add = false;
 	private JComboBox<String> cboxSearch;
 	private JDateChooser dateStart, dateEnd;
 	private JLabel lblDateEnd,lblDateStart;
@@ -80,6 +84,11 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
     }
 	
 	public PhieuNhapGUI() {
+		try {
+	        nhanVienBUS = new NhanVienBUS();
+	    } catch (SQLException e) {
+	        e.printStackTrace();       
+	    }
 		initComponents();
 	}
 	
@@ -203,7 +212,7 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
         lblDateStart.setBounds(624, 70, 60, 20);
         pHeaderMain.add(lblDateStart);
         
-        JDateChooser dateStart = new JDateChooser();
+        dateStart = new JDateChooser();
         dateStart.setDateFormatString("yyyy-MM-dd");
         dateStart.setBounds(694, 69, 126, 20);
         pHeaderMain.add(dateStart);
@@ -213,7 +222,7 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
         lblDateEnd.setBounds(864, 70, 60, 20);
         pHeaderMain.add(lblDateEnd);
         
-        JDateChooser dateEnd = new JDateChooser();
+        dateEnd = new JDateChooser();
         dateEnd.setDateFormatString("yyyy-MM-dd");
         dateEnd.setBounds(934, 70, 126, 20);
         pHeaderMain.add(dateEnd);
@@ -319,7 +328,7 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
         inforPanel.add(btnCancel);
         
         btnComplete = new JButton("Hoàn tất");
-        btnComplete.setBounds(258, 271, 114, 33);
+        btnComplete.setBounds(292, 271, 85, 33);
         inforPanel.add(btnComplete);
         btnComplete.addActionListener(e->complete());
         btnComplete.setVisible(false);
@@ -341,37 +350,39 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
         inforPanel.add(btnOpenSPList);
         btnOpenSPList.addActionListener(e->openSPList());
         
-        btnDetails = new JButton("");
-        btnDetails.setBorderPainted(false); 
-        btnDetails.setFocusPainted(false);  
-        btnDetails.setBackground(Color.WHITE);
-        btnDetails.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/icons8-information-20.png")));
-        btnDetails.setBounds(330, 11, 32, 23);
-        btnDetails.addActionListener(e->
-        	getSelectedRowTbPhieuNhap()
-        	);
-        inforPanel.add(btnDetails);
+//        btnDetails = new JButton("");
+//        btnDetails.setBorderPainted(false); 
+//        btnDetails.setFocusPainted(false);  
+//        btnDetails.setBackground(Color.WHITE);
+//        btnDetails.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/icons8-information-20.png")));
+//        btnDetails.setBounds(330, 11, 32, 23);
+//        btnDetails.addActionListener(e->
+//        	getSelectedRowTbPhieuNhap()
+//        	);
+//        inforPanel.add(btnDetails);
         
         
-        btnEditDoing = new JButton("Sửa");
-        btnEditDoing.setBounds(134, 271, 114, 33);
-        inforPanel.add(btnEditDoing);
-        btnEditDoing.addActionListener(e->editWhileDoing());
-        btnEditDoing.setVisible(false);
+        btnEditProduct = new JButton("Sửa SP");
+        btnEditProduct.setBounds(102, 271, 85, 33);
+        inforPanel.add(btnEditProduct);
+        btnEditProduct.addActionListener(e->editProduct());
+        btnEditProduct.setVisible(false);
         
         
-        btnDeleteDoing = new JButton("Xóa");
-        btnDeleteDoing.setBounds(10, 271, 114, 33);
-        inforPanel.add(btnDeleteDoing);
-        btnDeleteDoing.addActionListener(e->deleteWhileDoing());
-        btnDeleteDoing.setVisible(false);
+        btnDeleteProduct = new JButton("Xóa SP");
+//        btnDeleteDoing.setBounds(10, 271, 114, 33);
+        btnDeleteProduct.setBounds(7, 271, 85, 33);
+        inforPanel.add(btnDeleteProduct);
+        btnDeleteProduct.addActionListener(e->deleteProduct());
+        btnDeleteProduct.setVisible(false);
         
         
-        btnEditingAdd = new JButton("Thêm");
-        btnEditingAdd.setBounds(177, 271, 71, 33);
-        inforPanel.add(btnEditingAdd);
-        btnEditingAdd.addActionListener(e->addWhileEditing());
-        btnEditingAdd.setVisible(false);
+        btnAddProduct = new JButton("Thêm SP");
+//        btnEditingAdd.setBounds(177, 271, 71, 33);
+        btnAddProduct.setBounds (197, 271, 85, 33);
+        inforPanel.add(btnAddProduct);
+        btnAddProduct.addActionListener(e->addProduct());
+        btnAddProduct.setVisible(false);
         
         
         //tét//
@@ -429,7 +440,7 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
         tbPhieuNhap.getTableHeader().setFont(new Font("Verdana", Font.BOLD, 12));
         
         //lay selected 
-//        tbPhieuNhap.getSelectionModel().addListSelectionListener(e->getSelectedRowTbPhieuNhap());
+        tbPhieuNhap.getSelectionModel().addListSelectionListener(e->getSelectedRowTbPhieuNhap());
         ////////
         
         JScrollPane scrollPanePhieuNhap = new JScrollPane(tbPhieuNhap);
@@ -480,12 +491,24 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 	public void openNCCList() {
 		JDialog dialog = new JDialog();
 		dialog.setTitle("Nhà Cung Cấp");
-//		System.out.println("NCC");
+		dialog.setSize(650, 300);
+		dialog.setLayout(new BorderLayout(5, 5));
+		
+		JPanel searchPanel = new JPanel(new BorderLayout(5, 5));
+        searchPanel.setBackground(Color.WHITE);
+        JTextField txtSearchNCC = new JTextField();
+        txtSearchNCC.setFont(new Font("Arial", Font.PLAIN, 13));
+        searchPanel.add(txtSearchNCC, BorderLayout.CENTER);
+        dialog.add(searchPanel, BorderLayout.NORTH);
+
 		
 		String[] columns = { "Mã NCC", "Tên Nhà Cung Cấp", "Số Điện Thoại", "Địa Chỉ" };
 		
 		JTable tbNCC = new JTable();
 		JScrollPane jScrollPaneNCC = new JScrollPane(tbNCC);
+		tbNCC.setFont(new Font("Arial", Font.PLAIN, 12));
+		tbNCC.setRowHeight(23);
+		tbNCC.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
 		
 		DefaultTableModel modelNCC = new DefaultTableModel(columns, 0);
 		for(NhaCungCapDTO ncc : nhaCungCapBUS.getListNCC()) 
@@ -495,6 +518,19 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 		dialog.getContentPane().add(jScrollPaneNCC);
 		dialog.setBounds(0, 270 , 650, 250);
 		dialog.setVisible(true);
+		
+		//search 
+		txtSearchNCC.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				String keyword = txtSearchNCC.getText().trim().toLowerCase();
+				modelNCC.setRowCount(0);
+				for(NhaCungCapDTO ncc : nhaCungCapBUS.getListNCC())
+					if(ncc.getMaNCC().toLowerCase().contains(keyword))
+						modelNCC.addRow(new Object[]{ncc.getMaNCC(), ncc.getTenNCC(), ncc.getSDT(), ncc.getDiaChi()});
+			}
+		});
 		
 		  //Su kien click vao table 
       	tbNCC.getSelectionModel().addListSelectionListener(e->{
@@ -510,18 +546,25 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 	public void openNVList() {
 		JDialog dialog = new JDialog();
 		dialog.setTitle("Nhân viên");
+		dialog.setSize(650, 300);
+		dialog.setLayout(new BorderLayout(5, 5));
+		
+		JPanel searchPanel = new JPanel(new BorderLayout(5, 5));
+        searchPanel.setBackground(Color.WHITE);
+        JTextField txtSearchNV = new JTextField();
+        txtSearchNV.setFont(new Font("Arial", Font.PLAIN, 13));
+        searchPanel.add(txtSearchNV, BorderLayout.CENTER);
+        dialog.add(searchPanel, BorderLayout.NORTH);
+		
 	
-		NhanVienBUS nhanVienBUS = null;
-		try {
-			nhanVienBUS = new NhanVienBUS();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		
+
 		Object[] columns = {"Mã NV", "Họ NV", "Tên NV", "Số Điện Thoại"};
 		
 		JTable tbNV = new JTable();
+		tbNV.setFont(new Font("Arial", Font.PLAIN, 12));
+        tbNV.setRowHeight(23);
+        tbNV.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
+        
 		JScrollPane jScrollPaneNV = new JScrollPane(tbNV);
 		
 		DefaultTableModel modelNV = new DefaultTableModel(columns, 0);
@@ -534,6 +577,20 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 		dialog.setBounds(0, 300 , 650, 250);
 		dialog.setVisible(true);
 		
+		txtSearchNV.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				String keyword = txtSearchNV.getText().trim().toLowerCase();
+				modelNV.setRowCount(0);
+				for(NhanVienDTO nv : nhanVienBUS.getListNhanVien()) {
+					if(nv.getMaNV().toLowerCase().contains(keyword))
+						modelNV.addRow(new Object[]{nv.getMaNV(), nv.getHo(), nv.getTen(), nv.getSdt()});
+				}
+			}
+		}); 
+		
+		
 		
 		//su kien click 
 		tbNV.getSelectionModel().addListSelectionListener(e->{
@@ -545,86 +602,105 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 		});
 	}	
 	
-	//SU KIEN THEM PHIEU NHAPPPPPPPPPP///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public void addCTPN() {
-		String maPN = txtMaPN.getText();
-		String NV = txtNV.getText();
-		String NCC = txtNCC.getText();
-		String SP = txtSP.getText();
+	
+	public void openSPList() {
+		JDialog dialog = new JDialog();
+		dialog.setTitle("Sản Phẩm");
+		dialog.setSize(750, 300);
+        dialog.setLayout(new BorderLayout(5, 5));
 		
-		if (maPN.isEmpty()) {
-	        JOptionPane.showMessageDialog(this, "Vui lòng nhập mã phiếu nhập!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-	        txtMaPN.requestFocus();
-	        return;
-	    }
+        JPanel searchPanel = new JPanel(new BorderLayout(5, 5));
+        searchPanel.setBackground(Color.WHITE);
+        JTextField txtSearchSP = new JTextField();
+        txtSearchSP.setFont(new Font("Arial", Font.PLAIN, 13));
+        searchPanel.add(txtSearchSP, BorderLayout.CENTER);
+        dialog.add(searchPanel, BorderLayout.NORTH);
+        
+		Object[] columns = {"Mã SP", "Tên SP", "Loại", "Giá", "Số lượng", "ĐVT", "Màu sắc", "Kích thước", "Chất liệu", "Kiểu dáng"};
+		 
+		JTable tbSP = new JTable();
+		tbSP.setFont(new Font("Arial", Font.PLAIN, 12));
+        tbSP.setRowHeight(23);
+        tbSP.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
+		JScrollPane jScrollPaneSP = new JScrollPane(tbSP);
 		
-		if(phieuNhapBUS.checkMaPN(maPN)) {
-			JOptionPane.showMessageDialog(this,"Mã phiếu nhập " + maPN + " đã tồn tại! Vui lòng chọn mã khác.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-			txtMaPN.requestFocus();
-	        return;
+		DefaultTableModel modelSP = new DefaultTableModel(columns, 0);
+		for(SanPhamDTO sp : sanPhamBUS.getDssp()) {
+			String tenLoaiSP = "";
+			for (LoaiDTO loai : loaiBUS.getDsloai()) {
+                if (loai.getMaLoaiSP() == sp.getMaLoaiSP()) {
+                    tenLoaiSP = loai.getTenLoaiSP();
+                }
+			}
+			modelSP.addRow(new Object[]{
+					  sp.getMaSP(), sp.getTenSP(), tenLoaiSP, sp.getDonGia(), sp.getSoLuong(), 
+		                sp.getDonViTinh(), sp.getMauSac(), sp.getKichThuoc(), sp.getChatLieu(), 
+		                sp.getKieuDang()
+	            });
 		}
 		
-	    if (NV.isEmpty()) {
-	        JOptionPane.showMessageDialog(this, "Vui lòng nhập mã nhân viên!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-	        txtNV.requestFocus();
-	        return;
-	    }
-	    if (NCC.isEmpty()) {
-	        JOptionPane.showMessageDialog(this, "Vui lòng nhập mã nhà cung cấp!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-	        txtNCC.requestFocus();
-	        return;
-	    }
-	    if (SP.isEmpty()) {
-	        JOptionPane.showMessageDialog(this, "Vui lòng nhập mã sản phẩm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-	        txtSP.requestFocus();
-	        return;
-	    }
-	    
-		int soLuong;
-	    double donGia;
-	    try {
-	    	soLuong = Integer.parseInt(txtSoLuong.getText().trim());
-	        donGia = Double.parseDouble(txtDonGia.getText().trim());
-	    } catch (NumberFormatException ex) {
-	        JOptionPane.showMessageDialog(this, "Số lượng và đơn giá phải là số hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-	        return;
-	    }
-	    
-	    //check xem co trong chi tiet chua 
-	    for(ChiTietPNDTO ctpn : listTemp)
-	    	if(ctpn.getMaSP().equals(SP)) {
-	    		JOptionPane.showMessageDialog(this, "Sản phẩm " + SP + " đã tồn tại! Vui lòng chọn dòng và nhấn Sửa để cập nhật số lượng hoặc đơn giá.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-	            return;
-	    	}
-	    
-		double thanhTien = soLuong*donGia;
-		
-		listTemp.add(new ChiTietPNDTO(maPN,SP,soLuong,donGia,thanhTien));
-		modelCTPN.setRowCount(0);	
-		for(ChiTietPNDTO ctpn : listTemp)
-			modelCTPN.addRow(new Object[] {ctpn.getMaPhieuNH(),ctpn.getMaSP(), ctpn.getSoLuong(),ctpn.getDonGia(),ctpn.getThanhTien()});
 		
 		
-		txtMaPN.setEditable(false);
-		txtMaPN.setFocusable(false);
+		tbSP.setModel(modelSP);
 		
-		btnDetails.setVisible(false);
-		// tranh truong hop bam sua tuc la bounds cua sua va xoa thay doi roi moi bam them thi se gay ra th sua va xoa khong ve vi tri cu~
-		btnEditDoing.setBounds(134, 271, 114, 33);
-		btnDeleteDoing.setBounds(10, 271, 114, 33);
-		//
-		btnEditDoing.setVisible(true);
-		btnDeleteDoing.setVisible(true);
-		btnComplete.setVisible(true);
+		dialog.getContentPane().add(jScrollPaneSP);
+		dialog.setBounds(0, 330 , 750, 250);
+		dialog.setVisible(true);
 		
-		txtSP.setText("");
-		txtSoLuong.setText("");
-		txtDonGia.setText("");
+//		search
+		txtSearchSP.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				String keyword = txtSearchSP.getText().trim().toLowerCase();
+				modelSP.setRowCount(0);
+				for(SanPhamDTO sp : sanPhamBUS.getDssp()) {
+				String tenLoaiSP = "";
+					for (LoaiDTO loai : loaiBUS.getDsloai()) {
+						if (loai.getMaLoaiSP() == sp.getMaLoaiSP()) {
+	                    tenLoaiSP = loai.getTenLoaiSP();
+						}
+					}
+					if (sp.getMaSP().toLowerCase().contains(keyword)) {
+						modelSP.addRow(new Object[]{
+	                            sp.getMaSP(), sp.getTenSP(), tenLoaiSP, sp.getDonGia(), sp.getSoLuong(),
+	                            sp.getDonViTinh(), sp.getMauSac(), sp.getKichThuoc(), sp.getChatLieu(),
+	                            sp.getKieuDang()
+	                        });
+					}
+				}
+			}
 		
-		JOptionPane.showMessageDialog(this, "Thêm chi tiết thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+		});
+		
+		
+		//su kien click 
+		tbSP.getSelectionModel().addListSelectionListener(e->{
+			int selectedRow = tbSP.getSelectedRow();
+			
+			String maSP = (String) tbSP.getValueAt(selectedRow, 0);
+			txtSP.setText(maSP);
+			dialog.dispose();
+		});
+		
+		
 	}
 	
-	public void editWhileDoing() {
+	
+	//SU KIEN THEM PHIEU NHAPPPPPPPPPP///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public void addCTPN() {
+		clear();
+		
+		txtMaPN.setText(phieuNhapBUS.generateMaPN());
+		btnAddProduct.setVisible(true);
+		btnEditProduct.setVisible(true);
+		btnDeleteProduct.setVisible(true);
+		btnComplete.setVisible(true);
+		//dua vao trang thai add (han che select cac pn va ctpn)
+		add = true;
+	}
+	
+	public void editProduct() {
 		 int selectedRow = tbCTPN.getSelectedRow();
 		    if (selectedRow == -1) {
 		        JOptionPane.showMessageDialog(this, "Vui lòng chọn một chi tiết để sửa!", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -680,7 +756,7 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 	}
 	
 	
-	public void deleteWhileDoing() {
+	public void deleteProduct() {
 	    int selectedRow = tbCTPN.getSelectedRow();
 	    if (selectedRow == -1) {
 	        JOptionPane.showMessageDialog(this, "Vui lòng chọn một chi tiết để xóa!", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -713,19 +789,18 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 	
 ///////////////////////////////////EDITTTTTTTTTTTTTTT////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 	public void editPN() {
+		//truong hop dang coi chi tiet ma bam sua 
+		btnOpenNVList.setVisible(true);
+		btnOpenNCCList.setVisible(true);
+		btnOpenSPList.setVisible(true);
 		
-		//de phong truong hop nguoi dung bam xem details roi bam sua ma khong cancel
-				btnOpenNVList.setVisible(true);
-				btnOpenNCCList.setVisible(true);
-				btnOpenSPList.setVisible(true);
-				txtSoLuong.setEditable(true);
-				txtSoLuong.setFocusable(true);
-				txtDonGia.setEditable(true);
-				txtDonGia.setFocusable(true);
-				txtSP.setText("");
-				txtSoLuong.setText("");
-				txtDonGia.setText("");
-				///////////////////////////////////
+		txtSoLuong.setText("");
+		txtDonGia.setText("");
+		txtSoLuong.setEditable(true);
+		txtSoLuong.setFocusable(true);
+		txtDonGia.setEditable(true);
+		txtDonGia.setFocusable(true);
+		
 		update = true;
 		int selectedRowPN = tbPhieuNhap.getSelectedRow();
 		if(selectedRowPN == -1) {
@@ -738,6 +813,7 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 	    String NCC = (String) modelPhieuNhap.getValueAt(selectedRowPN, 2);
 	    
 	    txtMaPN.setText(maPN);
+	    txtMaPN.setForeground(new Color(155,155,155));
 	    txtNV.setText(NV);
 	    txtNCC.setText(NCC);
 	    
@@ -751,24 +827,32 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 		for(ChiTietPNDTO ctpn : listTemp)
 			modelCTPN.addRow(new Object[] {ctpn.getMaPhieuNH(),ctpn.getMaSP(), ctpn.getSoLuong(),ctpn.getDonGia(),ctpn.getThanhTien()});
 			
-		btnDetails.setVisible(false);
 		
-		btnDeleteDoing.setBounds(15, 271, 71, 33);
-		btnDeleteDoing.setVisible(true);
-		btnEditDoing.setBounds (96, 271, 71, 33);
-		btnEditDoing.setVisible(true);
-		
-		btnEditingAdd.setVisible(true);
+		btnAddProduct.setVisible(true);
+		btnEditProduct.setVisible(true);
+		btnDeleteProduct.setVisible(true);
 		btnComplete.setVisible(true);
 	}
 	
 	
-	public void addWhileEditing() {
+	public void addProduct() {
 		String maPN = txtMaPN.getText();
 		String NV = txtNV.getText();
 		String NCC = txtNCC.getText();
 		String SP = txtSP.getText();
 		
+		if (maPN.isEmpty()) {
+	        JOptionPane.showMessageDialog(this, "Vui lòng nhập mã phiếu nhập!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+	        txtMaPN.requestFocus();
+	        return;
+	    }
+		if(!update) {
+			if(phieuNhapBUS.checkMaPN(maPN)) {
+				JOptionPane.showMessageDialog(this,"Mã phiếu nhập " + maPN + " đã tồn tại! Vui lòng chọn mã khác.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+				txtMaPN.requestFocus();
+				return;
+			}
+		}
 		
 	    if (NV.isEmpty()) {
 	        JOptionPane.showMessageDialog(this, "Vui lòng nhập mã nhân viên!", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -809,12 +893,16 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 		modelCTPN.setRowCount(0);	
 		for(ChiTietPNDTO ctpn : listTemp)
 			modelCTPN.addRow(new Object[] {ctpn.getMaPhieuNH(),ctpn.getMaSP(), ctpn.getSoLuong(),ctpn.getDonGia(),ctpn.getThanhTien()});
-	
+
+		txtMaPN.setEditable(false);
+		txtMaPN.setFocusable(false);
+		txtMaPN.setForeground(new Color(155,155,155));
 		txtSP.setText("");
 		txtSoLuong.setText("");
 		txtDonGia.setText("");
 		
-		JOptionPane.showMessageDialog(this, "Thêm chi tiết thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+		
+		JOptionPane.showMessageDialog(this, "Thêm sản phẩm vào chi tiết phiếu nhập thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 ////////////////////////////////KET THUC EDIT///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -823,6 +911,12 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 		 String NV = txtNV.getText().trim();
 		 String NCC = txtNCC.getText().trim();
 		 
+		 
+		 if (maPN.isEmpty()) {
+		        JOptionPane.showMessageDialog(this, "Vui lòng nhập mã phiếu nhập!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+		        txtMaPN.requestFocus();
+		        return;
+		    }
 		 if (NV.isEmpty()) {
 		        JOptionPane.showMessageDialog(this, "Vui lòng nhập mã nhân viên!", "Lỗi", JOptionPane.ERROR_MESSAGE);
 		        txtNV.requestFocus();
@@ -918,50 +1012,7 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 	
 	
 	
-	public void openSPList() {
-		JDialog dialog = new JDialog();
-		dialog.setTitle("Sản Phẩm");
-//		System.out.println("SP");
-		
-		Object[] columns = {"Mã SP", "Tên SP", "Loại", "Giá", "Số lượng", "ĐVT", "Màu sắc", "Kích thước", "Chất liệu", "Kiểu dáng"};
-		 
-		JTable tbSP = new JTable();
-		JScrollPane jScrollPaneSP = new JScrollPane(tbSP);
-		
-		DefaultTableModel modelSP = new DefaultTableModel(columns, 0);
-		for(SanPhamDTO sp : sanPhamBUS.getDssp()) {
-			String tenLoaiSP = "";
-			for (LoaiDTO loai : loaiBUS.getDsloai()) {
-                if (loai.getMaLoaiSP() == sp.getMaLoaiSP()) {
-                    tenLoaiSP = loai.getTenLoaiSP();
-                }
-			}
-			modelSP.addRow(new Object[]{
-					  sp.getMaSP(), sp.getTenSP(), tenLoaiSP, sp.getDonGia(), sp.getSoLuong(), 
-		                sp.getDonViTinh(), sp.getMauSac(), sp.getKichThuoc(), sp.getChatLieu(), 
-		                sp.getKieuDang()
-	            });
-		}
-		
-		tbSP.setModel(modelSP);
-		
-		dialog.getContentPane().add(jScrollPaneSP);
-		dialog.setBounds(0, 330 , 750, 250);
-		dialog.setVisible(true);
-		
-		
-		//su kien click 
-		tbSP.getSelectionModel().addListSelectionListener(e->{
-			int selectedRow = tbSP.getSelectedRow();
-			
-			String maSP = (String) tbSP.getValueAt(selectedRow, 0);
-			txtSP.setText(maSP);
-			dialog.dispose();
-		});
-		
-		
-	}
-	
+
 //	public DefaultTableModel updateTableCTPN(DefaultTableModel model) {
 //		model.setRowCount(0); 
 //		
@@ -994,19 +1045,18 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 	
 	public void getSelectedRowTbPhieuNhap() {
 		int selectedRow = tbPhieuNhap.getSelectedRow();
-		if(selectedRow!=-1)
+		if(selectedRow!=-1 && update == false)
 		{
 			String maPN = (String) modelPhieuNhap.getValueAt(selectedRow, 0);
 			loadChiTietPN(maPN);
 		}
-		
 	}
 	
 	
 	public void getInforFromTbCTPN() {
 		int selectedRowPN = tbPhieuNhap.getSelectedRow();
 		int selectedRowCTPN = tbCTPN.getSelectedRow();
-		if(selectedRowCTPN != -1 && selectedRowPN != -1 && listTemp.isEmpty() && update == false) {
+		if(selectedRowCTPN != -1 && selectedRowPN != -1 && listTemp.isEmpty() && update == false && add == false) {
 			String maPN = (String) tbPhieuNhap.getValueAt(selectedRowPN,0);
 			String NV = (String) tbPhieuNhap.getValueAt(selectedRowPN, 1);
 			String NCC = (String) tbPhieuNhap.getValueAt(selectedRowPN, 2);
@@ -1033,22 +1083,8 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 			btnOpenSPList.setVisible(false);
 			btnComplete.setVisible(false);
 			
-			
-//			lbTongTien.setVisible(true);
-//	        txtTongTien.setVisible(true);
-//	        lbNgayNhap.setVisible(true);
-//	        txtNgayNhap.setVisible(true);
-
-		        
 		}
-//		else if(selectedRowCTPN != -1 && !listTemp.isEmpty() ) {
-//			String SP = (String) tbCTPN.getValueAt(selectedRowCTPN, 1);
-//			int soLuong = (int) tbCTPN.getValueAt(selectedRowCTPN, 2);
-//			double donGia = (double) tbCTPN.getValueAt(selectedRowCTPN, 3);
-//			txtSP.setText(SP);
-//			txtSoLuong.setText(String.valueOf(soLuong));
-//			txtDonGia.setText(String.valueOf(donGia));
-//		}
+
 	}
 	//Tim kiem nang cao va co ban
 	public void timKiem() {
@@ -1120,49 +1156,54 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 		txtDonGia.setEditable(true);
 		txtDonGia.setFocusable(true);
 		
-		btnDetails.setVisible(true);
+//		btnDetails.setVisible(true);
 		btnOpenNVList.setVisible(true);
 		btnOpenNCCList.setVisible(true);
 		btnOpenSPList.setVisible(true);
 		
-		btnEditDoing.setVisible(false);
-	    btnDeleteDoing.setVisible(false);
+		btnAddProduct.setVisible(false);
+		btnEditProduct.setVisible(false);
+		btnDeleteProduct.setVisible(false);
 	    btnComplete.setVisible(false);
-	    btnEditingAdd.setVisible(false);
 	    update = false;//bien giup cho su kien xem details chi thuc hien duoc khi click vao xem thong tin
+	    add = false;
+	    
+	    txtMaPN.setForeground(new Color(60,60,60));
 	    
 		listTemp.clear();
 	}
 	
-    public void xuatExcel()
-    {
-    	try {
-            ExcelExporter.exportJTableToExcel(tbPhieuNhap);
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi xuất file Excel: " + e.getMessage(),
-                    "Lỗi", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
-    }
-    
-    public void xuatPDF() {
-        int selectedRow = tbPhieuNhap.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn một phiếu nhập để xuất PDF!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            tbPhieuNhap.requestFocus();
-            return;
-        }
+	  public void xuatExcel()
+	    {
+	    	try {
+	            ExcelExporter.exportJTableToExcel(tbPhieuNhap);
+	        } catch (IOException e) {
+	            JOptionPane.showMessageDialog(this, "Lỗi khi xuất file Excel: " + e.getMessage(),
+	                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+	            e.printStackTrace();
+	        }
+	    }
+	    
+	    public void xuatPDF() {
+	        int selectedRow = tbPhieuNhap.getSelectedRow();
+	        if (selectedRow == -1) {
+	            JOptionPane.showMessageDialog(this, "Vui lòng chọn một phiếu nhập để xuất PDF!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+	            tbPhieuNhap.requestFocus();
+	            return;
+	        }
 
-        String maPN = (String) modelPhieuNhap.getValueAt(selectedRow, 0);
-        try {
-            PDFReporter pdfReporter = new PDFReporter();
-            pdfReporter.writePhieuNhap(maPN);
-            JOptionPane.showMessageDialog(this, "Xuất PDF thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi xuất PDF: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-            ex.printStackTrace();
-        }
-    }
+	        String maPN = (String) modelPhieuNhap.getValueAt(selectedRow, 0);
+	        try {
+	            PDFReporter pdfReporter = new PDFReporter();
+	            pdfReporter.writePhieuNhap(maPN);
+	            JOptionPane.showMessageDialog(this, "Xuất PDF thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+	        } catch (Exception ex) {
+	            JOptionPane.showMessageDialog(this, "Lỗi khi xuất PDF: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+	            ex.printStackTrace();
+	        }
+	    }
+	
+  
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
