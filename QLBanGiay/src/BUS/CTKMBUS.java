@@ -25,34 +25,55 @@ public class CTKMBUS {
 		this.listKhuyenMai = listKhuyenMai;
 	}
 	
-	public boolean checkKhuyenMaiExist(String maCTKM) {
+	public boolean checkMaCTKMexist(String maCTKM) {
 		for(CTKMDTO x : listKhuyenMai) {
-			if(x.getMaCTKM().equals(maCTKM)) {
+			if(x.getMaCTKM().equalsIgnoreCase(maCTKM)) {
 				return true;
 			}
 		}
 		return false;
 	}
 	
+	public boolean isNgayKTAfterNgayBD(java.util.Date ngayBD, java.util.Date ngayKT) {
+	    if (ngayBD == null || ngayKT == null) {
+	        return false;
+	    }
+	    return ngayKT.after(ngayBD);
+	}
+
 	
 	
-	public void addKhuyenMai(String maCTKM, Date ngayBD, Date ngayKT, String tenCTKM) {
-		CTKMDTO khuyenMai = new CTKMDTO();
-		khuyenMai.setMaCTKM(maCTKM);
-		khuyenMai.setNgayBD(ngayBD);
-		khuyenMai.setNgayKT(ngayKT);
-		khuyenMai.setTenCTKM(tenCTKM);
-		listKhuyenMai.add(khuyenMai);
-		khuyenMaiDAO.addkhuyenMaiDAO(khuyenMai);
+	
+	public boolean themKhuyenMai(String maCTKM, Date ngayBD, Date ngayKT, String tenCTKM, String loaiKM, String maSPorHD, double phanTram) {
+	    try {
+	        CTKMDTO khuyenMai = new CTKMDTO(maCTKM, new java.sql.Date(ngayBD.getTime()), new java.sql.Date(ngayKT.getTime()), tenCTKM);
+	        khuyenMaiDAO.addkhuyenMaiDAO(khuyenMai);
+
+	        if (loaiKM.equals("Sản Phẩm")) {
+	        	khuyenMaiDAO.addCTKM_SP(maCTKM, maSPorHD, phanTram);
+	        } else {
+	        	khuyenMaiDAO.addCTKM_HD(maCTKM, maSPorHD, phanTram);
+	        }
+
+	        listKhuyenMai.add(khuyenMai); // cập nhật list trong BUS
+	        return true;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false;
+	    }
 	}
 	
-	public void updateKhuyenMai(Date ngayBD, Date ngayKT,String tenCTKM, int index) {
-		CTKMDTO khuyenMai = listKhuyenMai.get(index);
-		khuyenMai.setNgayBD(ngayBD);
-		khuyenMai.setNgayKT(ngayKT);
-		khuyenMai.setTenCTKM(tenCTKM);
-		khuyenMaiDAO.updatekhuyenMaiDAO(khuyenMai);
+	public void updateCTKM(CTKMDTO ctkm, String loaiCTKMCu, String loaiCTKM, String maSPorHD, double phanTramValue,String maSPorHDCu, int index) {
+	    // Cập nhật thông tin của chương trình khuyến mãi trong danh sách
+		listKhuyenMai.set(index, ctkm);
+
+	    // Gọi DAO để cập nhật vào cơ sở dữ liệu
+		khuyenMaiDAO.updateCTKMDAO(ctkm,loaiCTKMCu,loaiCTKM,maSPorHD,maSPorHDCu,phanTramValue);
 	}
+
+
+
+
 	
 	public void deleteKhuyenMai(int index) {
 		CTKMDTO khuyenMai = listKhuyenMai.get(index);

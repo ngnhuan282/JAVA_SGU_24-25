@@ -41,31 +41,81 @@ public class CTKMDAO {
 		return listkhuyenMaiDTO;
 	}
 	
+	
+	
 	public void addkhuyenMaiDAO(CTKMDTO x) {
 		String sql = "INSERT INTO ctkm(MaCTKM, NgayBD, NgayKT, TenCTKM)"
 				+ "VALUES('"+ x.getMaCTKM()+"', '"+ x.getNgayBD() +"', '"+ x.getNgayKT()+ "', '"+ x.getTenCTKM()+"')";
 		
 		connection.executeUpdate(sql);
-//		if(rs.next) {
-//			String sql2 = "SELECT LAST_INSERT_ID()";
-//
-//		}
 	}
+	public void addCTKM_SP(String maCTKM, String maSP, double phanTram) {
+	    String sql = "INSERT INTO ctkm_sp VALUES('" + maCTKM + "', '" + maSP + "', " + phanTram + ")";
+	    connection.executeUpdate(sql);
+	}
+
+	public void addCTKM_HD(String maCTKM, String maHD, double phanTram) {
+	    String sql = "INSERT INTO ctkm_hd VALUES('" + maCTKM + "', '" + maHD + "', " + phanTram + ")";
+	    connection.executeUpdate(sql);
+	}
+
+	public void updateCTKMDAO(CTKMDTO ctkm, String loaiCTKMCu, String loaiCTKM, String maSPorHD, String maSPorHDCu, double phanTramValue) {
+	    // Cập nhật thông tin chương trình khuyến mãi vào bảng ctkm
+		String sqlUpdateCTKM = "UPDATE ctkm SET NgayBD = '" + new java.sql.Date(ctkm.getNgayBD().getTime()) + "', " +
+		                       "NgayKT = '" + new java.sql.Date(ctkm.getNgayKT().getTime()) + "', " +
+		                       "TenCTKM = '" + ctkm.getTenCTKM() + "' " +
+		                       "WHERE MaCTKM = '" + ctkm.getMaCTKM() + "'";
+		connection.executeUpdate(sqlUpdateCTKM);
+
+		// Kiểm tra xem loại khuyến mãi có thay đổi hay không
+		if (!loaiCTKMCu.equals(loaiCTKM)) {
+		    // Nếu loại khuyến mãi thay đổi, thực hiện xóa bản ghi cũ và thêm bản ghi mới vào bảng tương ứng
+		    if (loaiCTKMCu.equals("Sản Phẩm") && loaiCTKM.equals("Hóa Đơn")) {
+		        // Xóa bản ghi cũ trong bảng ctkm_sp
+		        String sqlDeleteSP = "DELETE FROM ctkm_sp WHERE MaCTKM = '" + ctkm.getMaCTKM() + "' AND MaSP = '" + maSPorHDCu + "'";
+		        connection.executeUpdate(sqlDeleteSP);
+
+		        // Thêm bản ghi mới vào bảng ctkm_hd
+		        String sqlInsertHD = "INSERT INTO ctkm_hd (MaCTKM, MaHD, PhanTramGiamGia) VALUES ('" + ctkm.getMaCTKM() + "', '" + maSPorHD + "', " + phanTramValue + ")";
+		        connection.executeUpdate(sqlInsertHD);
+		    } else if (loaiCTKMCu.equals("Hóa Đơn") && loaiCTKM.equals("Sản Phẩm")) {
+		        // Xóa bản ghi cũ trong bảng ctkm_hd
+		        String sqlDeleteHD = "DELETE FROM ctkm_hd WHERE MaCTKM = '" + ctkm.getMaCTKM() + "' AND MaHD = '" + maSPorHDCu + "'";
+		        connection.executeUpdate(sqlDeleteHD);
+
+		        // Thêm bản ghi mới vào bảng ctkm_sp
+		        String sqlInsertSP = "INSERT INTO ctkm_sp (MaCTKM, MaSP, PhanTramGiamGia) VALUES ('" + ctkm.getMaCTKM() + "', '" + maSPorHD + "', " + phanTramValue + ")";
+		        connection.executeUpdate(sqlInsertSP);
+		    }
+		} else {
+		    // Nếu loại khuyến mãi không thay đổi, kiểm tra mã sản phẩm/hoá đơn
+		    if (loaiCTKM.equals("Sản Phẩm")) {
+		        // Nếu mã SP thay đổi, cần xóa bản ghi cũ và thêm bản ghi mới
+		        String sqlDeleteSP = "DELETE FROM ctkm_sp WHERE MaCTKM = '" + ctkm.getMaCTKM() + "'";
+		        connection.executeUpdate(sqlDeleteSP);
+
+		        String sqlInsertSP = "INSERT INTO ctkm_sp (MaCTKM, MaSP, PhanTramGiamGia) VALUES ('" + ctkm.getMaCTKM() + "', '" + maSPorHD + "', " + phanTramValue + ")";
+		        connection.executeUpdate(sqlInsertSP);
+		    } else if (loaiCTKM.equals("Hóa Đơn")) {
+		        // Cập nhật phần trăm giảm giá cho hóa đơn
+		        String sqlUpdateHD = "UPDATE ctkm_hd SET PhanTramGiamGia = " + phanTramValue + 
+		                              " WHERE MaCTKM = '" + ctkm.getMaCTKM() + "' AND MaHD = '" + maSPorHD + "'";
+		        connection.executeUpdate(sqlUpdateHD);
+		    }
+		}
+	}
+
+
+
+
+//	    connection.disConnect();
 	
-	public void updatekhuyenMaiDAO(CTKMDTO x) {
-		String sql = "UPDATE khuyenMai"
-				+ " SET"
-				+ " NgayBT = '" + x.getNgayBD() + "'"
-				+ ", NgayKT = '" + x.getNgayKT() + "'"
-				+ ", TenCTKM = '" + x.getTenCTKM() + "'"
-				+ " WHERE MaCTKM = '" + x.getMaCTKM() + "'";
-		connection.executeUpdate(sql);
-		connection.disConnect();
-	}
+
+
+
 	
 	public void deletekhuyenMaiDAO(CTKMDTO x) {
-		String sql  = "DELETE FROM khuyenMai WHERE MaCTKM ='" + x.getMaCTKM() + "'";
+		String sql  = "DELETE FROM ctkm WHERE MaCTKM ='" + x.getMaCTKM() + "'";
 		connection.executeUpdate(sql);
-		connection.disConnect();
 	}
 }
