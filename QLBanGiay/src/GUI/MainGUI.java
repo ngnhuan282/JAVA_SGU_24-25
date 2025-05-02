@@ -238,6 +238,7 @@ public class MainGUI extends JFrame implements ActionListener {
         // Default panel
         cardLayout.show(pContent, "TrangChu");
     }
+    
 
     @Override
     public void actionPerformed(ActionEvent e) {
