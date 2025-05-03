@@ -32,8 +32,8 @@ public class ThongKeGUI extends JPanel {
         pTongQuan.setLayout(null);
         tabbedPane.addTab("Tổng quan", pTongQuan);
 
-        // Tab 2: Doanh thu (Gọi từ ThongKeDoanhThuGUI)
-        ThongKeDoanhThuGUI pDoanhThuTab = new ThongKeDoanhThuGUI();
+        // Tab 2: Doanh thu (Gọi từ ThongKeDoanhThuTuNgayDenNgay)
+        ThongKeDoanhThuTuNgayDenNgay pDoanhThuTab = new ThongKeDoanhThuTuNgayDenNgay();
         tabbedPane.addTab("Doanh thu", pDoanhThuTab);
 
         // Tab 3: Hóa đơn (Gọi từ ThongKeHoaDonGUI)
