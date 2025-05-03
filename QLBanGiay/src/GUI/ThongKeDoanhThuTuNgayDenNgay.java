@@ -74,12 +74,12 @@ public class ThongKeDoanhThuTuNgayDenNgay extends JPanel {
         pDateRange.add(pFilterDateRange);
 
         JLabel lblTuNgay = new JLabel("Từ ngày:");
-        lblTuNgay.setBounds(30, 25, 80, 30);
+        lblTuNgay.setBounds(30, 25, 100, 30);
         lblTuNgay.setFont(new Font("Arial", Font.PLAIN, 16));
         pFilterDateRange.add(lblTuNgay);
 
         dateChooserTuNgay = new JDateChooser();
-        dateChooserTuNgay.setBounds(110, 25, 100, 30);
+        dateChooserTuNgay.setBounds(110, 25, 120, 30);
         dateChooserTuNgay.setFont(new Font("Arial", Font.PLAIN, 14));
         Calendar calTuNgay = Calendar.getInstance();
         calTuNgay.set(2024, Calendar.APRIL, 1); // Đặt mặc định 2024-04-01
@@ -87,12 +87,12 @@ public class ThongKeDoanhThuTuNgayDenNgay extends JPanel {
         pFilterDateRange.add(dateChooserTuNgay);
 
         JLabel lblDenNgay = new JLabel("Đến ngày:");
-        lblDenNgay.setBounds(230, 25, 80, 30);
+        lblDenNgay.setBounds(250, 25, 100, 30);
         lblDenNgay.setFont(new Font("Arial", Font.PLAIN, 16));
         pFilterDateRange.add(lblDenNgay);
 
         dateChooserDenNgay = new JDateChooser();
-        dateChooserDenNgay.setBounds(310, 25, 100, 30);
+        dateChooserDenNgay.setBounds(330, 25, 120, 30);
         dateChooserDenNgay.setFont(new Font("Arial", Font.PLAIN, 14));
         Calendar calDenNgay = Calendar.getInstance();
         calDenNgay.set(2024, Calendar.APRIL, 5); // Đặt mặc định 2024-04-05
@@ -100,7 +100,7 @@ public class ThongKeDoanhThuTuNgayDenNgay extends JPanel {
         pFilterDateRange.add(dateChooserDenNgay);
 
         JButton btnLoc = new JButton("Lọc");
-        btnLoc.setBounds(430, 25, 100, 30);
+        btnLoc.setBounds(470, 25, 100, 30);
         btnLoc.setFont(new Font("Arial", Font.PLAIN, 14));
         btnLoc.setBackground(new Color(33, 150, 243));
         btnLoc.setForeground(Color.WHITE);
