@@ -478,16 +478,16 @@ public class PDFReporter {
             // Thêm phần chữ ký
             Paragraph paragraph = new Paragraph();
             paragraph.setIndentationLeft(22);
-            paragraph.add(new Chunk("Người lập hóa đơn", fontBoldItalic15));
+            paragraph.add(new Chunk("Người lập", fontBoldItalic15));
             paragraph.add(new Chunk(createWhiteSpace(30)));
             paragraph.add(new Chunk("Nhân viên bán hàng", fontBoldItalic15));
-            paragraph.add(new Chunk(createWhiteSpace(30)));
+            paragraph.add(new Chunk(createWhiteSpace(25)));
             paragraph.add(new Chunk("Khách hàng", fontBoldItalic15));
 
             Paragraph sign = new Paragraph();
-            sign.setIndentationLeft(23);
+            sign.setIndentationLeft(20);
             sign.add(new Chunk("(Ký và ghi rõ họ tên)", fontNormal10));
-            sign.add(new Chunk(createWhiteSpace(30)));
+            sign.add(new Chunk(createWhiteSpace(20)));
             sign.add(new Chunk("(Ký và ghi rõ họ tên)", fontNormal10));
             sign.add(new Chunk(createWhiteSpace(28)));
             sign.add(new Chunk("(Ký và ghi rõ họ tên)", fontNormal10));
