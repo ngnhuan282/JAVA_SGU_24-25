@@ -4,6 +4,7 @@ package DAO;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import DTO.CTKMDTO;
@@ -39,6 +40,48 @@ public class CTKMDAO {
 		
 		connection.disConnect();
 		return listkhuyenMaiDTO;
+	}
+	
+	public CTKMDTO getCTKM_HD(Date ngayLapSQL) throws SQLException {
+		String ngayLap = String.valueOf(ngayLapSQL);
+		String sql = "SELECT ctkm.*, ctkm_hd.PhanTramGiamGia FROM ctkm"
+				+ " JOIN ctkm_hd ON ctkm.MaCTKM = ctkm_hd.MaCTKM"
+				+ " WHERE NgayBD <= '"+ ngayLap +"' AND NgayKT >= '"+ ngayLap +"'";
+		ResultSet rs = connection.executeQuery(sql);
+		
+		if(rs.next()) {
+			String maCTKM = rs.getString("MaCTKM");
+			Date ngayBD = rs.getDate("NgayBD");
+			Date ngayKT = rs.getDate("NgayKT");
+			String tenCTKM =rs.getString("TenCTKM");
+			float phanTramGiamGia = rs.getFloat("PhanTramGiamGia");
+			
+			return new CTKMDTO(maCTKM, ngayBD, ngayKT,tenCTKM, phanTramGiamGia);
+		}
+		
+		return null;
+		
+	}
+	
+	public CTKMDTO getCTKM_SP(Date ngayLapSQL) throws SQLException {
+		String ngayLap = String.valueOf(ngayLapSQL);
+		String sql = "SELECT ctkm.*, ctkm_sp.PhanTramGiamGia, ctkm_sp.MaSP FROM ctkm"
+				+ " JOIN ctkm_sp ON ctkm.MaCTKM = ctkm_sp.MaCTKM"
+				+ " WHERE NgayBD <= '"+ ngayLap +"' AND NgayKT >= '"+ ngayLap +"'";
+		ResultSet rs = connection.executeQuery(sql);
+		
+		if(rs.next()) {
+			String maCTKM = rs.getString("MaCTKM");
+			Date ngayBD = rs.getDate("NgayBD");
+			Date ngayKT = rs.getDate("NgayKT");
+			String tenCTKM =rs.getString("TenCTKM");
+			float phanTramGiamGia = rs.getFloat("PhanTramGiamGia");
+			
+			return new CTKMDTO(maCTKM, ngayBD, ngayKT,tenCTKM, phanTramGiamGia);
+		}
+		
+		return null;
+		
 	}
 	
 	
@@ -151,5 +194,13 @@ public class CTKMDAO {
 			rs.close();
 			connection.disConnect();
 			return listMaHD;
+		}
+		
+		public static void main(String[] args) throws SQLException {
+			LocalDate now = LocalDate.now();
+			Date ngayLap = Date.valueOf(now);
+			CTKMDAO ctkmdao = new CTKMDAO();
+			CTKMDTO ctkm = ctkmdao.getCTKM_HD(ngayLap);
+			System.out.println(ctkm);
 		}
 }

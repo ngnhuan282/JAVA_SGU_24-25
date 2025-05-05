@@ -353,7 +353,7 @@ public class CTKMGUI extends JPanel {
             return;
         }
 
-        double phanTram = Double.parseDouble(phanTramGiamGiaStr);
+        float phanTram = Float.parseFloat(phanTramGiamGiaStr);
         if (phanTram < 0 || phanTram > 100) {
             JOptionPane.showMessageDialog(this, "Phần trăm giảm giá phải trong khoảng từ 0 đến 100!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
@@ -406,7 +406,7 @@ public class CTKMGUI extends JPanel {
             String loaiCTKM = cboxLoaiKM.getSelectedItem().toString();
             String maSPorHD;
             String phanTramText = txtPhanTramGiamGia.getText().replace("%", "").trim();
-            double phanTramValue = Double.parseDouble(phanTramText);
+            float phanTramValue = Float.parseFloat(phanTramText);
             
             
             if (loaiCTKM.equals("Sản Phẩm")) {
@@ -437,7 +437,7 @@ public class CTKMGUI extends JPanel {
 
             // Cập nhật dữ liệu trong CSDL
             String maSPorHDCu = tblCTKM.getValueAt(selectedRow, 5).toString();
-            CTKMDTO ctkm = new CTKMDTO(maCTKM, sqlNgayBD, sqlNgayKT, tenCTKM);
+            CTKMDTO ctkm = new CTKMDTO(maCTKM, sqlNgayBD, sqlNgayKT, tenCTKM, phanTramValue);
             ctkmBUS.updateCTKM(ctkm, loaiCTKMCu, loaiCTKM, maSPorHD, phanTramValue,maSPorHDCu, index);
 
             // Cập nhật lại bảng giao diện

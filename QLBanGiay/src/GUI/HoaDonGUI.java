@@ -36,11 +36,13 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
+import BUS.CTKMBUS;
 import BUS.ChiTietHoaDonBUS;
 import BUS.HoaDonBUS;
 import BUS.KhachHangBUS;
 import BUS.NhanVienBUS;
 import BUS.SanPhamBUS;
+import DTO.CTKMDTO;
 import DTO.ChiTietHDDTO;
 import DTO.HoaDonDTO;
 import DTO.KhachHangDTO;
@@ -79,6 +81,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 	private SanPhamBUS sanPhamBUS;
 	private NhanVienBUS nhanVienBUS;
 	private KhachHangBUS khachHangBUS;
+	private CTKMBUS ctkmBUS;
 	private boolean update = false;
 	private int selectedRowHoaDon = -1;
 	private int selectedRowCTHD = -1;
@@ -117,6 +120,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 		sanPhamBUS = new SanPhamBUS();
 		nhanVienBUS = new NhanVienBUS();
 		khachHangBUS = new KhachHangBUS();
+		ctkmBUS = new CTKMBUS();
 		listTemp = new ArrayList<ChiTietHDDTO>();
 		soLuongTruocKhiUpdate = new ArrayList<Integer>();
 		soLuongCanTang = new ArrayList<Integer>();
@@ -499,6 +503,19 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 		
 		JButton btnOpenMaSPList = new JButton("...");
 		btnOpenMaSPList.addActionListener(e -> {
+			
+			LocalDate now = LocalDate.now();
+			Date ngayLap = Date.valueOf(now);
+			CTKMBUS ctkmbus;
+			try {
+				ctkmbus = new CTKMBUS();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			
+			
 			JDialog dialog = new JDialog();
 			dialog.setTitle("Sản phẩm");
 			String[] colunms = {"Mã sản phẩm", "Tên sản phẩm", "Đơn giá", "Mã loại SP", "Số lượng"};
@@ -711,7 +728,19 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 				for(ChiTietHDDTO x : listTemp) {
 					tongTien += x.getThanhTien();
 				}
-				hoaDonBUS.addHoaDon(txtMaHD.getText(), txtMaKH.getText(), txtMaNV.getText(), ngayLap, tongTien);
+				
+				try {
+					if(ctkmBUS.getCTKM_HD(ngayLap) != null) {
+						CTKMDTO ctkmDTO = ctkmBUS.getCTKM_HD(ngayLap);
+						tongTien = tongTien - tongTien * (ctkmDTO.getPhanTramGiamGia()/100.0);
+						
+						JOptionPane.showMessageDialog(this, "Nhân dịp khuyến mãi "+ ctkmDTO.getTenCTKM() +" hóa đơn sẽ được giảm "+ ctkmDTO.getPhanTramGiamGia() +"% trên tổng giá trị hóa đơn", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+						
+					}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				hoaDonBUS.addHoaDon(txtMaHD.getText(), txtMaKH.getText(), txtMaNV.getText(), ngayLap, Math.round(tongTien * 100.0)/100.0);
 				for(ChiTietHDDTO x : listTemp) {
 					chiTietHoaDonBUS.updateSoLuongSP(x.getMaSP(), x.getSoLuong() - soLuongTruocKhiUpdate.get(i));
 					if(chiTietHoaDonBUS.checkDulicateMaSP(x.getMaSP(), x.getMaHD())) {
@@ -748,7 +777,19 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 					i++;
 				}
 				
-				hoaDonBUS.updateHoaDon(txtMaHD.getText(), txtMaKH.getText(), txtMaNV.getText(), ngayLap, tongTien, selectedRow);
+				try {
+					if(ctkmBUS.getCTKM_HD(ngayLap) != null) {
+						CTKMDTO ctkmDTO = ctkmBUS.getCTKM_HD(ngayLap);
+						tongTien = tongTien - tongTien * (ctkmDTO.getPhanTramGiamGia()/100.0);
+						
+						JOptionPane.showMessageDialog(this, "Nhân dịp khuyến mãi "+ ctkmDTO.getTenCTKM() +" hóa đơn sẽ được giảm "+ ctkmDTO.getPhanTramGiamGia() +"% trên tổng giá trị hóa đơn", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+						
+					}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				
+				hoaDonBUS.updateHoaDon(txtMaHD.getText(), txtMaKH.getText(), txtMaNV.getText(), ngayLap, Math.round(tongTien * 100.0)/100.0, selectedRow);
 				update = false;
 				soLuongTruocKhiUpdate.clear();
 				soLuongCanTang.clear();

@@ -44,9 +44,9 @@ public class CTKMBUS {
 	
 	
 	
-	public boolean themKhuyenMai(String maCTKM, Date ngayBD, Date ngayKT, String tenCTKM, String loaiKM, String maSPorHD, double phanTram) {
+	public boolean themKhuyenMai(String maCTKM, Date ngayBD, Date ngayKT, String tenCTKM, String loaiKM, String maSPorHD, float phanTram) {
 	    try {
-	        CTKMDTO khuyenMai = new CTKMDTO(maCTKM, new java.sql.Date(ngayBD.getTime()), new java.sql.Date(ngayKT.getTime()), tenCTKM);
+	        CTKMDTO khuyenMai = new CTKMDTO(maCTKM, new java.sql.Date(ngayBD.getTime()), new java.sql.Date(ngayKT.getTime()), tenCTKM, phanTram);
 	        khuyenMaiDAO.addkhuyenMaiDAO(khuyenMai);
 
 	        if (loaiKM.equals("Sản Phẩm")) {
@@ -111,5 +111,9 @@ public class CTKMBUS {
             throw new IllegalStateException("CTKMDAO chưa được khởi tạo!");
         }
         return khuyenMaiDAO.getListMaHD();
+    }
+    
+    public CTKMDTO getCTKM_HD(Date ngayLap) throws SQLException {
+    	return khuyenMaiDAO.getCTKM_HD(ngayLap);
     }
 }	
