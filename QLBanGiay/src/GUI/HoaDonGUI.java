@@ -202,15 +202,16 @@ public class HoaDonGUI extends JPanel implements ActionListener{
                                 btnXuatExcel.setBorderPainted(false);
                                 btnXuatExcel.setBackground(Color.WHITE);
                                 
-                                        JButton btnNhapExcel = new JButton("Nhập Excel");
-                                        horizontalBox.add(btnNhapExcel);
-                                        btnNhapExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
-                                        btnNhapExcel.setPreferredSize(new Dimension(120, 140));
-                                        btnNhapExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/bill48.png")));
-                                        btnNhapExcel.setHorizontalTextPosition(SwingConstants.CENTER);
-                                        btnNhapExcel.setFont(new Font("Arial", Font.PLAIN, 15));
-                                        btnNhapExcel.setBorderPainted(false);
-                                        btnNhapExcel.setBackground(Color.WHITE);
+                                        JButton btnXuatPDF = new JButton("Xuất PDF");
+                                        horizontalBox.add(btnXuatPDF);
+                                        btnXuatPDF.setVerticalTextPosition(SwingConstants.BOTTOM);
+                                        btnXuatPDF.addActionListener(this);
+                                        btnXuatPDF.setPreferredSize(new Dimension(120, 140));
+                                        btnXuatPDF.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/pdf48.png")));
+                                        btnXuatPDF.setHorizontalTextPosition(SwingConstants.CENTER);
+                                        btnXuatPDF.setFont(new Font("Arial", Font.PLAIN, 15));
+                                        btnXuatPDF.setBorderPainted(false);
+                                        btnXuatPDF.setBackground(Color.WHITE);
                                         
                                         txtSearch = new JTextField();
                                         txtSearch.setBounds(694, 31, 243, 39);
@@ -997,6 +998,25 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 		}
 		
 	}
+	
+	public void xuatPDF() {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một phiếu nhập để xuất PDF!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            table.requestFocus();
+            return;
+        }
+
+        String maHD = (String) table.getValueAt(selectedRow, 0);
+        try {
+            PDFReporter pdfReporter = new PDFReporter();
+            pdfReporter.writeHoaDon(maHD);
+            JOptionPane.showMessageDialog(this, "Xuất PDF thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi xuất PDF: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+    }
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -1017,6 +1037,9 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 		}
 		else if(str.equals("Xuất Excel")) {
 			xuatExcel();
+		}
+		else if(str.equals("Xuất PDF")) {
+			xuatPDF();
 		}
 	}
 	

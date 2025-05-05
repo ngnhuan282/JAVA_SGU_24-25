@@ -186,7 +186,7 @@ public class KhachHangGUI extends JPanel implements ActionListener {
         btnNhapExcel.addActionListener(this);
         btnNhapExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnNhapExcel.setPreferredSize(new Dimension(120, 140));
-        btnNhapExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/bill48.png")));
+        btnNhapExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/xuatexcel48.png")));
         btnNhapExcel.setHorizontalTextPosition(SwingConstants.CENTER);
         btnNhapExcel.setFont(new Font("Arial", Font.PLAIN, 15));
         btnNhapExcel.setBorderPainted(false);
