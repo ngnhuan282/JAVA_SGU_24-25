@@ -39,12 +39,14 @@ import javax.swing.table.TableModel;
 import BUS.CTKMBUS;
 import BUS.ChiTietHoaDonBUS;
 import BUS.HoaDonBUS;
+import BUS.KMSPBUS;
 import BUS.KhachHangBUS;
 import BUS.NhanVienBUS;
 import BUS.SanPhamBUS;
 import DTO.CTKMDTO;
 import DTO.ChiTietHDDTO;
 import DTO.HoaDonDTO;
+import DTO.KMSPDTO;
 import DTO.KhachHangDTO;
 import DTO.NhanVienDTO;
 import DTO.SanPhamDTO;
@@ -82,6 +84,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 	private NhanVienBUS nhanVienBUS;
 	private KhachHangBUS khachHangBUS;
 	private CTKMBUS ctkmBUS;
+	private KMSPBUS kmspBUS;
 	private boolean update = false;
 	private int selectedRowHoaDon = -1;
 	private int selectedRowCTHD = -1;
@@ -121,6 +124,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 		nhanVienBUS = new NhanVienBUS();
 		khachHangBUS = new KhachHangBUS();
 		ctkmBUS = new CTKMBUS();
+		kmspBUS = new KMSPBUS();
 		listTemp = new ArrayList<ChiTietHDDTO>();
 		soLuongTruocKhiUpdate = new ArrayList<Integer>();
 		soLuongCanTang = new ArrayList<Integer>();
@@ -390,7 +394,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 			tableMaKH.setModel(modelMaKHList);
 			
 			 dialog.getContentPane().add(jScrollPaneMaKH);
-             dialog.setBounds(1200, 285, 350, 200);
+			 dialog.setBounds(800, 330, 700, 200);
              dialog.setVisible(true);
              
              tableMaKH.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -461,7 +465,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 			tableMaNV.setModel(modelMaNVList);
 			
 			 dialog.getContentPane().add(jScrollPaneMaNV);
-             dialog.setBounds(1200, 240, 350, 200);
+			 dialog.setBounds(800, 330, 700, 200);
              dialog.setVisible(true);
              
              tableMaNV.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -504,18 +508,6 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 		JButton btnOpenMaSPList = new JButton("...");
 		btnOpenMaSPList.addActionListener(e -> {
 			
-			LocalDate now = LocalDate.now();
-			Date ngayLap = Date.valueOf(now);
-			CTKMBUS ctkmbus;
-			try {
-				ctkmbus = new CTKMBUS();
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			
-			
-			
 			JDialog dialog = new JDialog();
 			dialog.setTitle("Sản phẩm");
 			String[] colunms = {"Mã sản phẩm", "Tên sản phẩm", "Đơn giá", "Mã loại SP", "Số lượng"};
@@ -534,8 +526,8 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 			for(SanPhamDTO x : sanPhamBUS.getDssp()) {
 				Object[] row = {
 						x.getMaSP(),
-						x.getTenSP(),
-						x.getDonGia(),
+						(kmspBUS.checkMaSPKM(x.getMaSP())) ? x.getTenSP() + "(Sale)" : x.getTenSP(),
+						(kmspBUS.checkMaSPKM(x.getMaSP())) ? Math.round((x.getDonGia() - x.getDonGia()*kmspBUS.getPhanTram(x.getMaSP())/100.0)) : x.getDonGia(),
 						x.getMaLoaiSP(),
 						(x.getSoLuong() == 0) ? "Hết hàng" : x.getSoLuong()
 				};
@@ -544,7 +536,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 			tableMaSP.setModel(modelMaSpList);
 			
 			 dialog.getContentPane().add(jScrollPaneMaSP);
-             dialog.setBounds(1200, 330, 350, 200);
+             dialog.setBounds(800, 330, 700, 200);
              dialog.setVisible(true);
              
              tableMaSP.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -556,6 +548,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
              			return;
             		 }
             		 String maSP = (String) tableMaSP.getValueAt(selectedRow, 0);
+            		 
             		 donGia = Double.valueOf(tableMaSP.getValueAt(selectedRow, 2).toString());
             		 txtMaSP.setText(maSP);
             		 dialog.dispose();
@@ -570,7 +563,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
        				modelMaSpList.setRowCount(0);
        				for(SanPhamDTO x : sanPhamBUS.getDssp()) {
        					if(x.getMaSP().toLowerCase().contains(keyword))
-       						modelMaSpList.addRow(new Object[]{x.getMaSP(), x.getTenSP(), x.getDonGia(), x.getMaLoaiSP(), (x.getSoLuong() == 0) ? "Hết hàng" : x.getSoLuong()});
+       						modelMaSpList.addRow(new Object[]{x.getMaSP(), (kmspBUS.checkMaSPKM(x.getMaSP())) ? x.getTenSP() + "(Sale)" : x.getTenSP(), (kmspBUS.checkMaSPKM(x.getMaSP())) ? Math.round((x.getDonGia() - x.getDonGia()*kmspBUS.getPhanTram(x.getMaSP())/100.0)) : x.getDonGia(), x.getMaLoaiSP(), (x.getSoLuong() == 0) ? "Hết hàng" : x.getSoLuong()});
        				}
        			}
        		}); 

@@ -91,11 +91,6 @@ public class CTKMBUS {
 		return result;
 	}
 
-	public String getMaCTKM() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 	
 	 // Thêm phương thức để lấy danh sách MaSP
     public ArrayList<String> getListMaSP() throws SQLException {
@@ -116,4 +111,5 @@ public class CTKMBUS {
     public CTKMDTO getCTKM_HD(Date ngayLap) throws SQLException {
     	return khuyenMaiDAO.getCTKM_HD(ngayLap);
     }
+    
 }	

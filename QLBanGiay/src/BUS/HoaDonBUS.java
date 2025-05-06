@@ -28,6 +28,8 @@ public class HoaDonBUS {
 	
 	public String getMaHD() {
 		int size = listHoaDon.size() + 1;
+		while(checkDuplicateMaHD(size+""))
+			size++;
 		return size + "";
 	}
 	
