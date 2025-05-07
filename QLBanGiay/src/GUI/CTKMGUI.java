@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -40,6 +41,7 @@ import com.toedter.calendar.JDateChooser; // Thư viện JDateChooser
 
 import BUS.CTKMBUS;
 import DTO.CTKMDTO;
+import DTO.SanPhamDTO;
 
 public class CTKMGUI extends JPanel {
     private static final Object String = null;
@@ -163,14 +165,14 @@ public class CTKMGUI extends JPanel {
         btnXuatExcel.setPreferredSize(new Dimension(100, 140));
         box.add(btnXuatExcel);
 
-        String[] listKeyWord = {"Mã CTKM", "Loại KM"};
-        cboxLoaiKM = new JComboBox<String>(listKeyWord);
-        cboxLoaiKM.setFont(new Font("Arial", Font.PLAIN, 14));
-        cboxLoaiKM.setBackground(Color.WHITE);
-        cboxLoaiKM.setForeground(Color.BLACK);
-        cboxLoaiKM.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-        cboxLoaiKM.setBounds(524, 30, 100, 28);
-        pHeaderMain.add(cboxLoaiKM);
+        String[] listKeyWord = {"Mã CTKM", "Tên CTKM"};
+        cboxSearch = new JComboBox<String>(listKeyWord);
+        cboxSearch.setFont(new Font("Arial", Font.PLAIN, 14));
+        cboxSearch.setBackground(Color.WHITE);
+        cboxSearch.setForeground(Color.BLACK);
+        cboxSearch.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        cboxSearch.setBounds(524, 30, 100, 28);
+        pHeaderMain.add(cboxSearch);
 
         txtSearch = new JTextField();
         txtSearch.setColumns(10);
@@ -183,6 +185,14 @@ public class CTKMGUI extends JPanel {
         btnSearch.setActionCommand("Tìm kiếm");
         btnSearch.addActionListener(this::actionPerformed);
         pHeaderMain.add(btnSearch);
+        
+        JButton btnLamMoi = new JButton("Làm mới");
+        btnLamMoi.setBackground(Color.WHITE);
+        btnLamMoi.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/reload30.png")));
+        btnLamMoi.setFont(new Font("Arial", Font.PLAIN, 13));
+        btnLamMoi.setBounds(1045, 31, 126, 28);
+        btnLamMoi.setActionCommand("Reload");
+        pHeaderMain.add(btnLamMoi);
 
         JPanel panel = new JPanel(null);
         panel.setBorder(new LineBorder(Color.LIGHT_GRAY, 2, true));
@@ -307,15 +317,65 @@ public class CTKMGUI extends JPanel {
                 loadMaHD();  // Hàm load mã hóa đơn
             }
         });
+        
+        btnSearch.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String keyword = txtSearch.getText().trim();
+                String loaiSearch = (String) cboxSearch.getSelectedItem();
+                
+                // Kiểm tra từ khóa và loại tìm kiếm
+                if (keyword.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Vui lòng nhập từ khóa tìm kiếm.");
+                    return;
+                }
 
+                ArrayList<CTKMDTO> resultList = ctkmBUS.searchKhuyenMai(keyword, loaiSearch);
+
+                tableModel.setRowCount(0); // Xóa bảng cũ
+
+                for (CTKMDTO ctkm : resultList) {
+                    String loaiKM = ctkmBUS.layLoaiKhuyenMai(ctkm.getMaCTKM());
+                    String maSPorHD = ctkmBUS.layMaSPorHD(ctkm.getMaCTKM());
+                    String phanTram = ctkmBUS.layPhanTram(ctkm.getMaCTKM());
+
+                    tableModel.addRow(new Object[] {
+                        ctkm.getMaCTKM(),
+                        ctkm.getTenCTKM(),
+                        new SimpleDateFormat("yyyy-MM-dd").format(ctkm.getNgayBD()),
+                        new SimpleDateFormat("yyyy-MM-dd").format(ctkm.getNgayKT()),
+                        loaiKM,
+                        maSPorHD,
+                        phanTram + "%"
+                    });
+                }
+            }
+        });
+        
+        btnLamMoi.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getActionCommand().equals("Reload")) {
+                    loadData();  // Gọi hàm loadData khi nhấn nút "Làm mới"
+                }
+            }
+        });
+        
+        
+        
+        
+        
     }
+
+
+
+    
 
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
         switch (command) {
             case "Thêm": addKhuyenMai(); break;
             case "Sửa": updateKhuyenMai(); break;
-//            case "Xóa": deleteKhuyenMai(); break;
+            case "Xóa": deleteKhuyenMai(); break;
           //  case "Tìm kiếm": searchCTKM(); break;
            // case "Nhập Excel": nhapExcel(); break;
            // case "Xuất Excel": xuatExcel(); break;
@@ -363,7 +423,7 @@ public class CTKMGUI extends JPanel {
 
         boolean success = ctkmBUS.themKhuyenMai(maKM, sqlNgayBD, sqlNgayKT, tenKM, loaiKM, maSPorHD, phanTram);
         if (success) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             tableModel.addRow(new Object[]{maKM, tenKM, sdf.format(ngayBD), sdf.format(ngayKT), loaiKM, maSPorHD, phanTram + "%"});
             tblCTKM.setModel(tableModel);
             JOptionPane.showMessageDialog(this, "Thêm khuyến mãi thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
@@ -437,7 +497,16 @@ public class CTKMGUI extends JPanel {
 
             // Cập nhật dữ liệu trong CSDL
             String maSPorHDCu = tblCTKM.getValueAt(selectedRow, 5).toString();
+<<<<<<< Updated upstream
             CTKMDTO ctkm = new CTKMDTO(maCTKM, sqlNgayBD, sqlNgayKT, tenCTKM, phanTramValue);
+=======
+<<<<<<< HEAD
+            CTKMDTO ctkm = new CTKMDTO(maCTKM, sqlNgayBD, sqlNgayKT, tenCTKM);
+            System.out.println("Đang gọi updateCTKMDAO...");
+=======
+            CTKMDTO ctkm = new CTKMDTO(maCTKM, sqlNgayBD, sqlNgayKT, tenCTKM, phanTramValue);
+>>>>>>> 71dc5ef386b31b110de73ddde7dd6901ae790032
+>>>>>>> Stashed changes
             ctkmBUS.updateCTKM(ctkm, loaiCTKMCu, loaiCTKM, maSPorHD, phanTramValue,maSPorHDCu, index);
 
             // Cập nhật lại bảng giao diện
@@ -460,12 +529,36 @@ public class CTKMGUI extends JPanel {
         }
     }
 
+    public void deleteKhuyenMai() {
+    	 if (!isEditMode) {
+             JOptionPane.showMessageDialog(this, "Vui lòng bật chế độ chỉnh sửa trước!", "Lỗi", JOptionPane.WARNING_MESSAGE);
+             return;
+         }
+        int selectedRow = tblCTKM.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn chương trình khuyến mãi để xóa!", "Lỗi", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
-    
-    
-    
-    
-    
+        // Lấy mã chương trình khuyến mãi từ bảng
+        String maCTKM = tblCTKM.getValueAt(selectedRow, 0).toString();
+
+        int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa chương trình khuyến mãi này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                // Gọi phương thức trong BUS để xóa theo index
+                ctkmBUS.deleteKhuyenMaiByIndex(selectedRow);;
+                
+                // Cập nhật lại bảng (xóa dòng trong bảng)
+                tableModel.removeRow(selectedRow);
+
+                JOptionPane.showMessageDialog(this, "Xóa chương trình khuyến mãi thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi xóa chương trình khuyến mãi!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
+        }
+    }
     
     
     
@@ -588,12 +681,14 @@ public class CTKMGUI extends JPanel {
     }
 
 
-    private void loadData() throws SQLException {
-        ArrayList<CTKMDTO> list = ctkmBUS.getListKhuyenMai();
+    private void loadData() {
         tableModel.setRowCount(0);
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/quanlybangiay", "root", "");
+
+        ctkmBUS.docDSCTKM(); // đọc danh sách CTKM từ DAO
+        ArrayList<CTKMDTO> list = ctkmBUS.getListKhuyenMai();
 
         try {
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/quanlybangiay", "root", "");
             Statement st = con.createStatement();
 
             for (CTKMDTO dto : list) {
@@ -606,7 +701,7 @@ public class CTKMGUI extends JPanel {
                 String maSPorHD = "";
                 String phanTram = "";
 
-                // Check trong bảng ctkm_sp
+                // Kiểm tra CTKM cho sản phẩm
                 String sqlSP = "SELECT * FROM ctkm_sp WHERE MaCTKM = '" + maCTKM + "'";
                 ResultSet rsSP = st.executeQuery(sqlSP);
                 if (rsSP.next()) {
@@ -614,7 +709,7 @@ public class CTKMGUI extends JPanel {
                     maSPorHD = rsSP.getString("MaSP");
                     phanTram = rsSP.getString("PhanTramGiamGia") + "%";
                 } else {
-                    // Nếu không có thì check trong ctkm_hd
+                    // Kiểm tra CTKM cho hóa đơn
                     String sqlHD = "SELECT * FROM ctkm_hd WHERE MaCTKM = '" + maCTKM + "'";
                     ResultSet rsHD = st.executeQuery(sqlHD);
                     if (rsHD.next()) {
@@ -624,7 +719,6 @@ public class CTKMGUI extends JPanel {
                     }
                 }
 
-                // Thêm vào bảng
                 tableModel.addRow(new Object[]{
                     maCTKM, tenCTKM, ngayBD, ngayKT,
                     loaiKM, maSPorHD, phanTram
@@ -632,11 +726,11 @@ public class CTKMGUI extends JPanel {
             }
 
             tblCTKM.setModel(tableModel);
+            // Cấu hình độ rộng cột nếu cần
             tblCTKM.getColumnModel().getColumn(0).setPreferredWidth(60);
             tblCTKM.getColumnModel().getColumn(1).setPreferredWidth(100);
             tblCTKM.getColumnModel().getColumn(2).setPreferredWidth(150);
             tblCTKM.getColumnModel().getColumn(3).setPreferredWidth(150);
-            // Add width cho 3 cột mới
             tblCTKM.getColumnModel().getColumn(4).setPreferredWidth(100);
             tblCTKM.getColumnModel().getColumn(5).setPreferredWidth(100);
             tblCTKM.getColumnModel().getColumn(6).setPreferredWidth(100);
@@ -646,11 +740,14 @@ public class CTKMGUI extends JPanel {
         }
     }
 
+
+
    
     public void getInforFromTable() {
         int selectedRow = tblCTKM.getSelectedRow();
         if (selectedRow >= 0) {
             txtMaCTKM.setEditable(false);
+
 
             String maCTKM = tblCTKM.getValueAt(selectedRow, 0).toString();
             String tenCTKM = tblCTKM.getValueAt(selectedRow, 1).toString();
@@ -668,17 +765,19 @@ public class CTKMGUI extends JPanel {
             txtTenCTKM.setText(tenCTKM);
             txtPhanTramGiamGia.setText(phanTramGiamGia);
 
-            cboxLoaiKM.setSelectedItem(loaiKM);
-
             if (loaiKM.equals("Hóa đơn")) {
+            	loaiKM = "Hóa Đơn";
             	loadMaHD();
                 cboxMaHD.setSelectedItem(maSPOrHD); 
             } else if (loaiKM.equals("Sản phẩm")) {
+            	loaiKM = "Sản Phẩm";
             	loadMaSP();
                 cboxMaSP.setSelectedItem(maSPOrHD); 
             }
             cboxMaSP.setVisible(loaiKM.equals("Sản phẩm"));
             cboxMaHD.setVisible(loaiKM.equals("Hóa đơn"));
+            cboxLoaiKM.setSelectedItem(loaiKM);
+
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 Date ngayBD = sdf.parse(ngayBDStr);
@@ -726,6 +825,23 @@ public class CTKMGUI extends JPanel {
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Lỗi khi nạp danh sách mã hóa đơn: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void reloadTableData() {
+        // Xóa dữ liệu hiện tại trong bảng
+        tableModel.setRowCount(0); // Xóa tất cả dòng trong bảng
+
+        ArrayList<CTKMDTO> list = ctkmBUS.getListKhuyenMai(); // Giả sử phương thức này lấy lại toàn bộ dữ liệu
+
+        // Thêm dữ liệu mới vào bảng
+        for (CTKMDTO ctkm : list) {
+        	tableModel.addRow(new Object[]{
+                ctkm.getMaCTKM(),
+                ctkm.getTenCTKM(),
+                ctkm.getNgayBD(),
+                ctkm.getNgayKT()
+            });
         }
     }
 
