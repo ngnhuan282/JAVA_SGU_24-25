@@ -498,14 +498,20 @@ public class CTKMGUI extends JPanel {
             // Cập nhật dữ liệu trong CSDL
             String maSPorHDCu = tblCTKM.getValueAt(selectedRow, 5).toString();
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             CTKMDTO ctkm = new CTKMDTO(maCTKM, sqlNgayBD, sqlNgayKT, tenCTKM, phanTramValue);
 =======
+=======
+>>>>>>> Stashed changes
 <<<<<<< HEAD
             CTKMDTO ctkm = new CTKMDTO(maCTKM, sqlNgayBD, sqlNgayKT, tenCTKM);
             System.out.println("Đang gọi updateCTKMDAO...");
 =======
             CTKMDTO ctkm = new CTKMDTO(maCTKM, sqlNgayBD, sqlNgayKT, tenCTKM, phanTramValue);
 >>>>>>> 71dc5ef386b31b110de73ddde7dd6901ae790032
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
             ctkmBUS.updateCTKM(ctkm, loaiCTKMCu, loaiCTKM, maSPorHD, phanTramValue,maSPorHDCu, index);
 

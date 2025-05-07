@@ -189,6 +189,12 @@ public class CTKMBUS {
         return khuyenMaiDAO.getListMaHD();
     }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+}
+=======
+>>>>>>> Stashed changes
 =======
 <<<<<<< HEAD
 }
