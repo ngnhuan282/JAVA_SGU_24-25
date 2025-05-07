@@ -47,6 +47,7 @@ import DTO.NhanVienDTO;
 import DTO.PhieuNhapDTO;
 import DTO.SanPhamDTO;
 import com.toedter.calendar.JDateChooser;
+import javax.swing.border.EtchedBorder;
 
 
 
@@ -73,7 +74,8 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 	private boolean add = false;
 	private JComboBox<String> cboxSearch;
 	private JDateChooser dateStart, dateEnd;
-	private JLabel lblDateEnd,lblDateStart;
+	private JTextField txtMaPNNC , txtMaNCCNC;
+
 	
 	public static void main(String[] args) {
         JFrame frame = new JFrame("PhieuNhapGUI");
@@ -181,51 +183,92 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
         btnLamMoi.setBackground(Color.WHITE);
         btnLamMoi.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/reload30.png")));
         btnLamMoi.setFont(new Font("Arial", Font.PLAIN, 13));
-        btnLamMoi.setBounds(1045, 31, 126, 28);
+        btnLamMoi.setBounds(1028, 55, 128, 30);
         btnLamMoi.setActionCommand("Reload");
         btnLamMoi.addActionListener(this);
         pHeaderMain.add(btnLamMoi);
         
         String []listKeyWord = {"Mã PN", "Mã NV", "Mã NCC"};
-        cboxSearch = new JComboBox<String>(listKeyWord);
-        cboxSearch.setForeground(Color.BLACK);
-        cboxSearch.setFont(new Font("Arial", Font.PLAIN, 13));
-        cboxSearch.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-        cboxSearch.setBackground(Color.WHITE);
-        cboxSearch.setBounds(569, 31, 79, 28);
-        pHeaderMain.add(cboxSearch);
-        
-        txtSearch = new JTextField();
-        txtSearch.setColumns(10);
-        txtSearch.setBounds(658, 32, 290, 27);
-        pHeaderMain.add(txtSearch);
         
         JButton btnSearch = new JButton("", new ImageIcon(SanPhamGUI.class.getResource("/image/search30.png")));
         btnSearch.setBackground(Color.WHITE);
         btnSearch.setActionCommand("Tìm kiếm");
         btnSearch.addActionListener(this);
-        btnSearch.setBounds(958, 29, 66, 30);
+        btnSearch.setBounds(955, 55, 64, 30);
         pHeaderMain.add(btnSearch);
         
-        JLabel lblDateStart = new JLabel("Từ ngày:");
-        lblDateStart.setFont(new Font("Arial", Font.PLAIN, 13));
-        lblDateStart.setBounds(624, 70, 60, 20);
-        pHeaderMain.add(lblDateStart);
+        JPanel pSearchNC = new JPanel();
+        pSearchNC.setBackground(new Color(255, 255, 255));
+        pSearchNC.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "T\u00ECm ki\u1EBFm n\u00E2ng cao", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+        pSearchNC.setBounds(492, 0, 415, 47);
+        pHeaderMain.add(pSearchNC);
+        pSearchNC.setLayout(null);
         
-        dateStart = new JDateChooser();
-        dateStart.setDateFormatString("yyyy-MM-dd");
-        dateStart.setBounds(694, 69, 126, 20);
-        pHeaderMain.add(dateStart);
+        JLabel lbSearchNC1 = new JLabel("Mã PN:");
+        lbSearchNC1.setFont(new Font("Arial", Font.PLAIN, 13));
+        lbSearchNC1.setBounds(10, 16, 60, 20);
+        pSearchNC.add(lbSearchNC1);
         
-        JLabel lblDateEnd = new JLabel("Đến ngày:");
-        lblDateEnd.setFont(new Font("Arial", Font.PLAIN, 13));
-        lblDateEnd.setBounds(864, 70, 60, 20);
-        pHeaderMain.add(lblDateEnd);
+        txtMaPNNC = new JTextField();
+        txtMaPNNC.setBounds(74, 16, 119, 20);
+        pSearchNC.add(txtMaPNNC);
+        txtMaPNNC.setColumns(10);
+        
+        JLabel lbSearchNC2 = new JLabel("Mã NCC:");
+        lbSearchNC2.setFont(new Font("Arial", Font.PLAIN, 13));
+        lbSearchNC2.setBounds(203, 16, 60, 20);
+        pSearchNC.add(lbSearchNC2);
+        
+        txtMaNCCNC = new JTextField();
+        txtMaNCCNC.setColumns(10);
+        txtMaNCCNC.setBounds(270, 16, 119, 20);
+        pSearchNC.add(txtMaNCCNC);
+        
+        JPanel pSearch = new JPanel();
+        pSearch.setBounds(907, 0, 297, 47);
+        pHeaderMain.add(pSearch);
+        pSearch.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "T\u00ECm ki\u1EBFm", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+        pSearch.setBackground(new Color(255, 255, 255));
+        pSearch.setLayout(null);
+        
+        txtSearch = new JTextField();
+        txtSearch.setBounds(99, 16, 184, 20);
+        pSearch.add(txtSearch);
+        txtSearch.setColumns(10);
+        cboxSearch = new JComboBox<String>(listKeyWord);
+        cboxSearch.setBounds(10, 16, 79, 21);
+        pSearch.add(cboxSearch);
+        cboxSearch.setForeground(Color.BLACK);
+        cboxSearch.setFont(new Font("Arial", Font.PLAIN, 13));
+        cboxSearch.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        cboxSearch.setBackground(Color.WHITE);
+        
+        JPanel pDateSearch = new JPanel();
+        pDateSearch.setBackground(new Color(255, 255, 255));
+        pDateSearch.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "T\u00ECm ki\u1EBFm theo ng\u00E0y", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+        pDateSearch.setBounds(492, 48, 415, 47);
+        pHeaderMain.add(pDateSearch);
+        pDateSearch.setLayout(null);
         
         dateEnd = new JDateChooser();
+        dateEnd.setBounds(270, 16, 119, 20);
+        pDateSearch.add(dateEnd);
         dateEnd.setDateFormatString("yyyy-MM-dd");
-        dateEnd.setBounds(934, 70, 126, 20);
-        pHeaderMain.add(dateEnd);
+        
+        JLabel lblDateEnd = new JLabel("Đến ngày:");
+        lblDateEnd.setBounds(203, 16, 60, 20);
+        pDateSearch.add(lblDateEnd);
+        lblDateEnd.setFont(new Font("Arial", Font.PLAIN, 13));
+        
+        dateStart = new JDateChooser();
+        dateStart.setBounds(74, 16, 119, 20);
+        pDateSearch.add(dateStart);
+        dateStart.setDateFormatString("yyyy-MM-dd");
+        
+        JLabel lblDateStart = new JLabel("Từ ngày:");
+        lblDateStart.setBounds(10, 16, 60, 20);
+        pDateSearch.add(lblDateStart);
+        lblDateStart.setFont(new Font("Arial", Font.PLAIN, 13));
         
         
         JPanel pContent = new JPanel();
@@ -492,14 +535,14 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 		JDialog dialog = new JDialog();
 		dialog.setTitle("Nhà Cung Cấp");
 		dialog.setSize(650, 300);
-		dialog.setLayout(new BorderLayout(5, 5));
+		dialog.getContentPane().setLayout(new BorderLayout(5, 5));
 		
 		JPanel searchPanel = new JPanel(new BorderLayout(5, 5));
         searchPanel.setBackground(Color.WHITE);
         JTextField txtSearchNCC = new JTextField();
         txtSearchNCC.setFont(new Font("Arial", Font.PLAIN, 13));
         searchPanel.add(txtSearchNCC, BorderLayout.CENTER);
-        dialog.add(searchPanel, BorderLayout.NORTH);
+        dialog.getContentPane().add(searchPanel, BorderLayout.NORTH);
 
 		
 		String[] columns = { "Mã NCC", "Tên Nhà Cung Cấp", "Số Điện Thoại", "Địa Chỉ" };
@@ -547,14 +590,14 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 		JDialog dialog = new JDialog();
 		dialog.setTitle("Nhân viên");
 		dialog.setSize(650, 300);
-		dialog.setLayout(new BorderLayout(5, 5));
+		dialog.getContentPane().setLayout(new BorderLayout(5, 5));
 		
 		JPanel searchPanel = new JPanel(new BorderLayout(5, 5));
         searchPanel.setBackground(Color.WHITE);
         JTextField txtSearchNV = new JTextField();
         txtSearchNV.setFont(new Font("Arial", Font.PLAIN, 13));
         searchPanel.add(txtSearchNV, BorderLayout.CENTER);
-        dialog.add(searchPanel, BorderLayout.NORTH);
+        dialog.getContentPane().add(searchPanel, BorderLayout.NORTH);
 		
 	
 
@@ -607,14 +650,14 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 		JDialog dialog = new JDialog();
 		dialog.setTitle("Sản Phẩm");
 		dialog.setSize(750, 300);
-        dialog.setLayout(new BorderLayout(5, 5));
+        dialog.getContentPane().setLayout(new BorderLayout(5, 5));
 		
         JPanel searchPanel = new JPanel(new BorderLayout(5, 5));
         searchPanel.setBackground(Color.WHITE);
         JTextField txtSearchSP = new JTextField();
         txtSearchSP.setFont(new Font("Arial", Font.PLAIN, 13));
         searchPanel.add(txtSearchSP, BorderLayout.CENTER);
-        dialog.add(searchPanel, BorderLayout.NORTH);
+        dialog.getContentPane().add(searchPanel, BorderLayout.NORTH);
         
 		Object[] columns = {"Mã SP", "Tên SP", "Loại", "Giá", "Số lượng", "ĐVT", "Màu sắc", "Kích thước", "Chất liệu", "Kiểu dáng"};
 		 
@@ -1024,6 +1067,10 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 	
 	public DefaultTableModel updateTablePN() {
 		txtSearch.setText("");
+		txtMaPNNC.setText(""); 
+		txtMaNCCNC.setText("");
+		dateEnd.setDate(null);
+		dateStart.setDate(null);
 		
 		modelPhieuNhap.setRowCount(0);
 		
@@ -1090,18 +1137,32 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 	public void timKiem() {
 		String tieuChi = cboxSearch.getSelectedItem().toString();
 		String tuKhoa = txtSearch.getText().trim();
+		String maPNNC = txtMaPNNC.getText().trim();
+        String maNCCNC = txtMaNCCNC.getText().trim();
 		ArrayList<PhieuNhapDTO> result;
 		
 		java.util.Date utilStartDate = dateStart.getDate(); // java.util.Date
         java.util.Date utilEndDate = dateEnd.getDate();
         
-        if(tuKhoa.isEmpty() && utilStartDate == null && utilEndDate == null) {
-        	 JOptionPane.showMessageDialog(this, "Vui lòng nhập thông tin để tìm kiếm !", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        	 return;
+        boolean isTimKiemCoBan = !tuKhoa.isEmpty();
+        boolean isTimKiemTheoNgay = utilStartDate != null && utilEndDate != null;
+        boolean isTimKiemOR = !maPNNC.isEmpty() || !maNCCNC.isEmpty();
+        
+        int count = 0;
+        if (isTimKiemCoBan) count++;
+        if (isTimKiemTheoNgay) count++;
+        if (isTimKiemOR) count++;
+        
+        if (count > 1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chỉ chọn một loại tìm kiếm: cơ bản, theo ngày, hoặc theo mã PN/NCC!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
         }
-		if(!tuKhoa.isEmpty()) 
+       
+        
+		if(isTimKiemCoBan) {
 			result = phieuNhapBUS.search(tuKhoa, tieuChi);
-		else if(utilStartDate != null && utilEndDate != null) {
+		}
+		else if(isTimKiemTheoNgay) {
          // reset tg ve 0 0 0 0
             Calendar cal = Calendar.getInstance();
             cal.setTime(utilStartDate);
@@ -1117,17 +1178,22 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
             cal.set(Calendar.SECOND, 0);
             cal.set(Calendar.MILLISECOND, 0);
             Date endDate = new Date(cal.getTimeInMillis());
-            		
-			 if (startDate.after(endDate)) {
+            
+            	if (startDate.after(endDate)) {
 	                JOptionPane.showMessageDialog(this, "Ngày bắt đầu phải trước ngày kết thúc!", "Lỗi", JOptionPane.ERROR_MESSAGE);
 	                return;
 	            }
 			 result = phieuNhapBUS.searchByDate(startDate, endDate);
-		}else {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập cả ngày bắt đầu và ngày kết thúc cho tìm kiếm nâng cao!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return;
+		}
+		else if (isTimKiemOR) {
+            result = phieuNhapBUS.searchByMaPhieuNHOrMaNCC(maPNNC, maNCCNC);
         }
-			
+		else {
+			JOptionPane.showMessageDialog(this, "Vui lòng nhập thông tin để tìm kiếm !", "Lỗi", JOptionPane.ERROR_MESSAGE);
+       	 	return;
+		}
+		
+		
 		modelPhieuNhap.setRowCount(0);
 		for(PhieuNhapDTO pn : result)
 			modelPhieuNhap.addRow(new Object[] {pn.getMaPhieuNH(),pn.getMaNV(), pn.getMaNCC(),pn.getTongTien(),pn.getNgayNhap()});
@@ -1173,35 +1239,35 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 		listTemp.clear();
 	}
 	
-	  public void xuatExcel()
-	    {
-	    	try {
-	            ExcelExporter.exportJTableToExcel(tbPhieuNhap);
-	        } catch (IOException e) {
-	            JOptionPane.showMessageDialog(this, "Lỗi khi xuất file Excel: " + e.getMessage(),
-	                    "Lỗi", JOptionPane.ERROR_MESSAGE);
-	            e.printStackTrace();
-	        }
-	    }
-	    
-	    public void xuatPDF() {
-	        int selectedRow = tbPhieuNhap.getSelectedRow();
-	        if (selectedRow == -1) {
-	            JOptionPane.showMessageDialog(this, "Vui lòng chọn một phiếu nhập để xuất PDF!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-	            tbPhieuNhap.requestFocus();
-	            return;
-	        }
-
-	        String maPN = (String) modelPhieuNhap.getValueAt(selectedRow, 0);
-	        try {
-	            PDFReporter pdfReporter = new PDFReporter();
-	            pdfReporter.writePhieuNhap(maPN);
-	            JOptionPane.showMessageDialog(this, "Xuất PDF thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-	        } catch (Exception ex) {
-	            JOptionPane.showMessageDialog(this, "Lỗi khi xuất PDF: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-	            ex.printStackTrace();
-	        }
-	    }
+//	  public void xuatExcel()
+//	    {
+//	    	try {
+//	            ExcelExporter.exportJTableToExcel(tbPhieuNhap);
+//	        } catch (IOException e) {
+//	            JOptionPane.showMessageDialog(this, "Lỗi khi xuất file Excel: " + e.getMessage(),
+//	                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+//	            e.printStackTrace();
+//	        }
+//	    }
+//	    
+//	    public void xuatPDF() {
+//	        int selectedRow = tbPhieuNhap.getSelectedRow();
+//	        if (selectedRow == -1) {
+//	            JOptionPane.showMessageDialog(this, "Vui lòng chọn một phiếu nhập để xuất PDF!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+//	            tbPhieuNhap.requestFocus();
+//	            return;
+//	        }
+//
+//	        String maPN = (String) modelPhieuNhap.getValueAt(selectedRow, 0);
+//	        try {
+//	            PDFReporter pdfReporter = new PDFReporter();
+//	            pdfReporter.writePhieuNhap(maPN);
+//	            JOptionPane.showMessageDialog(this, "Xuất PDF thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+//	        } catch (Exception ex) {
+//	            JOptionPane.showMessageDialog(this, "Lỗi khi xuất PDF: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+//	            ex.printStackTrace();
+//	        }
+//	    }
 	
   
 	@Override
@@ -1219,9 +1285,9 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 			updateTablePN();
 		else if(command.equals("Tìm kiếm"))
 			timKiem();
-		else if(command.equals("Xuất Excel"))
-			xuatExcel();
-		else if(command.equals("Xuất PDF"))
-			xuatPDF();
+//		else if(command.equals("Xuất Excel"))
+//			xuatExcel();
+//		else if(command.equals("Xuất PDF"))
+//			xuatPDF();
 	}
 }

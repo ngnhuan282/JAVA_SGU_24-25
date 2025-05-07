@@ -79,7 +79,7 @@ public class PhieuNhapBUS {
 	
 	public ArrayList<PhieuNhapDTO> searchByDate(Date startDate, Date endDate){
 		ArrayList<PhieuNhapDTO> result = new ArrayList<PhieuNhapDTO>();
-		 for (PhieuNhapDTO pn : listPN) {
+		for (PhieuNhapDTO pn : listPN) {
 			 Date ngayNhap = pn.getNgayNhap();
 			 if(ngayNhap != null && !ngayNhap.before(startDate) && !ngayNhap.after(endDate)) {
 			 	result.add(pn); 
@@ -87,6 +87,14 @@ public class PhieuNhapBUS {
 		 }
 		 return result;
 	}
+	
+	 public ArrayList<PhieuNhapDTO> searchByMaPhieuNHOrMaNCC(String maPNNC, String maNCCNC) {
+		 ArrayList<PhieuNhapDTO> result = new ArrayList<PhieuNhapDTO>();
+		 for (PhieuNhapDTO pn : listPN) 
+			 if(pn.getMaPhieuNH().equalsIgnoreCase(maPNNC) || pn.getMaNCC().equalsIgnoreCase(maNCCNC))
+				 result.add(pn);			 		 
+		 return result;
+	 }
 	
 	
 	
