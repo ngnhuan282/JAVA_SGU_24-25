@@ -68,26 +68,7 @@ public class CTKMDAO {
 		
 	}
 	
-	public CTKMDTO getCTKM_HD(Date ngayLapSQL) throws SQLException {
-		String ngayLap = String.valueOf(ngayLapSQL);
-		String sql = "SELECT ctkm.*, ctkm_hd.PhanTramGiamGia FROM ctkm"
-				+ " JOIN ctkm_hd ON ctkm.MaCTKM = ctkm_hd.MaCTKM"
-				+ " WHERE NgayBD <= '"+ ngayLap +"' AND NgayKT >= '"+ ngayLap +"'";
-		ResultSet rs = connection.executeQuery(sql);
-		
-		if(rs.next()) {
-			String maCTKM = rs.getString("MaCTKM");
-			Date ngayBD = rs.getDate("NgayBD");
-			Date ngayKT = rs.getDate("NgayKT");
-			String tenCTKM =rs.getString("TenCTKM");
-			float phanTramGiamGia = rs.getFloat("PhanTramGiamGia");
-			
-			return new CTKMDTO(maCTKM, ngayBD, ngayKT,tenCTKM, phanTramGiamGia);
-		}
-		
-		return null;
-		
-	}
+
 	
 	
 		
@@ -95,21 +76,7 @@ public class CTKMDAO {
 	
 		
 	
-	
-		
-	
-	
-		
-	
-	
-		
-	
-	
-		
-	
-	
-		
-	
+
 	
 	
 	public void addkhuyenMaiDAO(CTKMDTO x) {
