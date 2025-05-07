@@ -5,8 +5,12 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.sql.Date;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -15,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -26,7 +31,13 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.toedter.calendar.JDateChooser;
+
+import BUS.ThongKeHoaDonBUS;
 import DAO.ThongKeDAO;
+import DTO.ThongKeDoanhThuDTO;
+import DTO.ThongKeDonHangDTO;
+import GUI.ThongKeDoanhThuTuNgayDenNgay.RoundedPanel;
 
 public class ThongKeHoaDonGUI extends JPanel {
     private static final long serialVersionUID = 1L;
@@ -36,9 +47,15 @@ public class ThongKeHoaDonGUI extends JPanel {
     private JComboBox<String> cboxNam, cboxLoaiThongKe;
     private DefaultTableModel tableModel;
     private JTable table;
-
+    private JDateChooser dateChooserTuNgay;
+    private JDateChooser dateChooserDenNgay;
+    private JPanel pChartDateRange;
+    private DefaultTableModel tableModelDateRange;
+    private JTable tableDateRange;
+    private ThongKeHoaDonBUS thongKeBus;
     public ThongKeHoaDonGUI() 
     {
+    	thongKeBus = new ThongKeHoaDonBUS();
         initComponents();
     }
 
@@ -47,116 +64,157 @@ public class ThongKeHoaDonGUI extends JPanel {
         setLayout(null);
 
         // Header: THỐNG KÊ HÓA ĐƠN
-        JLabel lblHeader = new JLabel("THỐNG KÊ HÓA ĐƠN", SwingConstants.CENTER);
-        lblHeader.setBounds(0, 10, 1228, 50);
-        lblHeader.setFont(new Font("Arial", Font.BOLD, 30));
-        lblHeader.setForeground(new Color(255, 82, 82));
-        add(lblHeader);
+        setBackground(Color.WHITE);
+        setLayout(null);
+        setBounds(0, 0, 1228, 737);
 
-        // Panel hiển thị Tổng số hóa đơn, Tổng giá trị, Số lượng sản phẩm
-        JPanel pSummary = new JPanel();
-        pSummary.setBounds(20, 70, 1188, 100);
-        pSummary.setBackground(Color.WHITE);
-        pSummary.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-        pSummary.setLayout(null);
-        add(pSummary);
+        // Panel lọc Từ ngày → Đến ngày
+        JPanel pFilterDateRange = new JPanel();
+        pFilterDateRange.setBounds(20, 20, 1188, 80);
+        pFilterDateRange.setBackground(new Color(227, 242, 253));
+        pFilterDateRange.setLayout(null);
+        add(pFilterDateRange);
 
-        lblTongSoHoaDon = new JLabel("Tổng số hóa đơn: 0");
-        lblTongSoHoaDon.setBounds(20, 30, 300, 40);
-        lblTongSoHoaDon.setFont(new Font("Arial", Font.PLAIN, 16));
-        pSummary.add(lblTongSoHoaDon);
-
-        lblTongGiaTri = new JLabel("Tổng giá trị: 0đ");
-        lblTongGiaTri.setBounds(420, 30, 300, 40);
-        lblTongGiaTri.setFont(new Font("Arial", Font.PLAIN, 16));
-        pSummary.add(lblTongGiaTri);
-
-        lblSoLuongSanPham = new JLabel("Số lượng sản phẩm: 0");
-        lblSoLuongSanPham.setBounds(820, 30, 300, 40);
-        lblSoLuongSanPham.setFont(new Font("Arial", Font.PLAIN, 16));
-        pSummary.add(lblSoLuongSanPham);
-
-        // Panel lọc
-        JPanel pFilter = new JPanel();
-        pFilter.setBounds(20, 180, 1188, 60);
-        pFilter.setBackground(Color.WHITE);
-        pFilter.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-        pFilter.setLayout(null);
-        add(pFilter);
-
-        // Lọc Từ ngày → Đến ngày
         JLabel lblTuNgay = new JLabel("Từ ngày:");
-        lblTuNgay.setBounds(20, 15, 80, 30);
-        lblTuNgay.setFont(new Font("Arial", Font.PLAIN, 14));
-        pFilter.add(lblTuNgay);
+        lblTuNgay.setBounds(30, 25, 100, 30);
+        lblTuNgay.setFont(new Font("Arial", Font.PLAIN, 16));
+        pFilterDateRange.add(lblTuNgay);
 
-        txtTuNgay = new JTextField();
-        txtTuNgay.setBounds(100, 15, 120, 30);
-        pFilter.add(txtTuNgay);
+        dateChooserTuNgay = new JDateChooser();
+        dateChooserTuNgay.setBounds(110, 25, 120, 30);
+        dateChooserTuNgay.setFont(new Font("Arial", Font.PLAIN, 14));
+        Calendar calTuNgay = Calendar.getInstance();
+        calTuNgay.set(2024, Calendar.APRIL, 1); // Đặt mặc định 2024-04-01
+        dateChooserTuNgay.setDate(calTuNgay.getTime());
+        pFilterDateRange.add(dateChooserTuNgay);
 
         JLabel lblDenNgay = new JLabel("Đến ngày:");
-        lblDenNgay.setBounds(240, 15, 80, 30);
-        lblDenNgay.setFont(new Font("Arial", Font.PLAIN, 14));
-        pFilter.add(lblDenNgay);
+        lblDenNgay.setBounds(250, 25, 100, 30);
+        lblDenNgay.setFont(new Font("Arial", Font.PLAIN, 16));
+        pFilterDateRange.add(lblDenNgay);
 
-        txtDenNgay = new JTextField();
-        txtDenNgay.setBounds(320, 15, 120, 30);
-        pFilter.add(txtDenNgay);
+        dateChooserDenNgay = new JDateChooser();
+        dateChooserDenNgay.setBounds(330, 25, 120, 30);
+        dateChooserDenNgay.setFont(new Font("Arial", Font.PLAIN, 14));
+        Calendar calDenNgay = Calendar.getInstance();
+        calDenNgay.set(2024, Calendar.APRIL, 5); // Đặt mặc định 2024-04-05
+        dateChooserDenNgay.setDate(calDenNgay.getTime());
+        pFilterDateRange.add(dateChooserDenNgay);
 
-        // Lọc Theo năm
-        JLabel lblTheoNam = new JLabel("Chọn năm:");
-        lblTheoNam.setBounds(460, 15, 80, 30);
-        lblTheoNam.setFont(new Font("Arial", Font.PLAIN, 14));
-        pFilter.add(lblTheoNam);
+        JButton btnLoc = new JButton("Lọc");
+        btnLoc.setBounds(470, 25, 100, 30);
+        btnLoc.setFont(new Font("Arial", Font.PLAIN, 14));
+        btnLoc.setBackground(new Color(33, 150, 243));
+        btnLoc.setForeground(Color.WHITE);
+        btnLoc.setBorder(BorderFactory.createEmptyBorder());
+        btnLoc.addActionListener(e -> capNhatDuLieu());
+        pFilterDateRange.add(btnLoc);
 
-        String[] years = {"2025", "2024", "2023", "2022", "2021"};
-        cboxNam = new JComboBox<>(years);
-        cboxNam.setBounds(540, 15, 80, 30);
-        pFilter.add(cboxNam);
+        JButton btnXuatExcelDateRange = new JButton("Xuất Excel");
+        btnXuatExcelDateRange.setBounds(1018, 25, 100, 30);
+        btnXuatExcelDateRange.setFont(new Font("Arial", Font.PLAIN, 14));
+        btnXuatExcelDateRange.setBackground(new Color(33, 150, 243));
+        btnXuatExcelDateRange.setForeground(Color.WHITE);
+        btnXuatExcelDateRange.setBorder(BorderFactory.createEmptyBorder());
+        btnXuatExcelDateRange.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				try {
+					ExcelExporter.exportJTableToExcel(tableDateRange);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+        pFilterDateRange.add(btnXuatExcelDateRange);
 
-        // Chọn loại thống kê
-        JLabel lblLoaiThongKe = new JLabel("Loại thống kê:");
-        lblLoaiThongKe.setBounds(640, 15, 100, 30);
-        lblLoaiThongKe.setFont(new Font("Arial", Font.PLAIN, 14));
-        pFilter.add(lblLoaiThongKe);
-
-        String[] loaiThongKe = {"Theo tháng", "Theo khách hàng", "Theo nhân viên", "Theo sản phẩm"};
-        cboxLoaiThongKe = new JComboBox<>(loaiThongKe);
-        cboxLoaiThongKe.setBounds(740, 15, 150, 30);
-        pFilter.add(cboxLoaiThongKe);
-
-        JButton btnFilter = new JButton("Lọc");
-        btnFilter.setBounds(960, 15, 100, 30);
-        btnFilter.setFont(new Font("Arial", Font.PLAIN, 14));
-        pFilter.add(btnFilter);
-
-        JButton btnXuatExcel = new JButton("Xuất Excel");
-        btnXuatExcel.setBounds(1068, 15, 100, 30);
-        btnXuatExcel.setFont(new Font("Arial", Font.PLAIN, 14));
-        pFilter.add(btnXuatExcel);
-
-        // Placeholder cho biểu đồ cột
-        JPanel pChart = new JPanel();
-        pChart.setBounds(20, 250, 1188, 200);
-        pChart.setBackground(Color.WHITE);
-        pChart.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-        pChart.setLayout(null);
-        add(pChart);
-
-        JLabel lblChartPlaceholder = new JLabel("Biểu đồ cột (Thống kê hóa đơn theo tháng)", SwingConstants.CENTER);
-        lblChartPlaceholder.setBounds(0, 0, 1188, 200);
-        lblChartPlaceholder.setFont(new Font("Arial", Font.PLAIN, 14));
-        pChart.add(lblChartPlaceholder);
+        // Biểu đồ cột
+        pChartDateRange = new JPanel();
+        pChartDateRange.setBounds(20, 120, 1188, 300);
+        pChartDateRange.setBackground(Color.WHITE);
+        pChartDateRange.setLayout(null);
+        add(pChartDateRange);
 
         // Bảng dữ liệu chi tiết
-        String[] columnNames = {"Tháng/Mã", "Số lượng hóa đơn/Tên", "Tổng giá trị", "Số lượng sản phẩm"};
-        tableModel = new DefaultTableModel(columnNames, 0);
-        table = new JTable(tableModel);
-        JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(20, 460, 1188, 200);
-        add(scrollPane);
+        String[] columnNamesDateRange = {"Ngày", "Tổng doanh thu", "Tổng đơn hàng"};
+        tableModelDateRange = new DefaultTableModel(columnNamesDateRange, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tableDateRange = new JTable(tableModelDateRange);
+        tableDateRange.setRowHeight(30);
+        tableDateRange.setFont(new Font("Arial", Font.PLAIN, 14));
+        tableDateRange.setBackground(new Color(245, 245, 245));
+        tableDateRange.setGridColor(new Color(200, 200, 200));
+        tableDateRange.setShowVerticalLines(true);
+        tableDateRange.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
-     
+        JScrollPane scrollPaneDateRange = new JScrollPane(tableDateRange);
+        scrollPaneDateRange.setBounds(20, 440, 1188, 220);
+        scrollPaneDateRange.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        add(scrollPaneDateRange);
 
+        // Điều chỉnh chiều rộng cột
+        tableDateRange.getColumnModel().getColumn(0).setPreferredWidth(150);
+        tableDateRange.getColumnModel().getColumn(1).setPreferredWidth(250);
+        tableDateRange.getColumnModel().getColumn(2).setPreferredWidth(250);
+        
+        capNhatDuLieu();
+        
     }
+    
+    private void capNhatDuLieu() {
+        try {
+            // Lấy ngày từ JDateChooser
+            java.util.Date tuNgayUtil = dateChooserTuNgay.getDate();
+            java.util.Date denNgayUtil = dateChooserDenNgay.getDate();
+
+            if (tuNgayUtil == null || denNgayUtil == null) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn đầy đủ ngày!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            Date tuNgay = new Date(tuNgayUtil.getTime());
+            Date denNgay = new Date(denNgayUtil.getTime());
+
+            if (tuNgay.after(denNgay)) {
+                JOptionPane.showMessageDialog(this, "Ngày bắt đầu phải trước ngày kết thúc!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Lấy dữ liệu từ ThongKeBUS
+            ArrayList<ThongKeDonHangDTO> listThongKe = thongKeBus.getListThongKe(tuNgay, denNgay);
+
+            // Cập nhật biểu đồ
+            pChartDateRange.removeAll();
+            int[] totalOrder = new int[listThongKe.size()];
+            String[] days = new String[listThongKe.size()];
+            for (int i = 0; i < listThongKe.size(); i++) {
+            	ThongKeDonHangDTO thongKe = listThongKe.get(i);
+                totalOrder[i] = thongKe.getTongDonHang();
+                days[i] = new SimpleDateFormat("dd/MM").format(thongKe.getNgay());
+            }
+            pChartDateRange.add(new Chart.CustomOrderChart(totalOrder, days));
+            pChartDateRange.revalidate();
+            pChartDateRange.repaint();
+
+            // Cập nhật bảng
+            tableModelDateRange.setRowCount(0);
+            DecimalFormat df = new DecimalFormat("#,###,###đ");
+            for (ThongKeDonHangDTO thongKe : listThongKe) {
+                tableModelDateRange.addRow(new Object[]{
+                    new SimpleDateFormat("dd/MM").format(thongKe.getNgay()),
+                    df.format((int)thongKe.getTongDoanhThu()),
+                    thongKe.getTongDonHang()
+                });
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật dữ liệu: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+}
 }

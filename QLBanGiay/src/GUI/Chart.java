@@ -187,4 +187,68 @@ public class Chart {
             g2.drawString(text, x - textWidth / 2, y);
         }
     }
+    
+    public static class CustomOrderChart extends JPanel {
+    	 private int[] totalOrder;
+         private String[] days;
+
+         public CustomOrderChart(int[] totalOrder, String[] days) {
+             this.totalOrder = totalOrder;
+             this.days = days;
+             setBackground(Color.WHITE);
+             setBounds(10, 10, 1128, 280);
+         }
+
+         @Override
+         protected void paintComponent(Graphics g) {
+             super.paintComponent(g);
+             Graphics2D g2 = (Graphics2D) g;
+             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+             int width = getWidth();
+             int height = getHeight();
+             int barWidth = (width - 40) / days.length;
+             int maxValue = 10; // 3.5M VNĐ
+             DecimalFormat df = new DecimalFormat("#,###,###");
+
+             // Vẽ lưới trục Y
+             g2.setColor(new Color(211, 211, 211));
+             for (int i = 0; i <= 5; i++) {
+                 int y = height - 30 - (int)((i * maxValue / 5.0) / maxValue * (height - 60));
+                 g2.drawLine(30, y, width - 30, y);
+                 g2.setColor(Color.BLACK);
+                 g2.drawString(df.format(i * maxValue / 5) + "đơn hàng", 5, y + 5);
+                 g2.setColor(new Color(211, 211, 211));
+             }
+
+             // Vẽ trục X và nhãn ngày
+             g2.setColor(Color.BLACK);
+             g2.drawLine(30, height - 30, width - 30, height - 30);
+             for (int i = 0; i < days.length; i++) {
+                 int x = 30 + i * barWidth + barWidth / 2;
+                 g2.drawString(days[i], x - barWidth / 2, height - 10);
+             }
+
+             // Vẽ cột và nhãn
+             for (int i = 0; i < days.length; i++) {
+                 int baseX = 30 + i * barWidth;
+                 if (totalOrder[i] > 0) {
+                     int barHeight = (int)(((double)totalOrder[i] / maxValue) * (height - 60));
+                     int y = height - 30 - barHeight;
+                     GradientPaint gradient = new GradientPaint(baseX, y, new Color(33, 150, 243),
+                             baseX, height - 30, new Color(129, 212, 250));
+                     g2.setPaint(gradient);
+                     g2.fill(new RoundRectangle2D.Float(baseX + barWidth / 4, y, barWidth / 2, barHeight, 10, 10));
+                     g2.setColor(Color.BLACK);
+                     drawCenteredString(g2, df.format(totalOrder[i]) + " đơn hàng", baseX + barWidth / 2, y - 10, barWidth / 2);
+                 }
+             }
+         }
+             
+             private void drawCenteredString(Graphics2D g2, String text, int x, int y, int width) {
+                 FontMetrics fm = g2.getFontMetrics();
+                 int textWidth = fm.stringWidth(text);
+                 g2.drawString(text, x - textWidth / 2, y);
+             }
+    }
 }
