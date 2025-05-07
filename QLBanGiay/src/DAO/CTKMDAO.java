@@ -102,6 +102,9 @@ public class CTKMDAO {
 		
 	
 	
+		
+	
+	
 	
 	public void addkhuyenMaiDAO(CTKMDTO x) {
 		String sql = "INSERT INTO ctkm(MaCTKM, NgayBD, NgayKT, TenCTKM)"
