@@ -1239,35 +1239,35 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 		listTemp.clear();
 	}
 	
-//	  public void xuatExcel()
-//	    {
-//	    	try {
-//	            ExcelExporter.exportJTableToExcel(tbPhieuNhap);
-//	        } catch (IOException e) {
-//	            JOptionPane.showMessageDialog(this, "Lỗi khi xuất file Excel: " + e.getMessage(),
-//	                    "Lỗi", JOptionPane.ERROR_MESSAGE);
-//	            e.printStackTrace();
-//	        }
-//	    }
-//	    
-//	    public void xuatPDF() {
-//	        int selectedRow = tbPhieuNhap.getSelectedRow();
-//	        if (selectedRow == -1) {
-//	            JOptionPane.showMessageDialog(this, "Vui lòng chọn một phiếu nhập để xuất PDF!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-//	            tbPhieuNhap.requestFocus();
-//	            return;
-//	        }
-//
-//	        String maPN = (String) modelPhieuNhap.getValueAt(selectedRow, 0);
-//	        try {
-//	            PDFReporter pdfReporter = new PDFReporter();
-//	            pdfReporter.writePhieuNhap(maPN);
-//	            JOptionPane.showMessageDialog(this, "Xuất PDF thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-//	        } catch (Exception ex) {
-//	            JOptionPane.showMessageDialog(this, "Lỗi khi xuất PDF: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-//	            ex.printStackTrace();
-//	        }
-//	    }
+	  public void xuatExcel()
+	    {
+	    	try {
+	            ExcelExporter.exportJTableToExcel(tbPhieuNhap);
+	        } catch (IOException e) {
+	            JOptionPane.showMessageDialog(this, "Lỗi khi xuất file Excel: " + e.getMessage(),
+	                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+	            e.printStackTrace();
+	        }
+	    }
+	    
+	    public void xuatPDF() {
+	        int selectedRow = tbPhieuNhap.getSelectedRow();
+	        if (selectedRow == -1) {
+	            JOptionPane.showMessageDialog(this, "Vui lòng chọn một phiếu nhập để xuất PDF!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+	            tbPhieuNhap.requestFocus();
+	            return;
+	        }
+
+	        String maPN = (String) modelPhieuNhap.getValueAt(selectedRow, 0);
+	        try {
+	            PDFReporter pdfReporter = new PDFReporter();
+	            pdfReporter.writePhieuNhap(maPN);
+	            JOptionPane.showMessageDialog(this, "Xuất PDF thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+	        } catch (Exception ex) {
+	            JOptionPane.showMessageDialog(this, "Lỗi khi xuất PDF: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+	            ex.printStackTrace();
+	        }
+	    }
 	
   
 	@Override
@@ -1285,9 +1285,9 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 			updateTablePN();
 		else if(command.equals("Tìm kiếm"))
 			timKiem();
-//		else if(command.equals("Xuất Excel"))
-//			xuatExcel();
-//		else if(command.equals("Xuất PDF"))
-//			xuatPDF();
+		else if(command.equals("Xuất Excel"))
+			xuatExcel();
+		else if(command.equals("Xuất PDF"))
+			xuatPDF();
 	}
 }
