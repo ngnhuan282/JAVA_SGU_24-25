@@ -88,14 +88,6 @@ public class PhieuNhapBUS {
 		 return result;
 	}
 	
-	 public ArrayList<PhieuNhapDTO> searchByMaPhieuNHOrMaNCC(String maPNNC, String maNCCNC) {
-		 ArrayList<PhieuNhapDTO> result = new ArrayList<PhieuNhapDTO>();
-		 for (PhieuNhapDTO pn : listPN) 
-			 if(pn.getMaPhieuNH().equalsIgnoreCase(maPNNC) || pn.getMaNCC().equalsIgnoreCase(maNCCNC))
-				 result.add(pn);			 		 
-		 return result;
-	 }
-	
 	
 	
 	
