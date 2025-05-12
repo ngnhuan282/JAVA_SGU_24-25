@@ -972,12 +972,14 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 		}
 		String maHD = (String) table.getValueAt(selectedRowHoaDon, 0);
 		String maKH = (String) table.getValueAt(selectedRowHoaDon, 1);
+		String maNV = (String) table.getValueAt(selectedRowHoaDon, 2);
 		for(ChiTietHDDTO x : chiTietHoaDonBUS.getListCTHD()) {
 			if(x.getMaHD().equals(maHD)) {
 				listTemp.add(new ChiTietHDDTO(x.getMaHD(), x.getMaSP(), x.getSoLuong(), x.getDonGia(), x.getThanhTien()));
 				soLuongTruocKhiUpdate.add(x.getSoLuong());
 			}
 		}
+		txtMaNV.setText(maNV);
 		txtMaHD.setText(maHD);
 		txtMaKH.setText(maKH);
 		update = true;
