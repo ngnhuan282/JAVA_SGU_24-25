@@ -33,9 +33,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import BUS.NhanVienBUS;
-import DAO.SanPhamDAO;
 import DTO.NhanVienDTO;
-import GUI.ExcelExporter;
 
 public class NhanVienGUI extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
@@ -552,7 +550,7 @@ public class NhanVienGUI extends JPanel implements ActionListener {
     public void xuatExcel() {
     	System.out.println("Exporting Excel for NhanVienGUI...");
         try {
-            ExcelExporter.exportJTableToExcel(tblDSNV);
+            ExcelReporter.exportJTableToExcel(tblDSNV);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Lỗi khi xuất file Excel: " + e.getMessage(),
                     "Lỗi", JOptionPane.ERROR_MESSAGE);

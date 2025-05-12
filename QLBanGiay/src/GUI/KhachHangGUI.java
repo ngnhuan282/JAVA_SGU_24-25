@@ -621,7 +621,7 @@ public class KhachHangGUI extends JPanel implements ActionListener {
 	public void xuatExcel()
 	{
 		try {
-            ExcelExporter.exportJTableToExcel(table);
+            ExcelReporter.exportJTableToExcel(table);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Lỗi khi xuất file Excel: " + e.getMessage(),
                     "Lỗi", JOptionPane.ERROR_MESSAGE);

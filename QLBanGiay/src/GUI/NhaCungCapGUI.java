@@ -524,7 +524,7 @@ public class NhaCungCapGUI extends JPanel implements ActionListener{
 	{	
 		System.out.println("Exporting Excel...");
 		try {
-            ExcelExporter.exportJTableToExcel(table);
+            ExcelReporter.exportJTableToExcel(table);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Lỗi khi xuất file Excel: " + e.getMessage(),
                     "Lỗi", JOptionPane.ERROR_MESSAGE);

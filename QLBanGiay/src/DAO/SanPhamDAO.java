@@ -23,8 +23,6 @@ public class SanPhamDAO {
 	{	
 		ArrayList<SanPhamDTO> dssp = new ArrayList<>();
 		try {
-			
-			MySQLConnect mysql = new MySQLConnect();
 			String sql = "SELECT * FROM SanPham";
 			ResultSet rs = mysql.executeQuery(sql);
 			while(rs.next())
@@ -82,7 +80,7 @@ public class SanPhamDAO {
 		sql += "ChatLieu='" + sp.getChatLieu() + "', ";
 		sql += "MauSac='" + sp.getMauSac() + "', ";
 		sql += "KieuDang='" + sp.getKieuDang() + "', ";
-		sql += "KichThuoc='" + sp.getKichThuoc() + "',";
+		sql += "KichThuoc='" + sp.getKichThuoc() + "' ";
 		sql += "WHERE MaSP= '" + sp.getMaSP() + "'";
 		mysql.executeUpdate(sql);
 		mysql.disConnect();
