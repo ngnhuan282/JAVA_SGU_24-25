@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -21,6 +23,7 @@ import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -33,6 +36,7 @@ import javax.swing.SortOrder;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -49,6 +53,8 @@ public class CTKMGUI extends JPanel {
     private DefaultTableModel tableModel;
     private JTable tblCTKM;
     private JTextField txtMaCTKM;
+    private JTextField txtTKMaCTKM;
+    private JTextField txtTKMaSPorHDCTKM;
     private JTextField txtTenCTKM;
     private JDateChooser dateNgayBD;
     private JDateChooser dateNgayKT;
@@ -171,26 +177,51 @@ public class CTKMGUI extends JPanel {
         cboxSearch.setBackground(Color.WHITE);
         cboxSearch.setForeground(Color.BLACK);
         cboxSearch.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-        cboxSearch.setBounds(524, 30, 100, 28);
+        cboxSearch.setBounds(524, 10, 100, 28);
         pHeaderMain.add(cboxSearch);
 
         txtSearch = new JTextField();
         txtSearch.setColumns(10);
-        txtSearch.setBounds(658, 32, 290, 27);
+        txtSearch.setBounds(658, 10, 290, 27);
         pHeaderMain.add(txtSearch);
 
         JButton btnSearch = new JButton("");
         btnSearch.setIcon(new ImageIcon(CTKMGUI.class.getResource("/image/search30.png")));
-        btnSearch.setBounds(958, 29, 66, 30);
+        btnSearch.setBounds(958, 10, 66, 30);
         btnSearch.setActionCommand("Tìm kiếm");
         btnSearch.addActionListener(this::actionPerformed);
         pHeaderMain.add(btnSearch);
+        
+        JLabel lbTKMaCTKM = new JLabel("Mã CTKM");
+        lbTKMaCTKM.setFont(new Font("Verdana", Font.BOLD, 12));
+        lbTKMaCTKM.setBounds(524, 50, 100, 28);
+        pHeaderMain.add(lbTKMaCTKM);
+
+        txtTKMaCTKM = new JTextField();
+        txtTKMaCTKM.setBounds(590, 50, 140, 28);
+        pHeaderMain.add(txtTKMaCTKM);
+        
+        JLabel lbTKMaSPorHDCTKM = new JLabel("Mã SP/HD");
+        lbTKMaSPorHDCTKM.setFont(new Font("Verdana", Font.BOLD, 12));
+        lbTKMaSPorHDCTKM.setBounds(730, 50, 100, 28);
+        pHeaderMain.add(lbTKMaSPorHDCTKM);
+
+        txtTKMaSPorHDCTKM = new JTextField();
+        txtTKMaSPorHDCTKM.setBounds(800, 50, 140, 28);
+        pHeaderMain.add(txtTKMaSPorHDCTKM);
+        
+        JButton btnSearch2 = new JButton("");
+        btnSearch2.setIcon(new ImageIcon(CTKMGUI.class.getResource("/image/search30.png")));
+        btnSearch2.setBounds(958, 50, 66, 30);
+        btnSearch2.setActionCommand("Tìm kiếm");
+        btnSearch2.addActionListener(this::actionPerformed);
+        pHeaderMain.add(btnSearch2);
         
         JButton btnLamMoi = new JButton("Làm mới");
         btnLamMoi.setBackground(Color.WHITE);
         btnLamMoi.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/reload30.png")));
         btnLamMoi.setFont(new Font("Arial", Font.PLAIN, 13));
-        btnLamMoi.setBounds(1045, 31, 126, 28);
+        btnLamMoi.setBounds(1045, 30, 126, 28);
         btnLamMoi.setActionCommand("Reload");
         pHeaderMain.add(btnLamMoi);
 
@@ -351,11 +382,49 @@ public class CTKMGUI extends JPanel {
             }
         });
         
+        btnSearch2.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String maCTKM = txtTKMaCTKM.getText().trim();
+                String maSPorHD = txtTKMaSPorHDCTKM.getText().trim();
+
+                if (maCTKM.isEmpty() && maSPorHD.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Vui lòng nhập ít nhất một tiêu chí tìm kiếm.");
+                    return;
+                }
+
+                ArrayList<CTKMDTO> resultList = ctkmBUS.searchKhuyenMaiNangCao(maCTKM, maSPorHD);
+
+                tableModel.setRowCount(0);
+
+                for (CTKMDTO ctkm : resultList) {
+                    String loaiKM = ctkmBUS.layLoaiKhuyenMai(ctkm.getMaCTKM());
+                    String maSPorHDValue = ctkmBUS.layMaSPorHD(ctkm.getMaCTKM());
+                    String phanTram = ctkmBUS.layPhanTram(ctkm.getMaCTKM());
+
+                    tableModel.addRow(new Object[] {
+                        ctkm.getMaCTKM(),
+                        ctkm.getTenCTKM(),
+                        new SimpleDateFormat("yyyy-MM-dd").format(ctkm.getNgayBD()),
+                        new SimpleDateFormat("yyyy-MM-dd").format(ctkm.getNgayKT()),
+                        loaiKM,
+                        maSPorHDValue,
+                        phanTram + "%"
+                    });
+                }
+            }
+        });
+
+        
         btnLamMoi.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getActionCommand().equals("Reload")) {
                     loadData();  // Gọi hàm loadData khi nhấn nút "Làm mới"
+                    txtSearch.setText("");
+                    txtTKMaCTKM.setText("");
+                    txtSearch.setText("");
+                    txtTKMaSPorHDCTKM.setText("");
+                    
                 }
             }
         });
@@ -376,9 +445,9 @@ public class CTKMGUI extends JPanel {
             case "Thêm": addKhuyenMai(); break;
             case "Sửa": updateKhuyenMai(); break;
             case "Xóa": deleteKhuyenMai(); break;
-          //  case "Tìm kiếm": searchCTKM(); break;
-           // case "Nhập Excel": nhapExcel(); break;
-           // case "Xuất Excel": xuatExcel(); break;
+           // case "Tìm kiếm": searchCTKM(); break;
+            case "Nhập Excel": nhapExcelCTKM(); break;
+            case "Xuất Excel": xuatExcelCTKM(); break;
 
 //            case "Tìm kiếm": timKiem(); break;
         }
@@ -474,7 +543,6 @@ public class CTKMGUI extends JPanel {
             } else {
                 maSPorHD = cboxMaHD.getSelectedItem().toString();
             }
-			System.out.println("haha"+ loaiCTKM + "hihi" + maSPorHD);
             if (maSPorHD.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Chưa chọn mã SP/HD", "Lỗi", JOptionPane.WARNING_MESSAGE);
                 return;
@@ -555,35 +623,41 @@ public class CTKMGUI extends JPanel {
     
     
     
-    public void nhapExcel() {
-//      JFileChooser fileChooser = new JFileChooser();
-//      FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xlsx", "xls");
-//      fileChooser.setFileFilter(filter);
-//      int result = fileChooser.showOpenDialog(this);
-//      if (result == JFileChooser.APPROVE_OPTION) {
-//          File selectedFile = fileChooser.getSelectedFile();
-//          try {
-//              CTKMBUS ctkmBUS = new CTKMBUS();
-//              JOptionPane.showMessageDialog(this, "Nhập dữ liệu từ Excel thành công!", 
-//                      "Thành công", JOptionPane.INFORMATION_MESSAGE);
-//          } catch (Exception e) {
-//              JOptionPane.showMessageDialog(this, "Lỗi khi nhập Excel: " + e.getMessage(), 
-//                      "Lỗi", JOptionPane.ERROR_MESSAGE);
-//              e.printStackTrace();
-//          }
-//      }
-  }
+    public void nhapExcelCTKM() {
+        JFileChooser fileChooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xlsx", "xls");
+        fileChooser.setFileFilter(filter);
 
-  public void xuatExcel() {
-//      System.out.println("Exporting Excel for CTKMGUI...");
-//      try {
-//          ExcelExporter.exportJTableToExcel(tblCTKM);
-//      } catch (IOException e) {
-//          JOptionPane.showMessageDialog(this, "Lỗi khi xuất file Excel: " + e.getMessage(),
-//                  "Lỗi", JOptionPane.ERROR_MESSAGE);
-//          e.printStackTrace();
-//      }
-  }
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+
+            try {
+                int[] importResult = ctkmBUS.ImportExcel(selectedFile);
+                JOptionPane.showMessageDialog(this,
+                    "Nhập Excel thành công!\n" +
+                    "- Dòng thêm mới: " + importResult[0] + "\n" +
+                    "- Dòng cập nhật: " + importResult[1],
+                    "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                loadData();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi nhập Excel: " + e.getMessage(),
+                        "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+
+
+    public void xuatExcelCTKM() {
+        // Gọi phương thức xuất Excel trong lớp ExcelExporter
+		try {
+			ExcelExporter. exportJTableToExcel(tblCTKM);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}  // tblCTKM là bảng CTKM
+    }
 
 
 
