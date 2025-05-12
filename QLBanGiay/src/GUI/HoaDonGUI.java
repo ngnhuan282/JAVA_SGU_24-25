@@ -625,6 +625,8 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 				
 				ChiTietHDDTO chiTietHDDTO = listTemp.get(h);
 				
+				double giaBanDau = sanPhamBUS.getDonGia(maSP);
+				
 				
 				chiTietHDDTO.setMaHD(maHD);
 				chiTietHDDTO.setMaSP(maSP);
@@ -632,9 +634,10 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 				thanhTien = soLuong * donGia;
 				chiTietHDDTO.setDonGia(donGia);
 				chiTietHDDTO.setThanhTien(thanhTien);
+				chiTietHDDTO.setDuocGiam(giaBanDau*soLuong - thanhTien);
 				
 				chiTietHoaDonBUS.deleteCTHDByIndex(k);
-				chiTietHoaDonBUS.addCTHD(chiTietHDDTO.getMaHD(), chiTietHDDTO.getMaSP(), chiTietHDDTO.getSoLuong(), chiTietHDDTO.getDonGia(), chiTietHDDTO.getThanhTien());
+				chiTietHoaDonBUS.addCTHD(chiTietHDDTO.getMaHD(), chiTietHDDTO.getMaSP(), chiTietHDDTO.getSoLuong(), chiTietHDDTO.getDonGia(), chiTietHDDTO.getThanhTien(), chiTietHDDTO.getDuocGiam());
 //				chiTietHoaDonBUS.updateSoLuongSP(chiTietHDDTO.getMaSP(), chiTietHDDTO.getSoLuong() - soLuongTruocKhiUpdate.get(h));
 //				soLuongTruocKhiUpdate.set(h, chiTietHDDTO.getSoLuong());
 				
@@ -697,9 +700,13 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 			soLuongTruocKhiUpdate.add(0);
 			thanhTien = donGia * soLuong;
 			
+			double giaBanDau = sanPhamBUS.getDonGia(maSP);
+			
+			
+			
 //			chiTietHoaDonBUS.addCTHD(maHD, maSP, soLuong, donGia, thanhTien);
-			listTemp.add(new ChiTietHDDTO(maHD, maSP, soLuong, donGia, thanhTien));
-			chiTietHoaDonBUS.addCTHD(maHD, maSP, soLuong, donGia, thanhTien);
+			listTemp.add(new ChiTietHDDTO(maHD, maSP, soLuong, donGia, thanhTien, giaBanDau*soLuong - thanhTien));
+			chiTietHoaDonBUS.addCTHD(maHD, maSP, soLuong, donGia, thanhTien, giaBanDau*soLuong - thanhTien);
 			donGia = 0;
 			thanhTien = 0;
 			JOptionPane.showMessageDialog(this, "Thêm sản phẩm vào hóa đơn thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
@@ -722,6 +729,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 					tongTien += x.getThanhTien();
 				}
 				
+				double giaBanDauHD = tongTien;
 				try {
 					if(ctkmBUS.getCTKM_HD(ngayLap) != null) {
 						CTKMDTO ctkmDTO = ctkmBUS.getCTKM_HD(ngayLap);
@@ -733,14 +741,15 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
-				hoaDonBUS.addHoaDon(txtMaHD.getText(), txtMaKH.getText(), txtMaNV.getText(), ngayLap, Math.round(tongTien * 100.0)/100.0);
+				hoaDonBUS.addHoaDon(txtMaHD.getText(), txtMaKH.getText(), txtMaNV.getText(), ngayLap, Math.round(tongTien * 100.0)/100.0, Math.round(giaBanDauHD - tongTien));
 				for(ChiTietHDDTO x : listTemp) {
 					chiTietHoaDonBUS.updateSoLuongSP(x.getMaSP(), x.getSoLuong() - soLuongTruocKhiUpdate.get(i));
 					if(chiTietHoaDonBUS.checkDulicateMaSP(x.getMaSP(), x.getMaHD())) {
 						i++;
 						continue;
 					}
-					chiTietHoaDonBUS.addCTHD(x.getMaHD(), x.getMaSP(), x.getSoLuong(), x.getDonGia(), x.getThanhTien());
+					double giaBanDau = sanPhamBUS.getDonGia(x.getMaSP());
+					chiTietHoaDonBUS.addCTHD(x.getMaHD(), x.getMaSP(), x.getSoLuong(), x.getDonGia(), x.getThanhTien(), giaBanDau*x.getSoLuong() - x.getThanhTien());
 					chiTietHoaDonBUS.updateSoLuongSP(x.getMaSP(), x.getSoLuong());
 					i++;
 				}
@@ -766,10 +775,11 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 						i++;
 						continue;
 					}
-					chiTietHoaDonBUS.addCTHD(x.getMaHD(), x.getMaSP(), x.getSoLuong(), x.getDonGia(), x.getThanhTien());
+					double giaBanDau = sanPhamBUS.getDonGia(x.getMaSP());
+					chiTietHoaDonBUS.addCTHD(x.getMaHD(), x.getMaSP(), x.getSoLuong(), x.getDonGia(), x.getThanhTien(), giaBanDau*x.getSoLuong() - x.getThanhTien());
 					i++;
 				}
-				
+				double giaBanDauHD = tongTien;
 				try {
 					if(ctkmBUS.getCTKM_HD(ngayLap) != null) {
 						CTKMDTO ctkmDTO = ctkmBUS.getCTKM_HD(ngayLap);
@@ -782,7 +792,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 					e1.printStackTrace();
 				}
 				
-				hoaDonBUS.updateHoaDon(txtMaHD.getText(), txtMaKH.getText(), txtMaNV.getText(), ngayLap, Math.round(tongTien * 100.0)/100.0, selectedRow);
+				hoaDonBUS.updateHoaDon(txtMaHD.getText(), txtMaKH.getText(), txtMaNV.getText(), ngayLap, Math.round(tongTien * 100.0)/100.0, Math.round(giaBanDauHD - tongTien), selectedRow);
 				update = false;
 				soLuongTruocKhiUpdate.clear();
 				soLuongCanTang.clear();
@@ -843,7 +853,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 						 txtMaNV.setText(table.getValueAt(selectedRowHoaDon, 2).toString());
 					 txtMaSP.setText(table_1.getValueAt(selectedRowCTHD, 1).toString());
 					 txtSoLuong.setText(table_1.getValueAt(selectedRowCTHD, 2).toString());
-					 chiTietHDDTO = new ChiTietHDDTO(txtMaHD.getText(), txtMaSP.getText(), Integer.valueOf(txtSoLuong.getText()), Double.valueOf(table_1.getValueAt(selectedRowCTHD, 3).toString()), Double.valueOf(table_1.getValueAt(selectedRowCTHD, 4).toString()));
+					 chiTietHDDTO = new ChiTietHDDTO(txtMaHD.getText(), txtMaSP.getText(), Integer.valueOf(txtSoLuong.getText()), Double.valueOf(table_1.getValueAt(selectedRowCTHD, 3).toString()), Double.valueOf(table_1.getValueAt(selectedRowCTHD, 4).toString()), Double.valueOf(table_1.getValueAt(selectedRowCTHD, 5).toString()));
 					 maSPTruocKhiSua = txtMaSP.getText();
 					 soLuongKhiSua = Integer.valueOf(txtSoLuong.getText());
 					 for(ChiTietHDDTO x : listTemp) {
@@ -878,7 +888,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 	}
 	
 	private void openBillDetailTable() {
-		String[] columnNameBillDetail = { "Mã hóa đơn", "Mã sản phẩm", "Số lưọng", "Đơn giá", "Thành tiền" };
+		String[] columnNameBillDetail = { "Mã hóa đơn", "Mã sản phẩm", "Số lưọng", "Đơn giá", "Thành tiền", "Được giảm giá" };
 		DefaultTableModel model1 = new DefaultTableModel(columnNameBillDetail, 0);
 		
 		for(ChiTietHDDTO x : listTemp) {
@@ -887,7 +897,8 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 					x.getMaSP(),
 					x.getSoLuong(),
 					x.getDonGia(),
-					x.getThanhTien()
+					x.getThanhTien(),
+					x.getDuocGiam()
 			};
 			model1.addRow(row);
 		}
@@ -898,7 +909,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 	
 	private void openBillTable(ArrayList<HoaDonDTO> result) {
 		// Dữ liệu mẫu (ví dụ về sản phẩm)
-		String[] columnNamesBill = { "Mã hóa đơn", "Mã khách hàng", "Tên khách hàng", "Mã nhân viên", "Ngày lập", "Tổng tiền" };
+		String[] columnNamesBill = { "Mã hóa đơn", "Mã khách hàng", "Tên khách hàng", "Mã nhân viên", "Ngày lập", "Tổng tiền", "Được giảm giá" };
 
 		// Tạo DefaultTableModel với dữ liệu mẫu
 		DefaultTableModel model = new DefaultTableModel(columnNamesBill, 0);
@@ -908,7 +919,8 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 					x.getMaKH(),
 					x.getMaNV(),
 					x.getNgayLap(),
-					x.getTongTien()
+					x.getTongTien(),
+					x.getDuocGiam()
 			};
 			model.addRow(row);
 		}
@@ -919,11 +931,12 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 		table.setModel(model);
 		 Font font = new Font("Verdana", Font.PLAIN, 14);
 		table.setFont(font);
+		
 	}
 	
 	private void openBillTable() {
 		// Dữ liệu mẫu (ví dụ về sản phẩm)
-		String[] columnNamesBill = { "Mã hóa đơn", "Mã khách hàng", "Mã nhân viên", "Ngày lập", "Tổng tiền" };
+		String[] columnNamesBill = { "Mã hóa đơn", "Mã khách hàng", "Mã nhân viên", "Ngày lập", "Tổng tiền", "Được giảm giá" };
 
 		// Tạo DefaultTableModel với dữ liệu mẫu
 		DefaultTableModel model = new DefaultTableModel(columnNamesBill, 0);
@@ -933,7 +946,8 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 					x.getMaKH(),
 					x.getMaNV(),
 					x.getNgayLap(),
-					x.getTongTien()
+					x.getTongTien(),
+					x.getDuocGiam()
 			};
 			model.addRow(row);
 		}
@@ -944,6 +958,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 		table.setModel(model);
 		 Font font = new Font("Verdana", Font.PLAIN, 14);
 		table.setFont(font);
+		
 	}
 	
 	public void openAddBill() {
@@ -975,7 +990,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 		String maNV = (String) table.getValueAt(selectedRowHoaDon, 2);
 		for(ChiTietHDDTO x : chiTietHoaDonBUS.getListCTHD()) {
 			if(x.getMaHD().equals(maHD)) {
-				listTemp.add(new ChiTietHDDTO(x.getMaHD(), x.getMaSP(), x.getSoLuong(), x.getDonGia(), x.getThanhTien()));
+				listTemp.add(new ChiTietHDDTO(x.getMaHD(), x.getMaSP(), x.getSoLuong(), x.getDonGia(), x.getThanhTien(), x.getDuocGiam()));
 				soLuongTruocKhiUpdate.add(x.getSoLuong());
 			}
 		}

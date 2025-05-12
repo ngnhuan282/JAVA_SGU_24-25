@@ -6,17 +6,28 @@ public class ChiTietHDDTO {
 	private int soLuong;
 	private double donGia;
 	private double thanhTien;
+	private double duocGiam;
 	
 	public ChiTietHDDTO() {
 	}
 
-	public ChiTietHDDTO(String maHD, String maSP, int soLuong, double donGia, double thanhTien) {
+	public ChiTietHDDTO(String maHD, String maSP, int soLuong, double donGia, double thanhTien, double duocGiam) {
 		this.maHD = maHD;
 		this.maSP = maSP;
 		this.soLuong = soLuong;
 		this.donGia = donGia;
 		this.thanhTien = thanhTien;
+		this.duocGiam = duocGiam;
 	}
+	
+	public double getDuocGiam() {
+		return duocGiam;
+	}
+
+	public void setDuocGiam(double duocGiam) {
+		this.duocGiam = duocGiam;
+	}
+
 
 	public String getMaHD() {
 		return maHD;
@@ -64,7 +75,7 @@ public class ChiTietHDDTO {
 	    if (obj == null || getClass() != obj.getClass()) return false; 
 	    ChiTietHDDTO other = (ChiTietHDDTO) obj; 
 
-	    return this.maHD.equals(other.maHD) && this.maSP.equals(other.maSP) && this.soLuong == other.soLuong && this.donGia == other.donGia && this.thanhTien == other.thanhTien;
+	    return this.maHD.equals(other.maHD) && this.maSP.equals(other.maSP) && this.soLuong == other.soLuong && this.donGia == other.donGia && this.thanhTien == other.thanhTien && this.duocGiam == other.duocGiam;
 	}
 
 	@Override

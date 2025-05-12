@@ -158,4 +158,13 @@ public class SanPhamBUS {
         docDSSP(); // Cập nhật DSSP
         return result;
     }
+    
+    public double getDonGia(String maSP) {
+    	for(SanPhamDTO x : dssp) {
+    		if(x.getMaSP().equals(maSP))
+    			return x.getDonGia();
+    	}
+    	
+    	return 0;
+    }
 }

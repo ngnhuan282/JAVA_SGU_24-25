@@ -60,7 +60,6 @@ public class CTKMDAO {
 			Date ngayKT = rs.getDate("NgayKT");
 			String tenCTKM =rs.getString("TenCTKM");
 			float phanTramGiamGia = rs.getFloat("PhanTramGiamGia");
-			
 			return new CTKMDTO(maCTKM, ngayBD, ngayKT,tenCTKM, phanTramGiamGia);
 		}
 		
