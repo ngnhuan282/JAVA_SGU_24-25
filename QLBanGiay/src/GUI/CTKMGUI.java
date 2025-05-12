@@ -652,7 +652,7 @@ public class CTKMGUI extends JPanel {
     public void xuatExcelCTKM() {
         // Gọi phương thức xuất Excel trong lớp ExcelExporter
 		try {
-			ExcelExporter. exportJTableToExcel(tblCTKM);
+			ExcelReporter. exportJTableToExcel(tblCTKM);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -126,7 +126,7 @@ public class KhachHangGUI extends JPanel implements ActionListener {
         
         Box horizontalBox = Box.createHorizontalBox();
         horizontalBox.setBorder(UIManager.getBorder("Button.border"));
-        horizontalBox.setBounds(0, 0, 512, 111);
+        horizontalBox.setBounds(0, 0, 532, 111);
         pLeftHeader.add(horizontalBox);
 
         JButton btnThem = new JButton("Thêm");
@@ -140,7 +140,7 @@ public class KhachHangGUI extends JPanel implements ActionListener {
         btnThem.setFont(new Font("Arial", Font.PLAIN, 15));
         btnThem.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnThem.setHorizontalTextPosition(SwingConstants.CENTER);
-        btnThem.setPreferredSize(new Dimension(120, 140));
+        btnThem.setPreferredSize(new Dimension(100, 140));
 
         JButton btnSua = new JButton("Sửa");
         horizontalBox.add(btnSua);
@@ -149,7 +149,7 @@ public class KhachHangGUI extends JPanel implements ActionListener {
         btnSua.addActionListener(this);
         btnSua.setBorderPainted(false);
         btnSua.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnSua.setPreferredSize(new Dimension(120, 140));
+        btnSua.setPreferredSize(new Dimension(100, 140));
         btnSua.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/edit48.png")));
         btnSua.setHorizontalTextPosition(SwingConstants.CENTER);
         btnSua.setFont(new Font("Arial", Font.PLAIN, 15));
@@ -162,7 +162,7 @@ public class KhachHangGUI extends JPanel implements ActionListener {
         btnXoa.addActionListener(this);
         btnXoa.setBorderPainted(false);
         btnXoa.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnXoa.setPreferredSize(new Dimension(120, 140));
+        btnXoa.setPreferredSize(new Dimension(100, 140));
         btnXoa.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/remove48.png")));
         btnXoa.setHorizontalTextPosition(SwingConstants.CENTER);
         btnXoa.setFont(new Font("Arial", Font.PLAIN, 15));
@@ -173,7 +173,7 @@ public class KhachHangGUI extends JPanel implements ActionListener {
         btnXuatExcel.setActionCommand("Xuất Excel");
         btnXuatExcel.addActionListener(this);
         btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnXuatExcel.setPreferredSize(new Dimension(120, 140));
+        btnXuatExcel.setPreferredSize(new Dimension(100, 140));
         btnXuatExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/excel48.png")));
         btnXuatExcel.setHorizontalTextPosition(SwingConstants.CENTER);
         btnXuatExcel.setFont(new Font("Arial", Font.PLAIN, 15));
@@ -185,7 +185,7 @@ public class KhachHangGUI extends JPanel implements ActionListener {
         btnNhapExcel.setActionCommand("Nhập Excel");
         btnNhapExcel.addActionListener(this);
         btnNhapExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnNhapExcel.setPreferredSize(new Dimension(120, 140));
+        btnNhapExcel.setPreferredSize(new Dimension(100, 140));
         btnNhapExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/xuatexcel48.png")));
         btnNhapExcel.setHorizontalTextPosition(SwingConstants.CENTER);
         btnNhapExcel.setFont(new Font("Arial", Font.PLAIN, 15));
@@ -193,14 +193,14 @@ public class KhachHangGUI extends JPanel implements ActionListener {
         btnNhapExcel.setBackground(Color.WHITE);
 		
         txtSearch = new JTextField();
-        txtSearch.setBounds(700, 30, 237, 27);
+        txtSearch.setBounds(658, 32, 290, 27);
         pHeaderMain.add(txtSearch);
         txtSearch.setColumns(10);
         
-        String[] keySearch = {"Mã khách hàng", "Họ tên", "SĐT"};
+        String[] keySearch = {"Mã KH", "Họ tên", "SĐT"};
         JComboBox<String> cboxSearch = new JComboBox<String>(keySearch);
         cboxSearch.setFont(new Font("Arial", Font.PLAIN, 14));
-        cboxSearch.setBounds(524, 30, 150, 28);
+        cboxSearch.setBounds(569, 31, 79, 28);
         cboxSearch.setBackground(Color.WHITE);
         cboxSearch.setForeground(Color.BLACK);
         cboxSearch.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
@@ -216,12 +216,12 @@ public class KhachHangGUI extends JPanel implements ActionListener {
         	btnLamMoi.setVisible(false);
         	fillTableWithSampleData();
         });
-        btnLamMoi.setVisible(false);
+        btnLamMoi.setVisible(true);
         pHeaderMain.add(btnLamMoi);
         
         JButton btnSearch = new JButton("");
         btnSearch.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/search30.png")));
-        btnSearch.setBounds(960, 22, 63, 39);
+        btnSearch.setBounds(958, 29, 66, 30);
         btnSearch.addActionListener(e -> {
         	String key = cboxSearch.getSelectedItem().toString();
         	String keyword = txtSearch.getText();
@@ -630,53 +630,52 @@ public class KhachHangGUI extends JPanel implements ActionListener {
 	}
 	
 	public void nhapExcel() {
-	    JFileChooser fileChooser = new JFileChooser();
-	    FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xlsx", "xls");
-	    fileChooser.setFileFilter(filter);
-	    int result = fileChooser.showOpenDialog(this);
-	    if (result == JFileChooser.APPROVE_OPTION) {
-	        File selectedFile = fileChooser.getSelectedFile();
-	        
-	        int confirm = JOptionPane.showConfirmDialog(
-	            this,
-	            "Bạn có muốn nạp dữ liệu mới từ file Excel này không?\nDữ liệu hiện có sẽ được kiểm tra và cập nhật nếu cần.",
-	            "Xác nhận nhập Excel",
-	            JOptionPane.YES_NO_OPTION,
-	            JOptionPane.QUESTION_MESSAGE
-	        );
-	        
-	        if (confirm == JOptionPane.YES_OPTION) {
-	            try {
-	                KhachHangBUS khBUS = new KhachHangBUS();
-	                int[] importResult = khBUS.ImportExcel(selectedFile);
-	                int addedRows = importResult[0];
-	                int updatedRows = importResult[1];
-	                JOptionPane.showMessageDialog(
-	                    this,
-	                    "Nhập dữ liệu từ Excel thành công!\n" +
-	                    " - Số dòng được thêm mới: " + addedRows + "\n" +
-	                    " - Số dòng được cập nhật: " + updatedRows,
-	                    "Thành công",
-	                    JOptionPane.INFORMATION_MESSAGE
-	                );
-	                fillTableWithSampleData();
-	            } catch (Exception e) {
-	                JOptionPane.showMessageDialog(
-	                    this,
-	                    "Lỗi khi nhập Excel: " + e.getMessage(),
-	                    "Lỗi",
-	                    JOptionPane.ERROR_MESSAGE
-	                );
-	                e.printStackTrace();
-	            }
-	        } else {
-	            JOptionPane.showMessageDialog(
-	                this,
-	                "Đã hủy nhập dữ liệu từ Excel.",
-	                "Thông báo",
-	                JOptionPane.INFORMATION_MESSAGE
-	            );
-	        }
-	    }
+        JFrame jf = new JFrame();
+        File selectedFile = ExcelReporter.selectExcelFileForImport(jf);
+
+        if (selectedFile == null) {
+            return; // Người dùng hủy hoặc file không hợp lệ
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(
+            this,
+            "Bạn có muốn nạp dữ liệu mới từ file Excel này không?\nDữ liệu hiện có sẽ được kiểm tra và cập nhật nếu cần.",
+            "Xác nhận nhập Excel",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                KhachHangBUS khBUS = new KhachHangBUS();
+                int[] importResult = khBUS.ImportExcel(selectedFile);
+                int addedRows = importResult[0];
+                int updatedRows = importResult[1];
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Nhập dữ liệu từ Excel thành công!\n" +
+                    " - Số dòng được thêm mới: " + addedRows + "\n" +
+                    " - Số dòng được cập nhật: " + updatedRows,
+                    "Thành công",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+                fillTableWithSampleData();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Lỗi khi nhập Excel: " + e.getMessage(),
+                    "Lỗi",
+                    JOptionPane.ERROR_MESSAGE
+                );
+                e.printStackTrace();
+            }
+        } else {
+            JOptionPane.showMessageDialog(
+                this,
+                "Đã hủy nhập dữ liệu từ Excel.",
+                "Thông báo",
+                JOptionPane.INFORMATION_MESSAGE
+            );
+        }
 	}
 }

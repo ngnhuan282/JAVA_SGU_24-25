@@ -532,15 +532,14 @@ public class NhaCungCapGUI extends JPanel implements ActionListener{
         }
 	}
 	
-	public void nhapExcel() {
-	    JFileChooser fileChooser = new JFileChooser();
-	    FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xlsx", "xls");
-	    fileChooser.setFileFilter(filter);
-	    int result = fileChooser.showOpenDialog(this);
-	    if (result == JFileChooser.APPROVE_OPTION) {
-	        File selectedFile = fileChooser.getSelectedFile();
-	        
-	        // Hiển thị hộp thoại xác nhận
+	 public void nhapExcel() {
+	        JFrame jf = new JFrame();
+	        File selectedFile = ExcelReporter.selectExcelFileForImport(jf);
+
+	        if (selectedFile == null) {
+	            return; // Người dùng hủy hoặc file không hợp lệ
+	        }
+
 	        int confirm = JOptionPane.showConfirmDialog(
 	            this,
 	            "Bạn có muốn nạp dữ liệu mới từ file Excel này không?\nDữ liệu hiện có sẽ được kiểm tra và cập nhật nếu cần.",
@@ -548,7 +547,7 @@ public class NhaCungCapGUI extends JPanel implements ActionListener{
 	            JOptionPane.YES_NO_OPTION,
 	            JOptionPane.QUESTION_MESSAGE
 	        );
-	        
+
 	        if (confirm == JOptionPane.YES_OPTION) {
 	            try {
 	                NhaCungCapBUS nccBUS = new NhaCungCapBUS();
@@ -563,7 +562,6 @@ public class NhaCungCapGUI extends JPanel implements ActionListener{
 	                    "Thành công",
 	                    JOptionPane.INFORMATION_MESSAGE
 	                );
-	                // Cập nhật lại bảng sau khi nhập
 	                nccBUS.updateTable(model);
 	            } catch (Exception e) {
 	                JOptionPane.showMessageDialog(
@@ -582,6 +580,5 @@ public class NhaCungCapGUI extends JPanel implements ActionListener{
 	                JOptionPane.INFORMATION_MESSAGE
 	            );
 	        }
-	    }
-	}
+	 }
 }
