@@ -199,7 +199,7 @@ public class KhachHangGUI extends JPanel implements ActionListener {
         pHeaderMain.add(txtSearch);
         txtSearch.setColumns(10);
         
-        String[] keySearch = {"Mã KH", "Họ tên", "SĐT"};
+        String[] keySearch = {"Mã khách hàng", "Họ tên", "SĐT"};
         JComboBox<String> cboxSearch = new JComboBox<String>(keySearch);
         cboxSearch.setFont(new Font("Arial", Font.PLAIN, 14));
         cboxSearch.setBounds(569, 31, 79, 28);
@@ -218,7 +218,7 @@ public class KhachHangGUI extends JPanel implements ActionListener {
         	btnLamMoi.setVisible(false);
         	fillTableWithSampleData();
         });
-        btnLamMoi.setVisible(true);
+        btnLamMoi.setVisible(false);
         pHeaderMain.add(btnLamMoi);
         
         JButton btnSearch = new JButton("");
