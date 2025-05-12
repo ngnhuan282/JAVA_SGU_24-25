@@ -168,30 +168,32 @@ public class KhachHangGUI extends JPanel implements ActionListener {
         btnXoa.setFont(new Font("Arial", Font.PLAIN, 15));
         btnXoa.setBackground(Color.WHITE);
 
-        JButton btnXuatExcel = new JButton("Xuất Excel");
-        horizontalBox.add(btnXuatExcel);
-        btnXuatExcel.setActionCommand("Xuất Excel");
-        btnXuatExcel.addActionListener(this);
-        btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnXuatExcel.setPreferredSize(new Dimension(100, 140));
-        btnXuatExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/excel48.png")));
-        btnXuatExcel.setHorizontalTextPosition(SwingConstants.CENTER);
-        btnXuatExcel.setFont(new Font("Arial", Font.PLAIN, 15));
-        btnXuatExcel.setBorderPainted(false);
-        btnXuatExcel.setBackground(Color.WHITE);
-
         JButton btnNhapExcel = new JButton("Nhập Excel");
         horizontalBox.add(btnNhapExcel);
         btnNhapExcel.setActionCommand("Nhập Excel");
         btnNhapExcel.addActionListener(this);
         btnNhapExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnNhapExcel.setPreferredSize(new Dimension(100, 140));
-        btnNhapExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/xuatexcel48.png")));
+        btnNhapExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/excel48.png")));
         btnNhapExcel.setHorizontalTextPosition(SwingConstants.CENTER);
         btnNhapExcel.setFont(new Font("Arial", Font.PLAIN, 15));
         btnNhapExcel.setBorderPainted(false);
         btnNhapExcel.setBackground(Color.WHITE);
 		
+        
+        JButton btnXuatExcel = new JButton("Xuất Excel");
+        horizontalBox.add(btnXuatExcel);
+        btnXuatExcel.setActionCommand("Xuất Excel");
+        btnXuatExcel.addActionListener(this);
+        btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnXuatExcel.setPreferredSize(new Dimension(100, 140));
+        btnXuatExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/xuatexcel48.png")));
+        btnXuatExcel.setHorizontalTextPosition(SwingConstants.CENTER);
+        btnXuatExcel.setFont(new Font("Arial", Font.PLAIN, 15));
+        btnXuatExcel.setBorderPainted(false);
+        btnXuatExcel.setBackground(Color.WHITE);
+
+       
         txtSearch = new JTextField();
         txtSearch.setBounds(658, 32, 290, 27);
         pHeaderMain.add(txtSearch);
