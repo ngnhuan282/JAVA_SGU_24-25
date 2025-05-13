@@ -443,7 +443,7 @@ public class SanPhamGUI extends JPanel implements ActionListener {
     public void toggleEditMode() 
     {
         isEditMode = !isEditMode;
-//        txtMaSP.setEditable(isEditMode);
+        txtMaSP.setEditable(isEditMode);
         txtTenSP.setEditable(isEditMode);
         txtDonGia.setEditable(isEditMode);
         txtSoLuong.setEditable(isEditMode);
