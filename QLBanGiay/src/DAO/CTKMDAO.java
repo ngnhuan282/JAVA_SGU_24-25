@@ -1,13 +1,23 @@
 package DAO;
 
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.mysql.cj.xdevapi.Statement;
 
@@ -171,6 +181,115 @@ public class CTKMDAO {
 	    }
 	    return result;
 	}
+	public int[] ImportExcel(File file) {
+	    int addedRows = 0;
+	    int updatedRows = 0;
+
+	    try {
+	        FileInputStream in = new FileInputStream(file);
+	        XSSFWorkbook workbook = new XSSFWorkbook(in);
+	        XSSFSheet sheet = workbook.getSheetAt(0);
+	        Row row;
+
+	        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+	        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+	            row = sheet.getRow(i);
+	            if (row == null) continue;
+
+	            String maCTKM = row.getCell(0).getStringCellValue().trim();  // Sửa MaKM thành MaCTKM
+	            String tenKM = row.getCell(1).getStringCellValue().trim();
+
+	            Cell cellNgayBD = row.getCell(2);
+	            Cell cellNgayKT = row.getCell(3);
+
+	            java.sql.Date ngayBD = null;
+	            java.sql.Date ngayKT = null;
+	            
+
+	            if (cellNgayBD != null) {
+	                if (cellNgayBD.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(cellNgayBD)) {
+	                    ngayBD = new java.sql.Date(cellNgayBD.getDateCellValue().getTime());
+	                } else if (cellNgayBD.getCellType() == CellType.STRING) {
+	                    java.util.Date date = sdf.parse(cellNgayBD.getStringCellValue().trim());
+	                    ngayBD = new java.sql.Date(date.getTime());
+	                }
+	            }
+
+	            if (cellNgayKT != null) {
+	                if (cellNgayKT.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(cellNgayKT)) {
+	                    ngayKT = new java.sql.Date(cellNgayKT.getDateCellValue().getTime());
+	                } else if (cellNgayKT.getCellType() == CellType.STRING) {
+	                    java.util.Date date = sdf.parse(cellNgayKT.getStringCellValue().trim());
+	                    ngayKT = new java.sql.Date(date.getTime());
+	                }
+	            }
+
+	            String loaiKM = row.getCell(4).getStringCellValue().trim();
+	            String maSporHD = row.getCell(5).getStringCellValue().trim();
+	            
+	            // Lấy PhanTramGiamGia từ ô Excel
+	            double phanTramGiamGia = getPhanTramGiamGia(row.getCell(6));
+
+	            String ctkm = loaiKM.equalsIgnoreCase("SP") ? "ctkm_sp" : "ctkm_hd";
+	            String maField = loaiKM.equalsIgnoreCase("SP") ? "MaSP" : "MaHD";
+
+	            // Kiểm tra tồn tại
+	            String sqlCheck = "SELECT * FROM " + ctkm + " WHERE MaCTKM = '" + maCTKM + "'";  
+	            ResultSet rs = connection.executeQuery(sqlCheck);
+
+	            if (!rs.next()) {
+	                // Thêm mới (bao gồm PhanTramGiamGia trong bảng ctkm)
+	                String sqlInsert = "INSERT INTO " + ctkm + " (MaCTKM, TenCTKM,NgayBD,NgayKT, " + maField + ") VALUES (";
+	                sqlInsert += "'" + maCTKM + "', ";  
+	                sqlInsert += "'" + new java.sql.Date(ngayBD.getTime()) + "', ";
+	                sqlInsert += "'" + new java.sql.Date(ngayKT.getTime()) + "', ";
+	                sqlInsert += "'" + tenKM + "', ";
+	                sqlInsert += "'" + phanTramGiamGia + "', ";
+	                sqlInsert += "'" + maSporHD + "')";
+	                connection.executeUpdate(sqlInsert);
+	                addedRows++;
+	            } else {
+	                // Cập nhật (bao gồm PhanTramGiamGia trong bảng ctkm)
+	                String sqlUpdate = "UPDATE " + ctkm + " SET ";      
+	                sqlUpdate += "NgayBD = '" + new java.sql.Date(ngayBD.getTime()) + "', ";  
+	                sqlUpdate += "NgayKT = '" + new java.sql.Date(ngayKT.getTime()) + "', ";
+	                sqlUpdate += "TenCTKM = '" + tenKM + "', ";
+	                sqlUpdate += "PhanTramGiamGia = " + phanTramGiamGia + ", "; // Thêm PhanTramGiamGia vào câu lệnh UPDATE
+	                sqlUpdate += maField + " = '" + maSporHD + "' ";  
+	                sqlUpdate += "WHERE MaCTKM = '" + maCTKM + "'";  
+	                connection.executeUpdate(sqlUpdate);
+	                updatedRows++;
+	            }
+	        }
+
+	        workbook.close();
+	        in.close();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        throw new RuntimeException("Lỗi khi nhập Excel CTKM: " + e.getMessage());
+	    }
+
+	    return new int[]{addedRows, updatedRows};
+	}
+
+	public double getPhanTramGiamGia(Cell cell) {
+	    double phanTramGiamGia = 0.0;
+	    
+	    if (cell.getCellType() == CellType.NUMERIC) {
+	        phanTramGiamGia = cell.getNumericCellValue(); // Nếu là kiểu số, lấy giá trị số
+	    } else if (cell.getCellType() == CellType.STRING) {
+	        try {
+	            phanTramGiamGia = Double.parseDouble(cell.getStringCellValue()); // Nếu là chuỗi, cố gắng chuyển thành double
+	        } catch (NumberFormatException e) {
+	            System.out.println("Lỗi chuyển đổi chuỗi thành số: " + e.getMessage());
+	        }
+	    }
+	    
+	    return phanTramGiamGia;
+	}
+
+
 
 
 

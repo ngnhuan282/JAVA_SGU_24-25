@@ -44,6 +44,7 @@ import javax.swing.table.TableRowSorter;
 import com.toedter.calendar.JDateChooser; // Thư viện JDateChooser
 
 import BUS.CTKMBUS;
+import BUS.NhanVienBUS;
 import DTO.CTKMDTO;
 import DTO.SanPhamDTO;
 
@@ -605,22 +606,51 @@ public class CTKMGUI extends JPanel {
         JFileChooser fileChooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xlsx", "xls");
         fileChooser.setFileFilter(filter);
-
         int result = fileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-
-            try {
-                int[] importResult = ctkmBUS.ImportExcel(selectedFile);
-                JOptionPane.showMessageDialog(this,
-                    "Nhập Excel thành công!\n" +
-                    "- Dòng thêm mới: " + importResult[0] + "\n" +
-                    "- Dòng cập nhật: " + importResult[1],
-                    "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-                loadData();
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Lỗi khi nhập Excel: " + e.getMessage(),
-                        "Lỗi", JOptionPane.ERROR_MESSAGE);
+            
+            // Hiển thị hộp thoại xác nhận
+            int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Bạn có muốn nạp dữ liệu mới từ file Excel này không?\nDữ liệu hiện có sẽ được kiểm tra và cập nhật nếu cần.",
+                "Xác nhận nhập Excel",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+            );
+            
+            if (confirm == JOptionPane.YES_OPTION) {
+                try {
+                    CTKMBUS nvBUS = new CTKMBUS();
+                    int[] importResult = nvBUS.ImportExcel(selectedFile);
+                    int addedRows = importResult[0];
+                    int updatedRows = importResult[1];
+                    JOptionPane.showMessageDialog(
+                        this,
+                        "Nhập dữ liệu từ Excel thành công!\n" +
+                        " - Số dòng được thêm mới: " + addedRows + "\n" +
+                        " - Số dòng được cập nhật: " + updatedRows,
+                        "Thành công",
+                        JOptionPane.INFORMATION_MESSAGE
+                    );
+                    // Cập nhật lại bảng sau khi nhập
+                    loadData();;
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(
+                        this,
+                        "Lỗi khi nhập Excel: " + e.getMessage(),
+                        "Lỗi",
+                        JOptionPane.ERROR_MESSAGE
+                    );
+                    e.printStackTrace();
+                }
+            } else {
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Đã hủy nhập dữ liệu từ Excel.",
+                    "Thông báo",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
             }
         }
     }
@@ -630,7 +660,7 @@ public class CTKMGUI extends JPanel {
     public void xuatExcelCTKM() {
         // Gọi phương thức xuất Excel trong lớp ExcelExporter
 		try {
-			ExcelReporter. exportJTableToExcel(tblCTKM);
+			ExcelReporter.exportJTableToExcel(tblCTKM);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
