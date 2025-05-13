@@ -369,6 +369,10 @@ public class CTKMGUI extends JPanel {
                     JOptionPane.showMessageDialog(null, "Vui lòng nhập ít nhất một tiêu chí tìm kiếm.");
                     return;
                 }
+                if(!keyword.isEmpty() && (!maCTKM.isEmpty() || !maSPorHD.isEmpty())   ) {
+                	 JOptionPane.showMessageDialog(null, "Vui lòng chỉ nhập một tiêu chí tìm kiếm , cơ bản hoặc nâng cao.");
+                     return;
+                }
 
                 // Xóa bảng cũ và hiển thị kết quả mới
                 tableModel.setRowCount(0);
@@ -397,12 +401,9 @@ public class CTKMGUI extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getActionCommand().equals("Reload")) {
-                    loadData();  // Gọi hàm loadData khi nhấn nút "Làm mới"
-                    txtSearch.setText("");
-                    txtTKMaCTKM.setText("");
-                    txtSearch.setText("");
-                    txtTKMaSPorHDCTKM.setText("");
-                    
+                    loadData(); 
+                    toggleEditInTheEnd();
+                    clearField();
                 }
             }
         });

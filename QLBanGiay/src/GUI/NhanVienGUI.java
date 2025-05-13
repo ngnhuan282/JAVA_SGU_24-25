@@ -52,10 +52,10 @@ public class NhanVienGUI extends JPanel implements ActionListener {
         tblDSNV = new JTable(model);
 
         initComponents();
-        fillTableWithSampleData();
+        loadData();
     }
 
-    private void fillTableWithSampleData() {
+    private void loadData() {
         model.setRowCount(0);
         ArrayList<NhanVienDTO> dsNV = nvBUS.getListNhanVien();
         for (NhanVienDTO nv : dsNV) {
@@ -286,6 +286,18 @@ public class NhanVienGUI extends JPanel implements ActionListener {
         pMain.add(scrollPane);
 
         tblDSNV.getSelectionModel().addListSelectionListener(e -> getInforFromTable());
+        
+        btnLamMoi.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getActionCommand().equals("Reload")) {
+                    loadData();
+                    txtSearch.setText("");
+                    toggleEditInTheEnd();
+                    clearField();
+                }
+            }
+        });
     }
 
     public void toggleEditMode() {
@@ -524,7 +536,7 @@ public class NhanVienGUI extends JPanel implements ActionListener {
                     "Thành công",
                     JOptionPane.INFORMATION_MESSAGE
                 );
-                fillTableWithSampleData();
+                loadData();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(
                     this,
