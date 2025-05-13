@@ -29,17 +29,7 @@ public class SanPhamBUS {
         return dssp;
     }
 
-    public String validateSanPham(SanPhamDTO sp) 
-    {
-        if (sp.getMaSP().isEmpty()) return "Vui lòng nhập mã sản phẩm";
-        if (sp.getTenSP().isEmpty()) return "Vui lòng nhập tên sản phẩm";
-        if (sp.getMaLoaiSP() <= 0) return "Vui lòng nhập mã loại sản phẩm";
-        if (sp.getDonGia() <= 0) return "Đơn giá phải lớn hơn 0";
-        if (sp.getSoLuong() <= 0) return "Số lượng phải lớn hơn 0";
-        if (sp.getDonViTinh().isEmpty()) return "Vui lòng nhập đơn vị tính";
-        if (!sp.getMaSP().matches("SP\\d{3}")) return "Mã SP phải có dạng SPxxx";
-        return null;
-    }
+
 
     public boolean checkMaSP(String maSP) 
     {
@@ -150,11 +140,31 @@ public class SanPhamBUS {
     	}
     }
     
+    public String validateSanPham(SanPhamDTO sp) 
+    {
+        if (sp.getMaSP().isEmpty()) return "Vui lòng nhập mã sản phẩm";
+        if (sp.getTenSP().isEmpty()) return "Vui lòng nhập tên sản phẩm";
+        if (sp.getMaLoaiSP() <= 0) return "Vui lòng nhập mã loại sản phẩm";
+        if (sp.getDonGia() <= 0) return "Đơn giá phải lớn hơn 0";
+        if (sp.getSoLuong() <= 0) return "Số lượng phải lớn hơn 0";
+        if (sp.getDonViTinh().isEmpty()) return "Vui lòng nhập đơn vị tính";
+        if (!sp.getMaSP().matches("SP\\d{3}")) return "Mã SP phải có dạng SPxxx";
+        return null;
+    }
     public int[] ImportExcel(File file) 
     {
         SanPhamDAO spDAO = new SanPhamDAO();
         int[] result = spDAO.ImportExcel(file);
         docDSSP(); // Cập nhật DSSP
         return result;
+    }
+    
+    public double getDonGia(String maSP) {
+    	for(SanPhamDTO x : dssp) {
+    		if(x.getMaSP().equals(maSP))
+    			return x.getDonGia();
+    	}
+    	
+    	return 0;
     }
 }

@@ -427,8 +427,8 @@ public class SanPhamGUI extends JPanel implements ActionListener {
             txtMaSP.setText(tblDSSP.getValueAt(i, 0).toString());
             txtTenSP.setText(tblDSSP.getValueAt(i, 1).toString());
             cbLoaiSP.setSelectedItem(tblDSSP.getValueAt(i, 2).toString());
-            txtDonGia.setText(tblDSSP.getValueAt(i, 3).toString());
-            txtSoLuong.setText(tblDSSP.getValueAt(i, 4).toString());
+            txtSoLuong.setText(tblDSSP.getValueAt(i, 3).toString());
+            txtDonGia.setText(tblDSSP.getValueAt(i, 4).toString());
             txtDonViTinh.setText(tblDSSP.getValueAt(i, 5).toString());
             String mauSac = tblDSSP.getValueAt(i, 6).toString();
             if (mauSac.equals("Đen")) rbDen.setSelected(true);
@@ -443,7 +443,7 @@ public class SanPhamGUI extends JPanel implements ActionListener {
     public void toggleEditMode() 
     {
         isEditMode = !isEditMode;
-        txtMaSP.setEditable(isEditMode);
+//        txtMaSP.setEditable(isEditMode);
         txtTenSP.setEditable(isEditMode);
         txtDonGia.setEditable(isEditMode);
         txtSoLuong.setEditable(isEditMode);
@@ -600,12 +600,6 @@ public class SanPhamGUI extends JPanel implements ActionListener {
             return;
         }
         
-        if(spBUS.checkMaSP(maSP))
-        {
-        	JOptionPane.showMessageDialog(this, "Mã sản phẩm đã tồn tại !", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        	return;
-        }
-        
         try {
             double donGia = Double.parseDouble(donGiaStr);
             int soLuong = Integer.parseInt(soLuongStr);
@@ -616,8 +610,8 @@ public class SanPhamGUI extends JPanel implements ActionListener {
                 model.setValueAt(maSP, row, 0);
                 model.setValueAt(tenSP, row, 1);
                 model.setValueAt(tenLoaiSP, row, 2);
-                model.setValueAt(donGia, row, 3);
-                model.setValueAt(soLuong, row, 4);
+                model.setValueAt(soLuong, row, 3);
+                model.setValueAt(donGia, row, 4);
                 model.setValueAt(donViTinh, row, 5);
                 model.setValueAt(mauSac, row, 6);
                 model.setValueAt(kichThuoc, row, 7);
@@ -682,7 +676,7 @@ public class SanPhamGUI extends JPanel implements ActionListener {
     public void xuatExcel()
     {
     	try {
-            ExcelExporter.exportJTableToExcel(tblDSSP);
+            ExcelReporter.exportJTableToExcel(tblDSSP);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Lỗi khi xuất file Excel: " + e.getMessage(),
                     "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -691,54 +685,53 @@ public class SanPhamGUI extends JPanel implements ActionListener {
     }
     
     public void nhapExcel() {
-        JFileChooser fileChooser = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xlsx", "xls");
-        fileChooser.setFileFilter(filter);
-        int result = fileChooser.showOpenDialog(this);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            
-            // Hiển thị hộp thoại xác nhận
-            int confirm = JOptionPane.showConfirmDialog(
-                this,
-                "Bạn có muốn nạp dữ liệu mới từ file Excel này không?\nDữ liệu hiện có sẽ được kiểm tra và cập nhật nếu cần.",
-                "Xác nhận nhập Excel",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE
-            );
-            
-            if (confirm == JOptionPane.YES_OPTION) {
-                try {
-                    SanPhamBUS spBUS = new SanPhamBUS();
-                    int[] importResult = spBUS.ImportExcel(selectedFile);
-                    int addedRows = importResult[0];
-                    int updatedRows = importResult[1];
-                    JOptionPane.showMessageDialog(
-                        this,
-                        "Nhập dữ liệu từ Excel thành công!\n" +
-                        " - Số dòng được thêm mới: " + addedRows + "\n" +
-                        " - Số dòng được cập nhật: " + updatedRows,
-                        "Thành công",
-                        JOptionPane.INFORMATION_MESSAGE
-                    );
-                    loadDataToTable();
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(
-                        this,
-                        "Lỗi khi nhập Excel: " + e.getMessage(),
-                        "Lỗi",
-                        JOptionPane.ERROR_MESSAGE
-                    );
-                    e.printStackTrace();
-                }
-            } else {
+        JFrame jf = new JFrame();
+        File selectedFile = ExcelReporter.selectExcelFileForImport(jf);
+
+        if (selectedFile == null) {
+            return; // Người dùng hủy hoặc file không hợp lệ
+        }
+
+        // Hiển thị hộp thoại xác nhận
+        int confirm = JOptionPane.showConfirmDialog(
+            this,
+            "Bạn có muốn nạp dữ liệu mới từ file Excel này không?\nDữ liệu hiện có sẽ được kiểm tra và cập nhật nếu cần.",
+            "Xác nhận nhập Excel",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                SanPhamBUS spBUS = new SanPhamBUS();
+                int[] importResult = spBUS.ImportExcel(selectedFile);
+                int addedRows = importResult[0];
+                int updatedRows = importResult[1];
                 JOptionPane.showMessageDialog(
                     this,
-                    "Đã hủy nhập dữ liệu từ Excel.",
-                    "Thông báo",
+                    "Nhập dữ liệu từ Excel thành công!\n" +
+                    " - Số dòng được thêm mới: " + addedRows + "\n" +
+                    " - Số dòng được cập nhật: " + updatedRows,
+                    "Thành công",
                     JOptionPane.INFORMATION_MESSAGE
                 );
+                loadDataToTable();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Lỗi khi nhập Excel: " + e.getMessage(),
+                    "Lỗi",
+                    JOptionPane.ERROR_MESSAGE
+                );
+                e.printStackTrace();
             }
+        } else {
+            JOptionPane.showMessageDialog(
+                this,
+                "Đã hủy nhập dữ liệu từ Excel.",
+                "Thông báo",
+                JOptionPane.INFORMATION_MESSAGE
+            );
         }
     }
     

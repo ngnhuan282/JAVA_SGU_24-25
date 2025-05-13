@@ -23,8 +23,8 @@ public class ChiTietHoaDonBUS {
 		this.listCTHD = listCTHD;
 	}
 	
-	public void addCTHD(String maHD, String maSP, int soLuong, double donGia, double thanhTien) {
-		ChiTietHDDTO chiTietHDDTO = new ChiTietHDDTO(maHD, maSP, soLuong, donGia, thanhTien);
+	public void addCTHD(String maHD, String maSP, int soLuong, double donGia, double thanhTien, double giaDuocGiam) {
+		ChiTietHDDTO chiTietHDDTO = new ChiTietHDDTO(maHD, maSP, soLuong, donGia, thanhTien, giaDuocGiam);
 		listCTHD.add(chiTietHDDTO);
 		chiTietHoaDonDAO.addCTHD(chiTietHDDTO);
 	}

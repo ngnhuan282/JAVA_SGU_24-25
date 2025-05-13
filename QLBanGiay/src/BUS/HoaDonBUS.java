@@ -41,19 +41,20 @@ public class HoaDonBUS {
 		return false;
 	}
 	
-	public void addHoaDon(String maHD, String maKH, String maNV, Date ngayLap, double tongTien) {
-		HoaDonDTO hoaDon = new HoaDonDTO(maHD, maKH, maNV, ngayLap, tongTien);
+	public void addHoaDon(String maHD, String maKH, String maNV, Date ngayLap, double tongTien, double duocGiam) {
+		HoaDonDTO hoaDon = new HoaDonDTO(maHD, maKH, maNV, ngayLap, tongTien, duocGiam);
 		listHoaDon.add(hoaDon);
 		hoaDonDAO.addHoaDon(hoaDon);
 	}
 	
-	public void updateHoaDon(String maHD, String maKH, String maNV, Date ngayLap, double tongTien, int index) {
+	public void updateHoaDon(String maHD, String maKH, String maNV, Date ngayLap, double tongTien, double duocGiam, int index) {
 		HoaDonDTO hoaDon = listHoaDon.get(index);
 		hoaDon.setMaHD(maHD);
 		hoaDon.setMaKH(maKH);
 		hoaDon.setMaNV(maNV);
 		hoaDon.setNgayLap(ngayLap);
 		hoaDon.setTongTien(tongTien);
+		hoaDon.setDuocGiam(duocGiam);
 		hoaDonDAO.updateHoaDon(hoaDon);
 	}
 	

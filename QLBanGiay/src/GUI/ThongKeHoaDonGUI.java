@@ -122,7 +122,7 @@ public class ThongKeHoaDonGUI extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				try {
-					ExcelExporter.exportJTableToExcel(tableDateRange);
+					ExcelReporter.exportJTableToExcel(tableDateRange);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

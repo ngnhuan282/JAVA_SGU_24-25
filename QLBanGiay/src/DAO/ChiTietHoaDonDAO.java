@@ -25,7 +25,8 @@ public class ChiTietHoaDonDAO {
 			int soLuong = Integer.valueOf(rs.getString("SoLuong"));
 			Double donGia = Double.valueOf(rs.getString("DonGia"));
 			Double thanhTien = Double.valueOf(rs.getString("ThanhTien"));
-			ChiTietHDDTO chiTietHDDTO = new ChiTietHDDTO(maHD, maSP, soLuong, donGia, thanhTien);
+			Double duocGiam = Double.valueOf(rs.getString("SoTienDuocGiamGia"));
+			ChiTietHDDTO chiTietHDDTO = new ChiTietHDDTO(maHD, maSP, soLuong, donGia, thanhTien, duocGiam);
 			listCTHDDTO.add(chiTietHDDTO);
 		}
 		return listCTHDDTO;
@@ -33,8 +34,8 @@ public class ChiTietHoaDonDAO {
 	
 	public void addCTHD(ChiTietHDDTO x) {
 		connection.getConnection();
-		String sql = "INSERT INTO chitiethoadon(MaHD, MaSP, SoLuong, DonGia, ThanhTien)"
-				+ " VALUES('"+ x.getMaHD()+ "', '"+ x.getMaSP() +"', '"+ x.getSoLuong() +"', '"+ x.getDonGia() +"', '"+ x.getThanhTien() +"')";
+		String sql = "INSERT INTO chitiethoadon(MaHD, MaSP, SoLuong, DonGia, ThanhTien, SoTienDuocGiamGia)"
+				+ " VALUES('"+ x.getMaHD()+ "', '"+ x.getMaSP() +"', '"+ x.getSoLuong() +"', '"+ x.getDonGia() +"', '"+ x.getThanhTien() +"', '"+ x.getDuocGiam() +"')";
 		connection.executeUpdate(sql);
 		connection.disConnect();
 	}
@@ -46,6 +47,7 @@ public class ChiTietHoaDonDAO {
 				+ " SoLuong = '"+ x.getSoLuong() + "',"
 				+ " DonGia = '"+ x.getDonGia() +"',"
 				+ " ThanhTien = '"+ x.getThanhTien() +"'"
+				+ " SoTienDuocGiamGia = '"+ x.getDuocGiam() +"'"
 				+ " WHERE MaHD = '"+ x.getMaHD() +"'";
 		connection.executeUpdate(sql);
 		connection.disConnect();

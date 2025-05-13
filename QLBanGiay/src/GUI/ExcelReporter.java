@@ -3,6 +3,7 @@ package GUI;
 import java.awt.FileDialog;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -17,7 +18,39 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class ExcelExporter {
+public class ExcelReporter {
+
+    /**
+     * Hiển thị hộp thoại FileDialog để chọn file Excel (dùng cho nhập hoặc xuất).
+     *
+     * @param parentFrame JFrame cha để căn giữa hộp thoại
+     * @param title Tiêu đề của hộp thoại
+     * @param mode Chế độ của FileDialog (FileDialog.LOAD hoặc FileDialog.SAVE)
+     * @param defaultFileName Tên tệp mặc định
+     * @return File được chọn, hoặc null nếu người dùng hủy
+     */
+    private static File showFileDialog(JFrame parentFrame, String title, int mode, String defaultFileName) {
+        FileDialog fd = new FileDialog(parentFrame, title, mode);
+        fd.pack();
+        fd.setSize(800, 600);
+        fd.validate();
+        Rectangle rect = parentFrame.getContentPane().getBounds();
+        double width = fd.getBounds().getWidth();
+        double height = fd.getBounds().getHeight();
+        double x = rect.getCenterX() - (width / 2);
+        double y = rect.getCenterY() - (height / 2);
+        Point leftCorner = new Point();
+        leftCorner.setLocation(x, y);
+        fd.setLocation(leftCorner);
+        fd.setFile(defaultFileName);
+        fd.setVisible(true);
+
+        String filePath = fd.getDirectory() + fd.getFile();
+        if (filePath.equals("nullnull")) {
+            return null;
+        }
+        return new File(filePath);
+    }
 
     /**
      * Xuất dữ liệu từ JTable sang file Excel (.xlsx) với đường dẫn do người dùng chọn.
@@ -27,25 +60,13 @@ public class ExcelExporter {
      */
     public static void exportJTableToExcel(JTable table) throws IOException {
         JFrame jf = new JFrame();
-        FileDialog fd = new FileDialog(jf, "Chọn đường dẫn lưu file Excel", FileDialog.SAVE);
-        fd.pack();
-        fd.setSize(800, 600);
-        fd.validate();
-        Rectangle rect = jf.getContentPane().getBounds();
-        double width = fd.getBounds().getWidth();
-        double height = fd.getBounds().getHeight();
-        double x = rect.getCenterX() - (width / 2);
-        double y = rect.getCenterY() - (height / 2);
-        Point leftCorner = new Point();
-        leftCorner.setLocation(x, y);
-        fd.setLocation(leftCorner);
-        fd.setFile("export.xlsx"); // Tên tệp mặc định
-        fd.setVisible(true);
+        File selectedFile = showFileDialog(jf, "Chọn đường dẫn lưu file Excel", FileDialog.SAVE, "export.xlsx");
 
-        String filePath = fd.getDirectory() + fd.getFile();
-        if (filePath.equals("nullnull")) {
-            return;
+        if (selectedFile == null) {
+            return; // Người dùng hủy
         }
+
+        String filePath = selectedFile.getAbsolutePath();
         if (!filePath.toLowerCase().endsWith(".xlsx")) {
             filePath += ".xlsx";
         }
@@ -54,6 +75,7 @@ public class ExcelExporter {
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Sheet1");
 
+            // Tạo hàng tiêu đề
             Row headerRow = sheet.createRow(0);
             for (int i = 0; i < model.getColumnCount(); i++) {
                 Cell cell = headerRow.createCell(i);
@@ -86,5 +108,28 @@ public class ExcelExporter {
                     "Lỗi", JOptionPane.ERROR_MESSAGE);
             throw e;
         }
+    }
+
+    /**
+     * Hiển thị hộp thoại để chọn file Excel nhập (.xlsx hoặc .xls).
+     *
+     * @param parentFrame JFrame cha để căn giữa hộp thoại
+     * @return File được chọn, hoặc null nếu người dùng hủy hoặc file không hợp lệ
+     */
+    public static File selectExcelFileForImport(JFrame parentFrame) {
+        File selectedFile = showFileDialog(parentFrame, "Chọn file Excel để nhập", FileDialog.LOAD, "import.xlsx");
+
+        if (selectedFile == null) {
+            return null; // Người dùng hủy
+        }
+
+        String filePath = selectedFile.getAbsolutePath();
+        if (!filePath.toLowerCase().endsWith(".xlsx") && !filePath.toLowerCase().endsWith(".xls")) {
+            JOptionPane.showMessageDialog(null, "Vui lòng chọn file Excel (.xlsx hoặc .xls)!", 
+                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
+        return selectedFile;
     }
 }

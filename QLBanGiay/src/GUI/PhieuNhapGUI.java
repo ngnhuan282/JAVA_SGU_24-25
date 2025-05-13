@@ -1153,7 +1153,7 @@ public class PhieuNhapGUI extends JPanel  implements ActionListener{
 	  public void xuatExcel()
 	    {
 	    	try {
-	            ExcelExporter.exportJTableToExcel(tbPhieuNhap);
+	            ExcelReporter.exportJTableToExcel(tbPhieuNhap);
 	        } catch (IOException e) {
 	            JOptionPane.showMessageDialog(this, "Lỗi khi xuất file Excel: " + e.getMessage(),
 	                    "Lỗi", JOptionPane.ERROR_MESSAGE);

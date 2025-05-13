@@ -26,8 +26,9 @@ public class HoaDonDAO {
 			String maNV = rs.getString("MaNV");
 			Date ngayLap = Date.valueOf(rs.getString("NgayLap"));
 			Double tongTien = Double.valueOf(rs.getString("TongTien"));
+			Double duocGiam = Double.valueOf(rs.getString("SoTienDuocGiamGia"));
 			
-			HoaDonDTO hoaDon = new HoaDonDTO(maHD, maKH, maNV, ngayLap, tongTien);
+			HoaDonDTO hoaDon = new HoaDonDTO(maHD, maKH, maNV, ngayLap, tongTien, duocGiam);
 			listHoaDonDTO.add(hoaDon);
 			
 		}
@@ -37,8 +38,8 @@ public class HoaDonDAO {
 	}
 	
 	public void addHoaDon(HoaDonDTO x) {
-		String sql = "INSERT INTO hoadon (MaHD, MaKH, MaNV, NgayLap, TongTien)"
-				+ " VALUES ('"+ x.getMaHD() + "', '" + x.getMaKH() + "', '" + x.getMaNV() + "', '" + x.getNgayLap() + "', '" + x.getTongTien() + "')";
+		String sql = "INSERT INTO hoadon (MaHD, MaKH, MaNV, NgayLap, TongTien, SoTienDuocGiamGia)"
+				+ " VALUES ('"+ x.getMaHD() + "', '" + x.getMaKH() + "', '" + x.getMaNV() + "', '" + x.getNgayLap() + "', '" + x.getTongTien() + "', '"+ x.getDuocGiam() +"')";
 		connection.executeUpdate(sql);
 		connection.disConnect();
 	}
@@ -49,7 +50,8 @@ public class HoaDonDAO {
 				+ " MaKH = '"+ x.getMaKH() + "',"
 				+ " MaNV = '"+ x.getMaNV() + "',"
 				+ " NgayLap = '"+ x.getNgayLap() +"',"
-				+ " TongTien = '"+ x.getTongTien() +"'"
+				+ " TongTien = '"+ x.getTongTien() +"',"
+				+ " SoTienDuocGiamGia = '"+ x.getDuocGiam() +"'"
 				+ " WHERE MaHD = '"+ x.getMaHD() +"'";
 		connection.executeUpdate(sql);
 		connection.disConnect();
