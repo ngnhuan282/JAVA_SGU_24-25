@@ -116,19 +116,15 @@ public class CTKMBUS {
                 }
             }
 
-            if (!maCTKM.isEmpty() && !maSPorHD.isEmpty()) {
-                if (matchMaCTKM && matchMaSPorHD) {
-                    resultList.add(ctkm);
-                }
-            } else if (!maCTKM.isEmpty() || !maSPorHD.isEmpty()) {
-                if (matchMaCTKM || matchMaSPorHD) {
-                    resultList.add(ctkm);
-                }
+            // Chỉ thêm nếu ít nhất 1 trong 2 ô được nhập và có khớp
+            if ((!maCTKM.isEmpty() || !maSPorHD.isEmpty()) && (matchMaCTKM || matchMaSPorHD)) {
+                resultList.add(ctkm);
             }
         }
 
         return resultList;
     }
+
     
     public int[] ImportExcel(File file) throws Exception {
 	    ArrayList<CTKMDTO> importedList = new ArrayList<>();

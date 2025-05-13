@@ -68,17 +68,6 @@ public class CTKMDAO {
 		
 	}
 	
-
-	
-	
-		
-	
-	
-		
-	
-
-	
-	
 	public void addkhuyenMaiDAO(CTKMDTO x) {
 		String sql = "INSERT INTO ctkm(MaCTKM, NgayBD, NgayKT, TenCTKM)"
 				+ "VALUES('"+ x.getMaCTKM()+"', '"+ x.getNgayBD() +"', '"+ x.getNgayKT()+ "', '"+ x.getTenCTKM()+"')";

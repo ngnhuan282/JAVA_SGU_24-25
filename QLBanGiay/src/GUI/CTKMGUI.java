@@ -187,7 +187,7 @@ public class CTKMGUI extends JPanel {
 
         JButton btnSearch = new JButton("");
         btnSearch.setIcon(new ImageIcon(CTKMGUI.class.getResource("/image/search30.png")));
-        btnSearch.setBounds(958, 10, 66, 30);
+        btnSearch.setBounds(958, 30, 66, 30);
         btnSearch.setActionCommand("Tìm kiếm");
         btnSearch.addActionListener(this::actionPerformed);
         pHeaderMain.add(btnSearch);
@@ -198,24 +198,24 @@ public class CTKMGUI extends JPanel {
         pHeaderMain.add(lbTKMaCTKM);
 
         txtTKMaCTKM = new JTextField();
-        txtTKMaCTKM.setBounds(590, 50, 140, 28);
+        txtTKMaCTKM.setBounds(590, 50, 100, 28);
         pHeaderMain.add(txtTKMaCTKM);
+        
+        JLabel dieukienOR = new JLabel("hoặc");
+        dieukienOR.setFont(new Font("Verdana", Font.BOLD, 12));
+        dieukienOR.setBounds(700, 50, 100, 28);
+        pHeaderMain.add(dieukienOR);
+
         
         JLabel lbTKMaSPorHDCTKM = new JLabel("Mã SP/HD");
         lbTKMaSPorHDCTKM.setFont(new Font("Verdana", Font.BOLD, 12));
-        lbTKMaSPorHDCTKM.setBounds(730, 50, 100, 28);
+        lbTKMaSPorHDCTKM.setBounds(740, 50, 100, 28);
         pHeaderMain.add(lbTKMaSPorHDCTKM);
 
         txtTKMaSPorHDCTKM = new JTextField();
-        txtTKMaSPorHDCTKM.setBounds(800, 50, 140, 28);
+        txtTKMaSPorHDCTKM.setBounds(810, 50, 100, 28);
         pHeaderMain.add(txtTKMaSPorHDCTKM);
-        
-        JButton btnSearch2 = new JButton("");
-        btnSearch2.setIcon(new ImageIcon(CTKMGUI.class.getResource("/image/search30.png")));
-        btnSearch2.setBounds(958, 50, 66, 30);
-        btnSearch2.setActionCommand("Tìm kiếm");
-        btnSearch2.addActionListener(this::actionPerformed);
-        pHeaderMain.add(btnSearch2);
+      
         
         JButton btnLamMoi = new JButton("Làm mới");
         btnLamMoi.setBackground(Color.WHITE);
@@ -351,49 +351,25 @@ public class CTKMGUI extends JPanel {
         
         btnSearch.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                // Lấy thông tin từ các ô tìm kiếm
                 String keyword = txtSearch.getText().trim();
                 String loaiSearch = (String) cboxSearch.getSelectedItem();
-                
-                // Kiểm tra từ khóa và loại tìm kiếm
-                if (keyword.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Vui lòng nhập từ khóa tìm kiếm.");
-                    return;
-                }
-
-                ArrayList<CTKMDTO> resultList = ctkmBUS.searchKhuyenMai(keyword, loaiSearch);
-
-                tableModel.setRowCount(0); // Xóa bảng cũ
-
-                for (CTKMDTO ctkm : resultList) {
-                    String loaiKM = ctkmBUS.layLoaiKhuyenMai(ctkm.getMaCTKM());
-                    String maSPorHD = ctkmBUS.layMaSPorHD(ctkm.getMaCTKM());
-                    String phanTram = ctkmBUS.layPhanTram(ctkm.getMaCTKM());
-
-                    tableModel.addRow(new Object[] {
-                        ctkm.getMaCTKM(),
-                        ctkm.getTenCTKM(),
-                        new SimpleDateFormat("yyyy-MM-dd").format(ctkm.getNgayBD()),
-                        new SimpleDateFormat("yyyy-MM-dd").format(ctkm.getNgayKT()),
-                        loaiKM,
-                        maSPorHD,
-                        phanTram + "%"
-                    });
-                }
-            }
-        });
-        
-        btnSearch2.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
                 String maCTKM = txtTKMaCTKM.getText().trim();
                 String maSPorHD = txtTKMaSPorHDCTKM.getText().trim();
 
-                if (maCTKM.isEmpty() && maSPorHD.isEmpty()) {
+                ArrayList<CTKMDTO> resultList;
+
+                // Ưu tiên tìm kiếm nâng cao nếu người dùng nhập ít nhất 1 trong 2 ô
+                if (!maCTKM.isEmpty() || !maSPorHD.isEmpty()) {
+                    resultList = ctkmBUS.searchKhuyenMaiNangCao(maCTKM, maSPorHD);
+                } else if (!keyword.isEmpty()) {
+                    resultList = ctkmBUS.searchKhuyenMai(keyword, loaiSearch);
+                } else {
                     JOptionPane.showMessageDialog(null, "Vui lòng nhập ít nhất một tiêu chí tìm kiếm.");
                     return;
                 }
 
-                ArrayList<CTKMDTO> resultList = ctkmBUS.searchKhuyenMaiNangCao(maCTKM, maSPorHD);
-
+                // Xóa bảng cũ và hiển thị kết quả mới
                 tableModel.setRowCount(0);
 
                 for (CTKMDTO ctkm : resultList) {
@@ -413,6 +389,7 @@ public class CTKMGUI extends JPanel {
                 }
             }
         });
+
 
         
         btnLamMoi.addActionListener(new ActionListener() {
@@ -497,6 +474,7 @@ public class CTKMGUI extends JPanel {
             tblCTKM.setModel(tableModel);
             JOptionPane.showMessageDialog(this, "Thêm khuyến mãi thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             clearField();
+            toggleEditInTheEnd();
         } else {
             JOptionPane.showMessageDialog(this, "Thêm khuyến mãi thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
@@ -894,24 +872,6 @@ public class CTKMGUI extends JPanel {
             JOptionPane.showMessageDialog(this, "Lỗi khi nạp danh sách mã hóa đơn: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    private void reloadTableData() {
-        // Xóa dữ liệu hiện tại trong bảng
-        tableModel.setRowCount(0); // Xóa tất cả dòng trong bảng
-
-        ArrayList<CTKMDTO> list = ctkmBUS.getListKhuyenMai(); // Giả sử phương thức này lấy lại toàn bộ dữ liệu
-
-        // Thêm dữ liệu mới vào bảng
-        for (CTKMDTO ctkm : list) {
-        	tableModel.addRow(new Object[]{
-                ctkm.getMaCTKM(),
-                ctkm.getTenCTKM(),
-                ctkm.getNgayBD(),
-                ctkm.getNgayKT()
-            });
-        }
-    }
-
 
 
 
