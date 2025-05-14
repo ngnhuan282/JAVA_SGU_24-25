@@ -18,7 +18,17 @@ public class ThongKeDAO {
     public ArrayList<ThongKeDoanhThuDTO> thongKeDoanhThuTuNgayDenNgay(Date tuNgay, Date denNgay) {
         ArrayList<ThongKeDoanhThuDTO> listThongKe = new ArrayList<>();
         try {
-
+//        	SELECT 
+//            DATE(NgayNhap) AS ngay, 
+//            COALESCE(SUM(pn.TongTien), 0) AS chiPhi, 
+//            COALESCE(SUM(hd.TongTien), 0) AS doanhThu 
+//        FROM PHIEUNHAPHANG pn 
+//        FULL OUTER JOIN HOADON hd ON DATE(pn.NgayNhap) = DATE(hd.NgayLap) 
+//        WHERE DATE(pn.NgayNhap) BETWEEN ? AND ? 
+//            OR DATE(hd.NgayLap) BETWEEN ? AND ?
+//        GROUP BY DATE(NgayNhap)
+//        ORDER BY DATE(NgayNhap)
+        	
             // Truy vấn tất cả các ngày trong khoảng từ ngày đến ngày
             String sql = "SELECT DATE_FORMAT(d.ngay, '%Y-%m-%d') AS ngay, " +
                          "COALESCE(SUM(pn.TongTien), 0) AS chiPhi, " +
@@ -53,7 +63,15 @@ public class ThongKeDAO {
     public ArrayList<ThongKeDoanhThuDTO> thongKeDoanhThuTheoThang(int nam) {
         ArrayList<ThongKeDoanhThuDTO> listThongKe = new ArrayList<>();
         try {
-
+//        	SELECT 
+//            MONTH(pn.NgayNhap) AS thang, 
+//            COALESCE(SUM(pn.TongTien), 0) AS chiPhi, 
+//            COALESCE(SUM(hd.TongTien), 0) AS doanhThu 
+//        FROM PHIEUNHAPHANG pn 
+//        FULL OUTER JOIN HOADON hd ON MONTH(pn.NgayNhap) = MONTH(hd.NgayLap) AND YEAR(pn.NgayNhap) = YEAR(hd.NgayLap)
+//        WHERE YEAR(pn.NgayNhap) = ? OR YEAR(hd.NgayLap) = ?
+//        GROUP BY MONTH(pn.NgayNhap)
+//        ORDER BY MONTH(pn.NgayNhap)
             // Truy vấn tất cả các tháng trong năm
             String sql = "SELECT m.thang, " +
                          "COALESCE(SUM(pn.TongTien), 0) AS chiPhi, " +
