@@ -33,12 +33,13 @@ public class ThongKeDAO {
             String sql = "SELECT DATE_FORMAT(d.ngay, '%Y-%m-%d') AS ngay, " +
                          "COALESCE(SUM(pn.TongTien), 0) AS chiPhi, " +
                          "COALESCE(SUM(hd.TongTien), 0) AS doanhThu " +
-                         "FROM (SELECT DATE_ADD('" + tuNgay + "', INTERVAL n DAY) AS ngay " +
-                         "      FROM (SELECT a.N + b.N * 10 + c.N * 100 AS n " +
+                         "FROM ("
+                         + "SELECT DATE_ADD('" + tuNgay + "', INTERVAL n DAY) AS ngay " +
+                         "  FROM (SELECT a.N + b.N * 10 + c.N * 100 AS n " +
                          "            FROM (SELECT 0 AS N UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) a, " +
                          "                 (SELECT 0 AS N UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) b, " +
                          "                 (SELECT 0 AS N UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) c) numbers " +
-                         "      WHERE DATE_ADD('" + tuNgay + "', INTERVAL n DAY) <= '" + denNgay + "') d " +
+                         " WHERE DATE_ADD('" + tuNgay + "', INTERVAL n DAY) <= '" + denNgay + "') d " +
                          "LEFT JOIN PHIEUNHAPHANG pn ON DATE(pn.NgayNhap) = d.ngay " +
                          "LEFT JOIN HOADON hd ON DATE(hd.NgayLap) = d.ngay " +
                          "GROUP BY d.ngay " +
@@ -76,7 +77,8 @@ public class ThongKeDAO {
             String sql = "SELECT m.thang, " +
                          "COALESCE(SUM(pn.TongTien), 0) AS chiPhi, " +
                          "COALESCE(SUM(hd.TongTien), 0) AS doanhThu " +
-                         "FROM (SELECT 1 AS thang UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 " +
+                         "FROM ("
+                         + "SELECT 1 AS thang UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 " +
                          "      UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10 UNION SELECT 11 UNION SELECT 12) m " +
                          "LEFT JOIN PHIEUNHAPHANG pn ON MONTH(pn.NgayNhap) = m.thang AND YEAR(pn.NgayNhap) = " + nam + " " +
                          "LEFT JOIN HOADON hd ON MONTH(hd.NgayLap) = m.thang AND YEAR(hd.NgayLap) = " + nam + " " +
