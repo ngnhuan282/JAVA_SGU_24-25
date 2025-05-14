@@ -114,8 +114,8 @@ public class SanPhamDAO {
 	            String maSP = row.getCell(0).getStringCellValue();
 	            String tenSP = row.getCell(1).getStringCellValue();
 	            String loai = row.getCell(2).getStringCellValue();
-	            int soLuong = (int) row.getCell(4).getNumericCellValue();
-	            int gia = (int) row.getCell(3).getNumericCellValue();
+	            int soLuong = (int) row.getCell(3).getNumericCellValue();
+	            int gia = (int) row.getCell(4).getNumericCellValue();
 	            String DVT = row.getCell(5).getStringCellValue();
 	            String mauSac = row.getCell(6).getStringCellValue();
 	            int kichThuoc = (int) row.getCell(7).getNumericCellValue();
