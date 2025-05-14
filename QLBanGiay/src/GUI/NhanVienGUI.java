@@ -267,9 +267,18 @@ public class NhanVienGUI extends JPanel implements ActionListener {
         btnEditMode.setFocusPainted(false);
         btnEditMode.setBorderPainted(false);
         btnEditMode.setBackground(null);
-        btnEditMode.setBounds(215, 15, 37, 20);
+        btnEditMode.setBounds(179, 10, 37, 20);
         btnEditMode.addActionListener(e -> toggleEditMode());
         panel.add(btnEditMode);
+        
+        JButton btnClearForm = new JButton("");
+        btnClearForm.setIcon(new ImageIcon(NhanVienGUI.class.getResource("/image/clear20.png")));
+        btnClearForm.setFocusPainted(false);
+        btnClearForm.setBorderPainted(false);
+        btnClearForm.setBackground((Color) null);
+        btnClearForm.setBounds(218, 10, 37, 20);
+        btnClearForm.addActionListener(e->clearField());
+        panel.add(btnClearForm);
 
         // Table
         tblDSNV.setFont(new Font("Verdana", Font.PLAIN, 12));
