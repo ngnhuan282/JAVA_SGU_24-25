@@ -50,7 +50,7 @@ public class SanPhamGUI extends JPanel implements ActionListener {
     private JRadioButton rbDen, rbTrang, rbXam;
     private ButtonGroup mauSacGroup;
     private JComboBox<String> cbLoaiSP, cboxSearch;
-    private JButton btnEditMode, btnNhapExcel, btnXuatExcel;
+    private JButton btnNhapExcel, btnXuatExcel;
     private LoaiBUS loaiBUS = new LoaiBUS();
     private SanPhamBUS spBUS = new SanPhamBUS();
     private boolean isEditMode = false;
@@ -388,16 +388,39 @@ public class SanPhamGUI extends JPanel implements ActionListener {
         txtKieuDang.setBounds(233, 354, 168, 19);
         txtKieuDang.setEditable(false);
         pInput.add(txtKieuDang);
-
-        btnEditMode = new JButton("", new ImageIcon(SanPhamGUI.class.getResource("/image/edit20.png")));
+        
+        JButton btnEditMode = new JButton("", new ImageIcon(SanPhamGUI.class.getResource("/image/edit20.png")));
         btnEditMode.setFont(new Font("Arial", Font.PLAIN, 13));
-        btnEditMode.setBounds(445, 55, 47, 21);
         btnEditMode.setFocusPainted(false);
         btnEditMode.setBorderPainted(false);
-        btnEditMode.setBackground(null);
-        btnEditMode.addActionListener(e -> toggleEditMode());
+        btnEditMode.setBackground((Color) null);
+        btnEditMode.setBounds(393, 55, 47, 21);
         pInput.add(btnEditMode);
-
+        btnEditMode.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				toggleEditMode();
+			}
+		});
+        
+        JButton btnClearForm = new JButton("", new ImageIcon(SanPhamGUI.class.getResource("/image/clear20.png")));
+        btnClearForm.setFont(new Font("Arial", Font.PLAIN, 13));
+        btnClearForm.setFocusPainted(false);
+        btnClearForm.setBorderPainted(false);
+        btnClearForm.setBackground((Color) null);
+        btnClearForm.setBounds(440, 55, 47, 21);
+        pInput.add(btnClearForm);
+        btnClearForm.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+			clearForm();	
+			}
+		});
+        
         // Table sản phẩm chính
         tblDSSP.setBackground(Color.WHITE);
         tblDSSP.setBorder(UIManager.getBorder("Table.scrollPaneBorder"));

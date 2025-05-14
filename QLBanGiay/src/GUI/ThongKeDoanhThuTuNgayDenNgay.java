@@ -82,7 +82,7 @@ public class ThongKeDoanhThuTuNgayDenNgay extends JPanel {
         dateChooserTuNgay.setBounds(110, 25, 120, 30);
         dateChooserTuNgay.setFont(new Font("Arial", Font.PLAIN, 14));
         Calendar calTuNgay = Calendar.getInstance();
-        calTuNgay.set(2024, Calendar.APRIL, 1); // Đặt mặc định 2024-04-01
+        calTuNgay.set(2025, Calendar.APRIL, 1); 
         dateChooserTuNgay.setDate(calTuNgay.getTime());
         pFilterDateRange.add(dateChooserTuNgay);
 
@@ -95,7 +95,7 @@ public class ThongKeDoanhThuTuNgayDenNgay extends JPanel {
         dateChooserDenNgay.setBounds(330, 25, 120, 30);
         dateChooserDenNgay.setFont(new Font("Arial", Font.PLAIN, 14));
         Calendar calDenNgay = Calendar.getInstance();
-        calDenNgay.set(2024, Calendar.APRIL, 5); // Đặt mặc định 2024-04-05
+        calDenNgay.set(2025, Calendar.APRIL, 5); 
         dateChooserDenNgay.setDate(calDenNgay.getTime());
         pFilterDateRange.add(dateChooserDenNgay);
 

@@ -25,10 +25,16 @@ public class PhieuNhapBUS {
 	}
 	
 	
-	public String generateMaPN() {
-		int size = listPN.size()+ 1;
-		return size +"";
-	}
+	 public String generateMaPN() {
+	        int newMaPN = 1;
+	        while (true) {
+	            String maPNStr = String.valueOf(newMaPN);
+	            if (!checkMaPN(maPNStr)) {
+	                return maPNStr;
+	            }
+	            newMaPN++;
+	        }
+	    }
 
 	public void addPN(String maPN , String NV , String NCC,double tongTien, Date ngayNhap) {
 		PhieuNhapDTO pn = new PhieuNhapDTO(maPN,NV,NCC,tongTien,ngayNhap);

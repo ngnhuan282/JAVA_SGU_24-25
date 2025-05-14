@@ -307,12 +307,20 @@ public class CTKMGUI extends JPanel {
         panel.add(txtPhanTramGiamGia);
 
         JButton btnEditMode = new JButton(new ImageIcon(CTKMGUI.class.getResource("/image/edit20.png")));
-        btnEditMode.setBounds(215, 15, 37, 20);
+        btnEditMode.setBounds(177, 10, 37, 20);
         btnEditMode.setBorderPainted(false);
         btnEditMode.setFocusPainted(false);
         btnEditMode.setBackground(null);
         btnEditMode.addActionListener(e -> toggleEditMode());
         panel.add(btnEditMode);
+        
+        JButton btnClearForm = new JButton(new ImageIcon(CTKMGUI.class.getResource("/image/clear20.png")));
+        btnClearForm.setFocusPainted(false);
+        btnClearForm.setBorderPainted(false);
+        btnClearForm.setBackground((Color) null);
+        btnClearForm.setBounds(218, 10, 37, 20);
+        btnClearForm.addActionListener(e->clearField());
+        panel.add(btnClearForm);
 
         JScrollPane scrollPane = new JScrollPane(tblCTKM);
         scrollPane.setBounds(265, 110, 965, 647);
@@ -879,7 +887,7 @@ public class CTKMGUI extends JPanel {
         JFrame frame = new JFrame("Quản Lý Chương Trình Khuyến Mãi");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1280, 800);
-        frame.add(new CTKMGUI());
+        frame.getContentPane().add(new CTKMGUI());
         frame.setVisible(true);
     }
 }
