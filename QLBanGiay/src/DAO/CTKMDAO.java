@@ -100,7 +100,6 @@ public class CTKMDAO {
 	                           "WHERE MaCTKM = '" + ctkm.getMaCTKM() + "'";
 	    connection.executeUpdate(sqlUpdateCTKM);
 
-	    //neu loai KM thay doi
 	    if (!loaiCTKMCu.equalsIgnoreCase(loaiCTKM)) {
 	        if (loaiCTKMCu.equalsIgnoreCase("Sản Phẩm") && loaiCTKM.equalsIgnoreCase("Hóa Đơn")) {
 	            String sqlDeleteSP = "DELETE FROM ctkm_sp WHERE MaCTKM = '" + ctkm.getMaCTKM() + "' AND MaSP = '" + maSPorHDCu + "'";
@@ -117,7 +116,6 @@ public class CTKMDAO {
 	            connection.executeUpdate(sqlInsertSP);
 	        }
 	    } 
-	    //neu loai KM ko thay doi
 	    else {
 	        if (loaiCTKM.equalsIgnoreCase("Sản Phẩm")) {
 	        	String sqlUpdateSP = "UPDATE ctkm_sp SET MaSP = '" + maSPorHD + "', PhanTramGiamGia = " + phanTramValue +
@@ -140,7 +138,6 @@ public class CTKMDAO {
 		 String sqlDeleteSP = "DELETE FROM ctkm_sp WHERE MaCTKM = '" + maCTKM + "'";
 		 connection.executeUpdate(sqlDeleteSP);
 
-	        // Xóa bảng ctkm_hd
 	        String sqlDeleteHD = "DELETE FROM ctkm_hd WHERE MaCTKM = '" + maCTKM + "'";
 	        connection.executeUpdate(sqlDeleteHD);
 	}
@@ -150,14 +147,12 @@ public class CTKMDAO {
 	    try {
 	        String sql = "";
 	        
-	        // Kiểm tra loại tìm kiếm và chuẩn bị câu lệnh SQL phù hợp
 	        if (loaiSearch.equals("Mã CTKM")) {
 	            sql = "SELECT * FROM ctkm WHERE MaCTKM LIKE '%" + keyword + "%'";
 	        } else if (loaiSearch.equals("Tên CTKM")) {
 	            sql = "SELECT * FROM ctkm WHERE TenCTKM LIKE '%" + keyword + "%'";
 	        }
 
-	        // Nếu sql rỗng, in ra thông báo lỗi và trả về kết quả rỗng
 	        if (sql.isEmpty()) {
 	            System.out.println("Câu lệnh SQL không hợp lệ.");
 	            return result;
@@ -197,7 +192,7 @@ public class CTKMDAO {
 	            row = sheet.getRow(i);
 	            if (row == null) continue;
 
-	            String maCTKM = row.getCell(0).getStringCellValue().trim();  // Sửa MaKM thành MaCTKM
+	            String maCTKM = row.getCell(0).getStringCellValue().trim(); 
 	            String tenKM = row.getCell(1).getStringCellValue().trim();
 
 	            Cell cellNgayBD = row.getCell(2);
@@ -228,18 +223,15 @@ public class CTKMDAO {
 	            String loaiKM = row.getCell(4).getStringCellValue().trim();
 	            String maSporHD = row.getCell(5).getStringCellValue().trim();
 	            
-	            // Lấy PhanTramGiamGia từ ô Excel
 	            double phanTramGiamGia = getPhanTramGiamGia(row.getCell(6));
 
 	            String ctkm = loaiKM.equalsIgnoreCase("SP") ? "ctkm_sp" : "ctkm_hd";
 	            String maField = loaiKM.equalsIgnoreCase("SP") ? "MaSP" : "MaHD";
 
-	            // Kiểm tra tồn tại
 	            String sqlCheck = "SELECT * FROM " + ctkm + " WHERE MaCTKM = '" + maCTKM + "'";  
 	            ResultSet rs = connection.executeQuery(sqlCheck);
 
 	            if (!rs.next()) {
-	                // Thêm mới (bao gồm PhanTramGiamGia trong bảng ctkm)
 	                String sqlInsert = "INSERT INTO " + ctkm + " (MaCTKM, TenCTKM,NgayBD,NgayKT, " + maField + ") VALUES (";
 	                sqlInsert += "'" + maCTKM + "', ";  
 	                sqlInsert += "'" + new java.sql.Date(ngayBD.getTime()) + "', ";
@@ -250,12 +242,11 @@ public class CTKMDAO {
 	                connection.executeUpdate(sqlInsert);
 	                addedRows++;
 	            } else {
-	                // Cập nhật (bao gồm PhanTramGiamGia trong bảng ctkm)
 	                String sqlUpdate = "UPDATE " + ctkm + " SET ";      
 	                sqlUpdate += "NgayBD = '" + new java.sql.Date(ngayBD.getTime()) + "', ";  
 	                sqlUpdate += "NgayKT = '" + new java.sql.Date(ngayKT.getTime()) + "', ";
 	                sqlUpdate += "TenCTKM = '" + tenKM + "', ";
-	                sqlUpdate += "PhanTramGiamGia = " + phanTramGiamGia + ", "; // Thêm PhanTramGiamGia vào câu lệnh UPDATE
+	                sqlUpdate += "PhanTramGiamGia = " + phanTramGiamGia + ", ";
 	                sqlUpdate += maField + " = '" + maSporHD + "' ";  
 	                sqlUpdate += "WHERE MaCTKM = '" + maCTKM + "'";  
 	                connection.executeUpdate(sqlUpdate);
@@ -277,10 +268,10 @@ public class CTKMDAO {
 	    double phanTramGiamGia = 0.0;
 	    
 	    if (cell.getCellType() == CellType.NUMERIC) {
-	        phanTramGiamGia = cell.getNumericCellValue(); // Nếu là kiểu số, lấy giá trị số
+	        phanTramGiamGia = cell.getNumericCellValue(); 
 	    } else if (cell.getCellType() == CellType.STRING) {
 	        try {
-	            phanTramGiamGia = Double.parseDouble(cell.getStringCellValue()); // Nếu là chuỗi, cố gắng chuyển thành double
+	            phanTramGiamGia = Double.parseDouble(cell.getStringCellValue());
 	        } catch (NumberFormatException e) {
 	            System.out.println("Lỗi chuyển đổi chuỗi thành số: " + e.getMessage());
 	        }
@@ -312,7 +303,7 @@ public class CTKMDAO {
 	        e.printStackTrace();
 	    }
 
-	    return ""; // Trường hợp không tìm thấy
+	    return "";
 	}
 	public String layMaSPorHD(String maCTKM) {
 	    try {
@@ -365,7 +356,6 @@ public class CTKMDAO {
 
 
 	
-	// Thêm phương thức để lấy danh sách MaSP
 		public ArrayList<String> getListMaSP() throws SQLException {
 			ArrayList<String> listMaSP = new ArrayList<>();
 			connection.getConnection();
@@ -382,7 +372,6 @@ public class CTKMDAO {
 			return listMaSP;
 		}
 		
-		// Thêm phương thức để lấy danh sách MaHD
 		public ArrayList<String> getListMaHD() throws SQLException {
 			ArrayList<String> listMaHD = new ArrayList<>();
 			connection.getConnection();

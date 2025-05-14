@@ -32,7 +32,7 @@ import DTO.SanPhamDTO;
 
 public class CTKMBUS {
     private ArrayList<CTKMDTO> listKhuyenMai;
-    private CTKMDAO khuyenMaiDAO = new CTKMDAO(); // ✅ BỔ SUNG BIẾN DAO
+    private CTKMDAO khuyenMaiDAO = new CTKMDAO(); 
 
     public void docDSCTKM() {
         if (listKhuyenMai == null) {
@@ -117,7 +117,6 @@ public class CTKMBUS {
                 }
             }
 
-            // Chỉ thêm nếu ít nhất 1 trong 2 ô được nhập và có khớp
             if ((!maCTKM.isEmpty() || !maSPorHD.isEmpty()) && (matchMaCTKM || matchMaSPorHD)) {
                 resultList.add(ctkm);
             }

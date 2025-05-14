@@ -33,6 +33,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import BUS.NhanVienBUS;
+import DTO.KhachHangDTO;
 import DTO.NhanVienDTO;
 
 public class NhanVienGUI extends JPanel implements ActionListener {
@@ -80,7 +81,6 @@ public class NhanVienGUI extends JPanel implements ActionListener {
         pMain.setLayout(null);
         add(pMain);
 
-        // Header
         JPanel pHeaderMain = new JPanel();
         pHeaderMain.setBackground(Color.WHITE);
         pHeaderMain.setBounds(0, 0, 1248, 100);
@@ -193,8 +193,7 @@ public class NhanVienGUI extends JPanel implements ActionListener {
         btnSearch.addActionListener(this);
         btnSearch.setBounds(958, 29, 66, 30);
         pHeaderMain.add(btnSearch);
-
-        // Input Form
+        
         JPanel panel = new JPanel();
         panel.setBorder(new LineBorder(Color.LIGHT_GRAY, 2, true));
         panel.setBackground(Color.WHITE);
@@ -271,7 +270,6 @@ public class NhanVienGUI extends JPanel implements ActionListener {
         btnEditMode.addActionListener(e -> toggleEditMode());
         panel.add(btnEditMode);
 
-        // Table
         tblDSNV.setFont(new Font("Verdana", Font.PLAIN, 12));
         tblDSNV.setGridColor(new Color(200, 200, 200));
         tblDSNV.getTableHeader().setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
@@ -298,6 +296,27 @@ public class NhanVienGUI extends JPanel implements ActionListener {
                 }
             }
         });
+        btnSearch.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getActionCommand().equals("Tìm kiếm")) {
+                    String key = cboxSearch.getSelectedItem().toString();
+                    String keyword = txtSearch.getText().trim();
+                    ArrayList<NhanVienDTO> result = nvBUS.search(key, keyword);
+                    if (result.isEmpty()) {
+                        JOptionPane.showMessageDialog(NhanVienGUI.this, "Không có kết quả phù hợp", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+                    model.setRowCount(0);
+                    for (NhanVienDTO nv : result) {
+                        model.addRow(new Object[]{
+                            nv.getMaNV(), nv.getHo(), nv.getTen(), nv.getSdt(), nv.getLuong()
+                        });
+                    }
+                }
+            }
+        });
+
     }
 
     public void toggleEditMode() {
@@ -335,9 +354,8 @@ public class NhanVienGUI extends JPanel implements ActionListener {
             updateStaff();
         } else if (str.equals("Xóa")) {
             deleteStaff();
-        } else if (str.equals("Tìm kiếm")) {
-            timKiem();
-        } else if (str.equals("Nhập Excel")) {
+        } 
+         else if (str.equals("Nhập Excel")) {
             nhapExcel();
         } else if (str.equals("Xuất Excel")) {
             xuatExcel();
@@ -346,29 +364,6 @@ public class NhanVienGUI extends JPanel implements ActionListener {
         }
     }
 
-    public void timKiem() {
-        String tuKhoa = txtSearch.getText().trim();
-        String tieuChi = cboxSearch.getSelectedItem().toString();
-        ArrayList<NhanVienDTO> result = new ArrayList<>();
-        for (NhanVienDTO nv : nvBUS.getListNhanVien()) {
-            if (tieuChi.equals("Mã NV") && nv.getMaNV().toLowerCase().contains(tuKhoa.toLowerCase())) {
-                result.add(nv);
-            } else if (tieuChi.equals("Tên NV") && nv.getTen().toLowerCase().contains(tuKhoa.toLowerCase())) {
-                result.add(nv);
-            }
-        }
-
-        model.setRowCount(0);
-        for (NhanVienDTO nv : result) {
-            model.addRow(new Object[]{
-                nv.getMaNV(), nv.getHo(), nv.getTen(), nv.getSdt(), nv.getLuong()
-            });
-        }
-        tblDSNV.setModel(model);
-        if (result.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-        }
-    }
 
     public void addStaff() {
         if (!isEditMode) {
@@ -386,9 +381,13 @@ public class NhanVienGUI extends JPanel implements ActionListener {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        if (!maNV.startsWith("NV")) {
+            JOptionPane.showMessageDialog(this, "Mã nhân viên phải bắt đầu bằng 'NV'", "Lỗi", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
-        if (!sdt.matches("\\d+")) {
-            JOptionPane.showMessageDialog(this, "Số điện thoại sai định dạng!", "Lỗi", JOptionPane.WARNING_MESSAGE);
+        if (!sdt.matches("0\\d{9}")) {
+            JOptionPane.showMessageDialog(this, "Số điện thoại phải bắt đầu bằng số 0 và gồm 10 chữ số!", "Lỗi", JOptionPane.WARNING_MESSAGE);
             return;
         }
         if (!hoNV.matches("^[a-zA-ZÀ-ỹ ]+$")) {
@@ -399,6 +398,7 @@ public class NhanVienGUI extends JPanel implements ActionListener {
             JOptionPane.showMessageDialog(this, "Tên sai định dạng!", "Lỗi", JOptionPane.WARNING_MESSAGE);
             return;
         }
+        
 
         try {
             double luong = Double.parseDouble(luongStr);
@@ -452,8 +452,8 @@ public class NhanVienGUI extends JPanel implements ActionListener {
             return;
         }
 
-        if (!sdt.matches("\\d+")) {
-            JOptionPane.showMessageDialog(this, "Số điện thoại sai định dạng!", "Lỗi", JOptionPane.WARNING_MESSAGE);
+        if (!sdt.matches("0\\d{9}")) {
+            JOptionPane.showMessageDialog(this, "Số điện thoại phải bắt đầu bằng số 0 và gồm 10 chữ số!", "Lỗi", JOptionPane.WARNING_MESSAGE);
             return;
         }
         if (!hoNV.matches("^[a-zA-ZÀ-ỹ ]+$")) {
@@ -511,7 +511,7 @@ public class NhanVienGUI extends JPanel implements ActionListener {
         File selectedFile = ExcelReporter.selectExcelFileForImport(jf);
 
         if (selectedFile == null) {
-            return; // Người dùng hủy hoặc file không hợp lệ
+            return;
         }
 
         int confirm = JOptionPane.showConfirmDialog(

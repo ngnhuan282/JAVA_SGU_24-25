@@ -45,7 +45,7 @@ public class NhanVienDAO {
 	
 	public void addNhanVienDAO(NhanVienDTO x) {
 		String sql = "INSERT INTO nhanvien(MaNV, Ho, Ten, SDT, LuongThang)"
-				+ "VALUES('"+ x.getMaNV()+"', '"+ x.getHo() +"', '"+ x.getTen() +"', '" + x.getSdt() + "', '" + x.getLuong() + "')";
+				+ " VALUES(' "+ x.getMaNV()+"', '"+ x.getHo() +"', '"+ x.getTen() +"', '" + x.getSdt() + "', '" + x.getLuong() + "' ) ";
 		connection.executeUpdate(sql);
 	}
 	
@@ -75,7 +75,7 @@ public class NhanVienDAO {
 	        Row row;
 	        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
 	            row = sheet.getRow(i);
-	            if (row == null) continue; // Bỏ qua hàng rỗng
+	            if (row == null) continue; 
 	            String maNV = row.getCell(0) != null ? row.getCell(0).getStringCellValue() : "";
 	            String ho = row.getCell(1) != null ? row.getCell(1).getStringCellValue() : "";
 	            String ten = row.getCell(2) != null ? row.getCell(2).getStringCellValue() : "";
@@ -90,9 +90,8 @@ public class NhanVienDAO {
 	            }
 	            double luong = row.getCell(4) != null ? row.getCell(4).getNumericCellValue() : 0.0;
 	            
-	            // Kiểm tra dữ liệu đầu vào
 	            if (maNV.isEmpty() || ho.isEmpty() || ten.isEmpty() || sdt.isEmpty()) {
-	                continue; // Bỏ qua dòng thiếu dữ liệu
+	                continue;
 	            }
 	            
 	            String sqlCheck = "SELECT * FROM nhanvien WHERE MaNV = '" + maNV + "'";

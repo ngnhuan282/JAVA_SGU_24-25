@@ -59,11 +59,23 @@ public class NhanVienBUS {
 		listNhanVien.remove(index);
 		nhanVienDAO.deleteNhanVienDAO(nv);
 	}
+	
+	public ArrayList<NhanVienDTO> search(String key, String keyword) {
+		ArrayList<NhanVienDTO> result = new ArrayList<NhanVienDTO>();
+		
+		for(NhanVienDTO x : listNhanVien) {
+			if(key.equals("Mã NV") && keyword.equals(x.getMaNV()))
+				result.add(x);
+			if(key.equals("Tên NV") && keyword.equals(x.getTen()))
+				result.add(x);
+
+		}
+		return result;
+	}
 
 	public int[] ImportExcel(File file) {
 	    NhanVienDAO nvDAO = new NhanVienDAO();
 	    int[] result = nvDAO.ImportExcel(file);
-	    // Cập nhật danh sách nhân viên sau khi nhập
 	    try {
 			listNhanVien = nvDAO.getListNhanVien();
 		} catch (SQLException e) {
