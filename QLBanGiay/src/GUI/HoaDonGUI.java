@@ -204,7 +204,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
                                 btnXuatExcel.addActionListener(this);
                                 btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
                                 btnXuatExcel.setPreferredSize(new Dimension(120, 140));
-                                btnXuatExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/excel48.png")));
+                                btnXuatExcel.setIcon(new ImageIcon(SanPhamGUI.class.getResource("/image/xuatexcel48.png")));
                                 btnXuatExcel.setHorizontalTextPosition(SwingConstants.CENTER);
                                 btnXuatExcel.setFont(new Font("Arial", Font.PLAIN, 15));
                                 btnXuatExcel.setBorderPainted(false);
