@@ -909,7 +909,7 @@ public class HoaDonGUI extends JPanel implements ActionListener{
 	
 	private void openBillTable(ArrayList<HoaDonDTO> result) {
 		// Dữ liệu mẫu (ví dụ về sản phẩm)
-		String[] columnNamesBill = { "Mã hóa đơn", "Mã khách hàng", "Tên khách hàng", "Mã nhân viên", "Ngày lập", "Tổng tiền", "Được giảm giá" };
+		String[] columnNamesBill = { "Mã hóa đơn", "Mã khách hàng", "Mã nhân viên", "Ngày lập", "Tổng tiền", "Được giảm giá" };
 
 		// Tạo DefaultTableModel với dữ liệu mẫu
 		DefaultTableModel model = new DefaultTableModel(columnNamesBill, 0);
